@@ -20,7 +20,7 @@ Este repo implementa distintos algoritmos de Information Retrieval para la parte
 │
 ├── docs               <- A default mkdocs project; see www.mkdocs.org for details
 │
-├── models             <- Trained and serialized models, model predictions, or model summaries
+├── models             <- (Optional) Artifacts for learned rankers
 │
 ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
 │                         the creator's initials, and a short `-` delimited description, e.g.
@@ -45,17 +45,38 @@ Este repo implementa distintos algoritmos de Information Retrieval para la parte
     │
     ├── config.py               <- Store useful variables and configuration
     │
-    ├── dataset.py              <- Scripts to download or generate data
+    ├── dataset.py              <- (Optional) Data preparation helpers
     │
-    ├── features.py             <- Code to create features for modeling
+    ├── rankers                 <- Ranker interface and implementations
+    │   ├── __init__.py
+    │   ├── base.py
+    │   ├── registry.py
+    │   └── baselines.py        <- Simple built-in rankers
     │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
+    ├── evaluation              <- Metrics, runner, reporting
+    │   ├── metrics.py
+    │   ├── runner.py
+    │   └── reporting.py
     │
-    └── plots.py                <- Code to create visualizations
+    ├── data                    <- Dataset loaders
+    │   └── loaders.py
+    │
+    ├── cli                     <- Typer CLIs
+    │   ├── eval.py             <- Evaluate rankers and write reports
+    │   └── rank.py             <- Run a single ranker
+    │
+    └── types.py                <- Typed containers for ranking tasks
 ```
 
 --------
+
+Quickstart
+
+- Install: `pip install -e .`
+- List rankers: `ireranker-rank list`
+- Run synthetic eval: `ireranker-eval`
+
+Notes
+
+- Cookiecutter modeling stubs (train/predict) were removed to focus the repo on reranking algorithms and evaluation.
 

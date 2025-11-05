@@ -4,7 +4,7 @@
 
 PROJECT_NAME = IReranker
 PYTHON_VERSION = 3.10
-PYTHON_INTERPRETER = python
+PYTHON_INTERPRETER ?= python
 
 #################################################################################
 # COMMANDS                                                                      #
@@ -66,6 +66,16 @@ create_environment:
 .PHONY: data
 data: requirements
 	$(PYTHON_INTERPRETER) ireranker/dataset.py
+
+## List available rankers
+.PHONY: list-rankers
+list-rankers:
+	$(PYTHON_INTERPRETER) -m ireranker.cli.rank list
+
+## Run evaluation on synthetic data
+.PHONY: eval
+eval:
+	$(PYTHON_INTERPRETER) -m ireranker.cli.eval run
 
 
 #################################################################################
