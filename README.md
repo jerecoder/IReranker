@@ -1,6 +1,6 @@
 # IReranker
 
-Reranking y evaluación basados en BEIR para RAG/IR. Permite evaluar rankers arbitrarios sobre datasets BEIR usando métricas oficiales (NDCG, MAP, Recall, P@k), con configuración externa.
+RAG reranking con IR.
 
 ## Estructura
 
@@ -33,10 +33,6 @@ Reranking y evaluación basados en BEIR para RAG/IR. Permite evaluar rankers arb
 └─ pyproject.toml
 ```
 
-Componentes legacy/sintéticos se eliminaron (metrics/runner/reporting, eval/rank, datasets sintéticos, features). El proyecto se centra en evaluación con BEIR.
-
-
-
 ## Instalacion con conda (sugerido)
 
   - `make environment` (crea `IReranker` con Python 3.10 e instala deps)
@@ -46,10 +42,6 @@ Comandos útiles dentro del env `IReranker`:
 - Lint/format: `make lint` / `make format`
 - Tests: `make test`
 - Evaluación BEIR (usa configs): `make beir-eval`
-
-Notas:
-- Recomendado usar el canal conda-forge: `conda config --add channels conda-forge`.
-- Si usas Mambaforge, puedes reemplazar `conda` por `mamba` para acelerar la resolución.
 
 ## Configuración
 
