@@ -1,0 +1,17 @@
+{
+  "datasets": [
+    "webis-touche2020",
+    "nfcorpus",
+    "trec-covid",
+    "scifact",
+    "fiqa",
+    "dbpedia-entity"
+  ],
+  "split": "test",
+  "max_queries": null,
+  "seed": 69420,
+  "k_values": [1, 3, 5, 10, 100],
+  
+  "output_dir": "beir-metrics",
+  "rankers": ["all"]
+}

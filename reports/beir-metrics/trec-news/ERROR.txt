@@ -1,0 +1,2 @@
+Zip: C:\Users\jeref\Documents\IReranker\data\external\beir\trec-news.zip
+Error: File is not a zip file

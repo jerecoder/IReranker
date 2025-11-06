@@ -62,20 +62,15 @@ create_environment:
 #################################################################################
 
 
-## Make dataset
-.PHONY: data
-data: requirements
-	$(PYTHON_INTERPRETER) ireranker/dataset.py
+## (dataset rule removed)
 
-## List available rankers
-.PHONY: list-rankers
-list-rankers:
-	$(PYTHON_INTERPRETER) -m ireranker.cli.rank list
 
-## Run evaluation on synthetic data
-.PHONY: eval
-eval:
-	$(PYTHON_INTERPRETER) -m ireranker.cli.eval run
+## Evaluate all registered rankers on BEIR datasets (config-driven)
+.PHONY: beir-eval
+beir-eval:
+	$(PYTHON_INTERPRETER) -m ireranker.run_beir_eval
+
+ 
 
 
 #################################################################################

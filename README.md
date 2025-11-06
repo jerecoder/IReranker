@@ -1,82 +1,82 @@
 # IReranker
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+Reranking y evaluación basados en BEIR para RAG/IR. Permite evaluar rankers arbitrarios sobre datasets BEIR usando métricas oficiales (NDCG, MAP, Recall, P@k), con configuración externa.
 
-Este repo implementa distintos algoritmos de Information Retrieval para la parte de rerank en RAG.
-
-## Project Organization
+## Estructura
 
 ```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- (Optional) Artifacts for learned rankers
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         ireranker and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── ireranker   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes ireranker a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- (Optional) Data preparation helpers
-    │
-    ├── rankers                 <- Ranker interface and implementations
-    │   ├── __init__.py
-    │   ├── base.py
-    │   ├── registry.py
-    │   └── baselines.py        <- Simple built-in rankers
-    │
-    ├── evaluation              <- Metrics, runner, reporting
-    │   ├── metrics.py
-    │   ├── runner.py
-    │   └── reporting.py
-    │
-    ├── data                    <- Dataset loaders
-    │   └── loaders.py
-    │
-    ├── cli                     <- Typer CLIs
-    │   ├── eval.py             <- Evaluate rankers and write reports
-    │   └── rank.py             <- Run a single ranker
-    │
-    └── types.py                <- Typed containers for ranking tasks
+├─ LICENSE
+├─ Makefile
+├─ README.md
+├─ config
+│  ├─ beir_eval.json       # Config de evaluación (datasets, k_values, output_dir, etc.)
+│  └─ beir_loader.json     # Config del loader BEIR (base_url, cache_subdir)
+├─ data
+│  └─ external             # Cache de datasets BEIR
+├─ reports
+│  └─ beir-metrics         # Salidas por dataset (CSV), o según config/output_dir
+├─ ireranker
+│  ├─ __init__.py
+│  ├─ config.py            # Rutas y logging
+│  ├─ types.py             # RankingTask, RankingDataset
+│  ├─ rankers
+│  │  ├─ __init__.py
+│  │  ├─ base.py
+│  │  ├─ registry.py
+│  │  └─ baselines.py
+│  ├─ data
+│  │  └─ loaders.py        # Loader BEIR
+│  ├─ evaluation
+│  │  └─ beir.py           # Evaluación con BEIR
+│  └─ cli
+│     └─ beir_eval.py      # CLI de evaluación
+└─ pyproject.toml
 ```
 
---------
+Componentes legacy/sintéticos se eliminaron (metrics/runner/reporting, eval/rank, datasets sintéticos, features). El proyecto se centra en evaluación con BEIR.
 
-Quickstart
+## Instalación
 
-- Install: `pip install -e .`
-- List rankers: `ireranker-rank list`
-- Run synthetic eval: `ireranker-eval`
+```
+pip install -e .
+```
 
-Notes
+## Configuración
 
-- Cookiecutter modeling stubs (train/predict) were removed to focus the repo on reranking algorithms and evaluation.
+- `config/beir_eval.json`
+  - `datasets`: lista de datasets BEIR a evaluar (nombres canónicos)
+  - `split`: split (p.ej. "test")
+  - `max_queries`: límite de queries (o null)
+  - `seed`: semilla
+  - `k_values`: cortes de evaluación, p.ej. [1,3,5,10,100]
+  - `output_dir`: destino de resultados (absoluto o relativo a REPORTS_DIR)
+  - `rankers`: ["all"] o lista de nombres
 
+- `config/beir_loader.json`
+  - `base_url`: URL base de BEIR
+  - `cache_subdir`: subcarpeta bajo `data/external/`
+
+## Uso
+
+- Ver datasets del config:
+  - `(edita config/beir_eval.json para cambiar datasets)`
+
+- Ejecutar evaluación (usa config):
+  - `make beir-eval`
+  - o `python -m ireranker.run_beir_eval`
+
+- Overrides comunes:
+  - `--datasets trec-covid` `--max-queries 200`
+  - `--out-dir /ruta/absoluta` o `--config-path otro.json`
+
+## Salida
+
+Por dataset: CSV `summary.csv` con filas por ranker y k
+- Columnas: `ranker,k,NDCG,MAP,Recall,Precision`
+- Carpeta: `reports/beir-metrics/<dataset>/` o `output_dir`
+
+## Notas
+
+- Si el directorio del dataset existe, no se descarga de nuevo.
+- Tras descomprimir, se elimina el ZIP para ahorrar espacio.
+- Errores de descarga se registran y se continúa con el siguiente dataset (se crea `ERROR.txt`).

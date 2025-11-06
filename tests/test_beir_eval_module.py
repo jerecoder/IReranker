@@ -1,21 +1,26 @@
-from ireranker.evaluation.beir import dataset_to_beir_qrels, evaluate_rankers_beir
+from __future__ import annotations
+
+from ireranker.evaluation.beir import (
+    dataset_to_beir_qrels,
+    evaluate_rankers_beir,
+)
 from ireranker.rankers import get_ranker
 from ireranker.types import RankingDataset, RankingTask
 
 
-def test_beir_metrics_on_minimal():
+def test_beir_qrels_and_eval_basic():
     tasks = []
-    for t in range(2):
-        cands = [f"d{t}-{i}" for i in range(5)]
-        y_true = [float(4 - i) for i in range(5)]
-        tasks.append(RankingTask(query_id=f"q{t}", candidate_ids=cands, y_true=y_true))
+    cands = [f"d{i}" for i in range(5)]
+    y_true = [float(4 - i) for i in range(5)]
+    tasks.append(RankingTask(query_id="q0", candidate_ids=cands, y_true=y_true))
     ds = RankingDataset(tasks=tasks)
     r = get_ranker("identity")
 
     qrels = dataset_to_beir_qrels(ds)
-    assert len(qrels) == 2
-    for rels in qrels.values():
-        assert all(v > 0 for v in rels.values())
+    assert len(qrels) == 1
+    qid = ds.tasks[0].query_id
+    assert qid in qrels
+    assert all(v > 0 for v in qrels[qid].values())
 
     rows = evaluate_rankers_beir([r], ds, [1, 3, 5])
     assert len(rows) == 3
