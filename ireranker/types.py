@@ -133,9 +133,7 @@ class BidirectionalMatrixOracle(Oracle):
                 if dataset_key in path.name.lower():
                     candidates.append(path)
         if not candidates:
-            raise FileNotFoundError(
-                f"No rerank matrix found for dataset '{dataset}' in {base}"
-            )
+            raise FileNotFoundError(f"No rerank matrix found for dataset '{dataset}' in {base}")
         best = max(candidates, key=lambda p: p.stat().st_mtime)
         with best.open("rb") as f:
             obj = pickle.load(f)

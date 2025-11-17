@@ -1,7 +1,12 @@
 from __future__ import annotations
 
 import math
-from typing import Dict, Iterable, Iterator, List, Tuple
+from typing import Dict, Iterable, List, Tuple
+
+from tqdm import tqdm
+
+from ireranker.rankers.base import Ranker
+from ireranker.types import RankingDataset
 
 try:
     from beir.retrieval.evaluation import EvaluateRetrieval  # type: ignore
@@ -91,15 +96,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback evaluator
             return hits / k
 
 
-from tqdm import tqdm
-
-
 def _progress(iterable: Iterable, **kwargs) -> Iterable:
     return tqdm(iterable, **kwargs)
-
-
-from ireranker.rankers.base import Ranker
-from ireranker.types import RankingDataset
 
 
 def dataset_to_beir_qrels(dataset: RankingDataset) -> Dict[str, Dict[str, int]]:
