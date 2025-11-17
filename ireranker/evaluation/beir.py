@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import math
-from typing import Dict, List, Tuple
+from typing import Dict, Iterable, Iterator, List, Tuple
 
 try:
     from beir.retrieval.evaluation import EvaluateRetrieval  # type: ignore
@@ -91,6 +91,13 @@ except ModuleNotFoundError:  # pragma: no cover - fallback evaluator
             return hits / k
 
 
+from tqdm import tqdm
+
+
+def _progress(iterable: Iterable, **kwargs) -> Iterable:
+    return tqdm(iterable, **kwargs)
+
+
 from ireranker.rankers.base import Ranker
 from ireranker.types import RankingDataset
 
@@ -110,7 +117,14 @@ def dataset_to_beir_qrels(dataset: RankingDataset) -> Dict[str, Dict[str, int]]:
 
 def ranker_results_to_beir(ranker: Ranker, dataset: RankingDataset) -> Dict[str, Dict[str, float]]:
     results: Dict[str, Dict[str, float]] = {}
-    for task in dataset.tasks:
+    tasks = dataset.tasks
+    iterator = _progress(
+        tasks,
+        total=len(tasks),
+        desc=f"Ranking ({ranker.name})",
+        leave=False,
+    )
+    for task in iterator:
         indices = ranker.rank(task)
         n = len(indices)
         res: Dict[str, float] = {}
@@ -131,7 +145,8 @@ def evaluate_rankers_beir(
     """
     qrels = dataset_to_beir_qrels(dataset)
     rows: List[Dict[str, float | int | str]] = []
-    for r in rankers:
+    iter_rankers = _progress(rankers, desc="Evaluating rankers", leave=True)
+    for r in iter_rankers:
         res = ranker_results_to_beir(r, dataset)
         ndcg, _map, recall, precision = EvaluateRetrieval.evaluate(qrels, res, k_values)
         for k in k_values:

@@ -12,7 +12,7 @@ class DummyOracle(Oracle):
     def load_dataset(self, dataset: str, *, split: str = "test") -> None:
         self.loaded.append((dataset, split))
 
-    def sample_outcome(self, query_id: str, doc_a: str, doc_b: str) -> bool:
+    def sample_lt(self, query_id: str, doc_a: str, doc_b: str) -> bool:
         return False
 
 

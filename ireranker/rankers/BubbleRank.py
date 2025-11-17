@@ -29,7 +29,7 @@ class BubbleRanker(Ranker):
                 left_doc = task.candidate_ids[left_idx]
                 right_doc = task.candidate_ids[right_idx]
 
-                if self.oracle.sample_outcome(task.query_id, right_doc, left_doc):
+                if self.oracle.sample_lt(task.query_id, left_doc, right_doc):
                     order[i], order[i + 1] = order[i + 1], order[i]
                     swapped = True
         return order

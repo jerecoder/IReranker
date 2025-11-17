@@ -41,7 +41,7 @@ class Oracle(ABC):
         """Load comparison data for the given dataset, replacing any previous state."""
 
     @abstractmethod
-    def sample_outcome(self, query_id: str, doc_a: str, doc_b: str) -> bool:
+    def sample_lt(self, query_id: str, doc_a: str, doc_b: str) -> bool:
         """Return True when doc_a should be ranked ahead of doc_b."""
 
 
@@ -57,7 +57,7 @@ class BidirectionalMatrixOracle(Oracle):
         self._matrix = self._load_matrix(dataset, split)
         self._dataset = dataset
 
-    def sample_outcome(self, query_id: str, doc_a: str, doc_b: str) -> bool:
+    def sample_lt(self, query_id: str, doc_a: str, doc_b: str) -> bool:
         matrix = self._ensure_matrix_loaded()
         forward_key = (query_id, doc_a, doc_b)
         reverse_key = (query_id, doc_b, doc_a)
@@ -72,27 +72,25 @@ class BidirectionalMatrixOracle(Oracle):
         if forward_pref is None or reverse_pref is None:
             return False
 
-        # forward entry: 'A' refers to doc_a, 'B' refers to doc_b
-        # reverse entry: 'A' refers to doc_b, 'B' refers to doc_a
-        if forward_pref == "A" and reverse_pref == "B":
-            return True
-        if forward_pref == "B" and reverse_pref == "A":
-            return False
-        return False
+        return forward_pref == "A" and reverse_pref == "B"
 
     def _ensure_matrix_loaded(self) -> Dict[MatrixKey, Mapping[str, Any]]:
         if self._matrix is None:
             raise RuntimeError("Oracle matrix not loaded. Call load_dataset() first.")
         return self._matrix
 
-    def _entry_preference(self, entry: Mapping[str, Any]) -> Optional[str]:
+    def _entry_preference(self, entry: Mapping[str, Any] | None) -> Optional[str]:
+        if entry is None:
+            return None
         score_a, score_b = self._extract_scores(entry)
         if score_a is None or score_b is None or score_a == score_b:
             return None
         return "A" if score_a > score_b else "B"
 
     @staticmethod
-    def _extract_scores(entry: Mapping[str, Any]) -> Tuple[Optional[float], Optional[float]]:
+    def _extract_scores(
+        entry: Mapping[str, Any],
+    ) -> Tuple[Optional[float], Optional[float]]:
         raw_scores = entry.get("scores")
         pairs: List[Tuple[str, float]] = []
         if isinstance(raw_scores, Mapping):
@@ -135,7 +133,9 @@ class BidirectionalMatrixOracle(Oracle):
                 if dataset_key in path.name.lower():
                     candidates.append(path)
         if not candidates:
-            raise FileNotFoundError(f"No rerank matrix found for dataset '{dataset}' in {base}")
+            raise FileNotFoundError(
+                f"No rerank matrix found for dataset '{dataset}' in {base}"
+            )
         best = max(candidates, key=lambda p: p.stat().st_mtime)
         with best.open("rb") as f:
             obj = pickle.load(f)

@@ -27,7 +27,9 @@ def _entry_preference(entry: Dict[str, object]) -> str | None:
 
 def _extract_scores(entry: Dict[str, object]) -> Dict[str, float]:
     raw_scores = entry.get("scores")
-    iterable = raw_scores.items() if isinstance(raw_scores, dict) else (raw_scores or [])
+    iterable = (
+        raw_scores.items() if isinstance(raw_scores, dict) else (raw_scores or [])
+    )
     scores: Dict[str, float] = {}
     for pair in iterable:  # type: ignore
         if (
@@ -57,6 +59,7 @@ def _find_consistent_pair(
             return key, True  # doc_a wins
         if forward_pref == "B" and reverse_pref == "A":
             return key, False  # doc_b wins
+        # Any other combination means at least one tie/None.
     return None
 
 
@@ -85,7 +88,9 @@ def dataset_and_pair() -> Tuple[str, Tuple[MatrixKey, bool]]:
 
 
 @pytest.fixture()
-def oracle(dataset_and_pair: Tuple[str, Tuple[MatrixKey, bool]]) -> BidirectionalMatrixOracle:
+def oracle(
+    dataset_and_pair: Tuple[str, Tuple[MatrixKey, bool]],
+) -> BidirectionalMatrixOracle:
     dataset, _ = dataset_and_pair
     oracle = BidirectionalMatrixOracle()
     oracle.load_dataset(dataset)
@@ -98,9 +103,9 @@ def test_oracle_matches_real_votes(
 ) -> None:
     _, (key, expected) = dataset_and_pair
     qid, doc_a, doc_b = key
-    assert oracle.sample_outcome(qid, doc_a, doc_b) is expected
-    assert oracle.sample_outcome(qid, doc_b, doc_a) is (not expected)
+    assert oracle.sample_lt(qid, doc_a, doc_b) is expected
+    assert oracle.sample_lt(qid, doc_b, doc_a) is (not expected)
 
 
 def test_missing_pair_returns_false(oracle: BidirectionalMatrixOracle) -> None:
-    assert oracle.sample_outcome("__missing__", "docA", "docB") is False
+    assert oracle.sample_lt("__missing__", "docA", "docB") is False
