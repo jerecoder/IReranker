@@ -40,12 +40,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback evaluator
 
             ndcg = {f"NDCG@{k}": val / total for k, val in metrics["ndcg"].items()}
             mp = {f"MAP@{k}": val / total for k, val in metrics["map"].items()}
-            recall = {
-                f"Recall@{k}": val / total for k, val in metrics["recall"].items()
-            }
-            precision = {
-                f"P@{k}": val / total for k, val in metrics["precision"].items()
-            }
+            recall = {f"Recall@{k}": val / total for k, val in metrics["recall"].items()}
+            precision = {f"P@{k}": val / total for k, val in metrics["precision"].items()}
             return ndcg, mp, recall, precision
 
         @staticmethod
@@ -58,12 +54,12 @@ except ModuleNotFoundError:  # pragma: no cover - fallback evaluator
             for idx, rel in enumerate(gains):
                 if rel <= 0:
                     continue
-                dcg += (2 ** rel - 1) / math.log2(idx + 2)
+                dcg += (2**rel - 1) / math.log2(idx + 2)
 
             ideal_rels = sorted((v for v in rel_map.values() if v > 0), reverse=True)
             ideal = 0.0
             for idx, rel in enumerate(ideal_rels[:k]):
-                ideal += (2 ** rel - 1) / math.log2(idx + 2)
+                ideal += (2**rel - 1) / math.log2(idx + 2)
             if ideal == 0:
                 return 0.0
             return dcg / ideal
@@ -93,6 +89,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback evaluator
                 return 0.0
             hits = sum(1 for rel in gains if rel > 0)
             return hits / k
+
 
 from ireranker.rankers.base import Ranker
 from ireranker.types import RankingDataset

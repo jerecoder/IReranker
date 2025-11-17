@@ -1,2 +1,0 @@
-Zip: /home/jerefigo/Documents/UdeSA/Procesamiento_del_Lenguaje_Natural/IReranker/data/external/beir/webis-touche2020.zip
-Error: Rerank matrix not found for webis-touche2020/test. Skipping dataset.

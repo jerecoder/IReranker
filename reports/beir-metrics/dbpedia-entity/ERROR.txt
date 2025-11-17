@@ -1,2 +1,0 @@
-Zip: /home/jerefigo/Documents/UdeSA/Procesamiento_del_Lenguaje_Natural/IReranker/data/external/beir/dbpedia-entity.zip
-Error: Rerank matrix not found for dbpedia-entity/test. Skipping dataset.

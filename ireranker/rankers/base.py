@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import List
 
-from ireranker.types import RankingTask
+from ireranker.types import Oracle, RankingTask
 
 
 class Ranker(ABC):
@@ -15,8 +15,13 @@ class Ranker(ABC):
 
     name: str = "base"
 
-    def __init__(self, seed: int | None = None):
+    def __init__(self, oracle: Oracle, seed: int | None = None):
         self.seed = seed
+        self.oracle = oracle
+
+    def set_dataset(self, dataset: str, *, split: str = "test") -> None:
+        """Update the oracle with a new dataset before ranking."""
+        self.oracle.load_dataset(dataset, split=split)
 
     @abstractmethod
     def rank(self, task: RankingTask) -> List[int]:

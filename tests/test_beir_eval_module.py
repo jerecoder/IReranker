@@ -8,13 +8,13 @@ from ireranker.rankers import get_ranker
 from ireranker.types import RankingDataset, RankingTask
 
 
-def test_beir_qrels_and_eval_basic():
+def test_beir_qrels_and_eval_basic(dummy_oracle):
     tasks = []
     cands = [f"d{i}" for i in range(5)]
     y_true = [float(4 - i) for i in range(5)]
     tasks.append(RankingTask(query_id="q0", candidate_ids=cands, y_true=y_true))
     ds = RankingDataset(tasks=tasks)
-    r = get_ranker("identity")
+    r = get_ranker("identity", oracle=dummy_oracle)
 
     qrels = dataset_to_beir_qrels(ds)
     assert len(qrels) == 1

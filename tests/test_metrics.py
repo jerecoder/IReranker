@@ -3,14 +3,14 @@ from ireranker.rankers import get_ranker
 from ireranker.types import RankingDataset, RankingTask
 
 
-def test_beir_metrics_on_minimal():
+def test_beir_metrics_on_minimal(dummy_oracle):
     tasks = []
     for t in range(2):
         cands = [f"d{t}-{i}" for i in range(5)]
         y_true = [float(4 - i) for i in range(5)]
         tasks.append(RankingTask(query_id=f"q{t}", candidate_ids=cands, y_true=y_true))
     ds = RankingDataset(tasks=tasks)
-    r = get_ranker("identity")
+    r = get_ranker("identity", oracle=dummy_oracle)
 
     qrels = dataset_to_beir_qrels(ds)
     assert len(qrels) == 2

@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import csv
 import json
+from pathlib import Path
 import pickle
 import shutil
-import zipfile
-from pathlib import Path
 from typing import Dict, List, Optional
+import zipfile
 
 try:
     from loguru import logger
@@ -102,9 +102,7 @@ def _get_generic_loader():
 
         _GENERIC_LOADER_CLS = GenericDataLoader
     except ModuleNotFoundError:
-        logger.warning(
-            "beir package not installed; using simplified JSONL loader instead"
-        )
+        logger.warning("beir package not installed; using simplified JSONL loader instead")
         _GENERIC_LOADER_CLS = _JsonlGenericDataLoader
     return _GENERIC_LOADER_CLS
 
@@ -239,11 +237,7 @@ def _load_rerank_matrix(dataset: str, split: str) -> Optional[Dict[str, List[str
                 for k in obj.keys():
                     if isinstance(k, tuple) and len(k) == 3:
                         qid, a, b = k
-                        if (
-                            isinstance(qid, str)
-                            and isinstance(a, str)
-                            and isinstance(b, str)
-                        ):
+                        if isinstance(qid, str) and isinstance(a, str) and isinstance(b, str):
                             acc.setdefault(qid, set()).update([a, b])
                 logger.info(f"Loaded rerank matrix from {best} (queries: {len(acc)})")
                 return {qid: sorted(list(s)) for qid, s in acc.items()}
@@ -299,9 +293,7 @@ def load_beir_dataset(
         total = len(q_ids)
         q_ids = [qid for qid in q_ids if qid in matrix]
         used = len(q_ids)
-        logger.info(
-            f"Using rerank matrix for {used} of {total} queries in {canonical}/{split}"
-        )
+        logger.info(f"Using rerank matrix for {used} of {total} queries in {canonical}/{split}")
     else:
         from ireranker.config import EXTERNAL_DATA_DIR
 
@@ -326,6 +318,7 @@ def load_beir_dataset(
                 query_id=qid,
                 candidate_ids=cand_ids,
                 y_true=y_true,
+                dataset_path=str(data_path),
             )
         )
 

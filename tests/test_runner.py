@@ -4,15 +4,15 @@ import ireranker.rankers.baselines  # noqa: F401
 from ireranker.types import RankingDataset, RankingTask
 
 
-def test_beir_eval_returns_rows_for_rankers():
+def test_beir_eval_returns_rows_for_rankers(dummy_oracle_factory):
     tasks = []
     for t in range(3):
         cands = [f"d{t}-{i}" for i in range(5)]
         y_true = [float(4 - i) for i in range(5)]
         tasks.append(RankingTask(query_id=f"q{t}", candidate_ids=cands, y_true=y_true))
     ds = RankingDataset(tasks=tasks)
-    r_identity = get_ranker("identity")
-    r_reverse = get_ranker("reverse")
+    r_identity = get_ranker("identity", oracle=dummy_oracle_factory())
+    r_reverse = get_ranker("reverse", oracle=dummy_oracle_factory())
 
     rows = evaluate_rankers_beir([r_identity, r_reverse], ds, [5])
     # Expect one row per ranker for k=5
