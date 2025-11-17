@@ -1,0 +1,2 @@
+Zip: /home/jerefigo/Documents/UdeSA/Procesamiento_del_Lenguaje_Natural/IReranker/data/external/beir/trec-covid.zip
+Error: Rerank matrix not found for trec-covid/test. Skipping dataset.

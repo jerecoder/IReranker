@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -10,9 +11,14 @@ from ireranker.config import PROJ_ROOT, REPORTS_DIR
 from ireranker.data.loaders import _beir_supported_name, load_beir_dataset
 from ireranker.evaluation.beir import evaluate_rankers_beir
 from ireranker.rankers import get_ranker
+from ireranker.types import BidirectionalMatrixOracle
 
 
-def run_from_config(config_path: Optional[Path] = None) -> None:
+def run_from_config(
+    config_path: Optional[Path] = None,
+    *,
+    dataset_override: Optional[str] = None,
+) -> None:
     cfg_path = config_path or (PROJ_ROOT / "config" / "beir_eval.json")
 
     cfg: Dict[str, Any] = {}
@@ -26,6 +32,8 @@ def run_from_config(config_path: Optional[Path] = None) -> None:
         raise FileNotFoundError(f"Config not found: {cfg_path}")
 
     raw_ds = cfg.get("datasets") if isinstance(cfg.get("datasets"), list) else None
+    if dataset_override:
+        raw_ds = [dataset_override]
     if not raw_ds:
         raise ValueError("Config is missing 'datasets' list")
     ds_names = [_beir_supported_name(d) for d in raw_ds]
@@ -44,7 +52,7 @@ def run_from_config(config_path: Optional[Path] = None) -> None:
         eff_rankers = cfg_rankers
 
     seed = int(cfg.get("seed") or 123)
-    rs = [get_ranker(r, seed=seed) for r in eff_rankers]
+    rs = [get_ranker(r, seed=seed, oracle=BidirectionalMatrixOracle()) for r in eff_rankers]
 
     cfg_kvals = cfg.get("k_values") if isinstance(cfg.get("k_values"), list) else None
     k_values = list(cfg_kvals) if cfg_kvals else [1, 3, 5, 10, 100]
@@ -69,6 +77,8 @@ def run_from_config(config_path: Optional[Path] = None) -> None:
                 split=split,
                 max_queries=max_queries,
             )
+            for ranker in rs:
+                ranker.set_dataset(d, split=split)
             rows = evaluate_rankers_beir(rs, dataset, k_values)
 
             import pandas as pd
@@ -76,7 +86,7 @@ def run_from_config(config_path: Optional[Path] = None) -> None:
             d_out = eff_out_root / d
             d_out.mkdir(parents=True, exist_ok=True)
             pd.DataFrame(rows).to_csv(d_out / "summary.csv", index=False)
-            logger.success(f"Saved BEIR evaluation summary to {d_out / 'summary.csv'}")
+            logger.success(f"Saved BEIR evaluation summary to {d_out / 'summary.csv'}")  # type: ignore
         except Exception as e:
             from ireranker.config import EXTERNAL_DATA_DIR
 
@@ -92,7 +102,23 @@ def run_from_config(config_path: Optional[Path] = None) -> None:
 
 
 def main() -> None:
-    run_from_config()
+    parser = argparse.ArgumentParser(description="Evaluate rankers on BEIR datasets.")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default=None,
+        help="Path to a custom beir_eval.json file.",
+    )
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        default=None,
+        help="Run evaluation only on this dataset name.",
+    )
+    args = parser.parse_args()
+
+    cfg_path = Path(args.config) if args.config else None
+    run_from_config(cfg_path, dataset_override=args.dataset)
 
 
 if __name__ == "__main__":

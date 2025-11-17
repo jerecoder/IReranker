@@ -39,6 +39,7 @@ RAG reranking con IR.
   - `conda activate IReranker`
 
 Comandos útiles dentro del env `IReranker`:
+- Instalar dependencias del proyecto: `make requirements`
 - Lint/format: `make lint` / `make format`
 - Tests: `make test`
 - Evaluación BEIR (usa configs): `make beir-eval`
@@ -67,9 +68,10 @@ Comandos útiles dentro del env `IReranker`:
   - `make beir-eval`
   - o `python -m ireranker.run_beir_eval`
 
-- Overrides comunes:
-  - `--datasets trec-covid` `--max-queries 200`
-  - `--out-dir /ruta/absoluta` o `--config-path otro.json`
+- Overrides:
+  - `make beir-eval ARGS="--dataset webis-touche2020"`
+  - `python -m ireranker.run_beir_eval --dataset trec-covid --max-queries 200`
+  - `python -m ireranker.run_beir_eval --config /ruta/a/custom.json`
 
 ## Salida
 

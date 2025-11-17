@@ -68,8 +68,7 @@ create_environment:
 ## Evaluate all registered rankers on BEIR datasets (config-driven)
 .PHONY: beir-eval
 beir-eval:
-	$(PYTHON_INTERPRETER) -m ireranker.run_beir_eval
-
+	$(PYTHON_INTERPRETER) -m ireranker.run_beir_eval $(ARGS)
  
 
 
