@@ -17,9 +17,6 @@ class BubbleRanker(Ranker):
 
     def rank(self, task: RankingTask) -> List[int]:
         order = list(range(len(task.candidate_ids)))
-        if not order:
-            return order
-
         swapped = True
         while swapped:
             swapped = False

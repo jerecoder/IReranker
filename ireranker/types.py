@@ -72,7 +72,7 @@ class BidirectionalMatrixOracle(Oracle):
         if forward_pref is None or reverse_pref is None:
             return False
 
-        return forward_pref == "A" and reverse_pref == "B"
+        return forward_pref == "B" and reverse_pref == "A"
 
     def _ensure_matrix_loaded(self) -> Dict[MatrixKey, Mapping[str, Any]]:
         if self._matrix is None:
