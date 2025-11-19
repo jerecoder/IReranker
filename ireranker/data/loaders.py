@@ -8,13 +8,7 @@ import shutil
 from typing import Dict, List, Optional
 import zipfile
 
-try:
-    from loguru import logger
-except ModuleNotFoundError:  # pragma: no cover - fallback to stdlib logging
-    import logging
-
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger("ireranker")
+from loguru import logger
 
 from ireranker.types import RankingDataset, RankingTask
 
