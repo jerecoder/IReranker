@@ -1,8 +1,8 @@
 # IReranker
 
-RAG reranking con IR.
+RAG reranking with IR.
 
-## Estructura
+## Structure
 
 ```
 ├─ LICENSE
@@ -34,29 +34,29 @@ RAG reranking con IR.
 └─ pyproject.toml
 ```
 
-## Instalacion con conda (sugerido)
+## Installation with conda (recommended)
 
-  - `make environment` (crea `IReranker` con Python 3.10 e instala deps)
+  - `make environment` (creates `IReranker` env with Python 3.10 and installs deps)
   - `conda activate IReranker`
 
-Comandos útiles dentro del env `IReranker`:
-- Instalar dependencias del proyecto: `make requirements`
+Useful commands inside the `IReranker` env:
+- Install project dependencies: `make requirements`
 - Lint/format: `make lint` / `make format`
 - Tests: `make test`
-- Evaluación BEIR (usa configs): `make beir-eval`
+- BEIR evaluation (uses configs): `make beir-eval`
 
-## Configuración
+## Configuration
 
 - `config/beir_eval.json`
-  - `datasets`: lista de datasets BEIR a evaluar (nombres canónicos)
-  - `split`: split (p.ej. "test")
-  - `max_queries`: límite de queries (o null)
-  - `light_exclude`: lista de datasets que se omiten cuando se corre con `--light`
-  - `seed`: semilla
-  - `k_values`: cortes de evaluación, p.ej. [1,3,5,10,100]
-  - `output_dir`: destino de resultados (absoluto o relativo a REPORTS_DIR)
-  - `rankers`: ["all"] o lista de nombres
-  - Ejemplo actual (config/beir_eval.json):
+  - `datasets`: list of BEIR datasets to evaluate (canonical names)
+  - `split`: BEIR split (e.g., "test")
+  - `max_queries`: query cap (or null)
+  - `light_exclude`: datasets to skip when running with `--light`
+  - `seed`: RNG seed
+  - `k_values`: evaluation cutoffs, e.g., [1,3,5,10,100]
+  - `output_dir`: results destination (absolute or relative to REPORTS_DIR)
+  - `rankers`: ["all"] or a list of names
+  - Current example (`config/beir_eval.json`):
 
     ```json
     {
@@ -79,32 +79,31 @@ Comandos útiles dentro del env `IReranker`:
     ```
 
 - `config/beir_loader.json`
-  - `base_url`: URL base de BEIR
-  - `cache_subdir`: subcarpeta bajo `data/external/`
+  - `base_url`: BEIR base URL
+  - `cache_subdir`: sub-folder under `data/external/`
 
-## Uso
+## Usage
 
-- Ver datasets del config:
-  - `(edita config/beir_eval.json para cambiar datasets)`
+- View/adjust datasets via `config/beir_eval.json`.
 
-- Ejecutar evaluación (usa config):
+- Run evaluation (uses config):
   - `make beir-eval`
-  - o `python -m ireranker.run_beir_eval`
+  - or `python -m ireranker.run_beir_eval`
 
 - Overrides:
   - `make beir-eval ARGS="--dataset webis-touche2020"`
-  - `make beir-eval ARGS="--light"` para saltar datasets pesados definidos en `light_exclude`
+  - `make beir-eval ARGS="--light"` to skip datasets from `light_exclude`
   - `python -m ireranker.run_beir_eval --dataset trec-covid --max-queries 200`
-  - `python -m ireranker.run_beir_eval --config /ruta/a/custom.json`
+  - `python -m ireranker.run_beir_eval --config /path/to/custom.json`
 
-## Salida
+## Output
 
-Por dataset: CSV `summary.csv` con filas por ranker y k
-- Columnas: `ranker,k,NDCG,MAP,Recall,Precision`
-- Carpeta: `reports/beir-metrics/<dataset>/` o `output_dir`
+Per dataset: CSV `summary.csv` with one row per ranker & k
+- Columns: `ranker,k,NDCG,MAP,Recall,Precision`
+- Directory: `reports/beir-metrics/<dataset>/` or `output_dir`
 
-## Notas
+## Notes
 
-- Si el directorio del dataset existe, no se descarga de nuevo.
-- Tras descomprimir, se elimina el ZIP para ahorrar espacio.
-- Errores de descarga se registran y se continúa con el siguiente dataset (se crea `ERROR.txt`).
+- Existing dataset directories are reused (no re-download).
+- After extraction the ZIP is removed to save space.
+- Download errors are logged and the dataset creates an `ERROR.txt` so the run continues.
