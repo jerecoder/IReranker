@@ -41,7 +41,11 @@ def run_from_config(
     ds_names = [d for d in ds_names if d]
     if light_mode and dataset_override is None:
         cfg_exclude = cfg.get("light_exclude")
-        exclude = {_beir_supported_name(d) for d in cfg_exclude} if isinstance(cfg_exclude, list) else set()
+        exclude = (
+            {_beir_supported_name(d) for d in cfg_exclude}
+            if isinstance(cfg_exclude, list)
+            else set()
+        )
         exclude = {d for d in exclude if d}
         if exclude:
             before = set(ds_names)
