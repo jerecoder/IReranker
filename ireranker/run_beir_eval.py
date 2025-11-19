@@ -85,7 +85,15 @@ def run_from_config(
 
             d_out = eff_out_root / d
             d_out.mkdir(parents=True, exist_ok=True)
-            pd.DataFrame(rows).to_csv(d_out / "summary.csv", index=False)
+            summary_path = d_out / "summary.csv"
+            error_path = d_out / "ERROR.txt"
+            for old in (summary_path, error_path):
+                if old.exists():
+                    try:
+                        old.unlink()
+                    except OSError:
+                        logger.warning(f"Could not remove stale file {old}")
+            pd.DataFrame(rows).to_csv(summary_path, index=False)
             logger.success(f"Saved BEIR evaluation summary to {d_out / 'summary.csv'}")  # type: ignore
         except Exception as e:
             from ireranker.config import EXTERNAL_DATA_DIR
@@ -94,7 +102,19 @@ def run_from_config(
             logger.error(f"Failed dataset '{d}'. Zip: {zip_path}. Error: {e}")
             err_dir = eff_out_root / d
             err_dir.mkdir(parents=True, exist_ok=True)
-            (err_dir / "ERROR.txt").write_text(f"Zip: {zip_path}\nError: {e}\n")
+            summary_path = err_dir / "summary.csv"
+            if summary_path.exists():
+                try:
+                    summary_path.unlink()
+                except OSError:
+                    logger.warning(f"Could not remove stale file {summary_path}")
+            err_file = err_dir / "ERROR.txt"
+            if err_file.exists():
+                try:
+                    err_file.unlink()
+                except OSError:
+                    logger.warning(f"Could not remove stale file {err_file}")
+            err_file.write_text(f"Zip: {zip_path}\nError: {e}\n")
             failed.append(d)
 
     if failed:
