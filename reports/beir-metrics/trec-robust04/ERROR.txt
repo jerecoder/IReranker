@@ -1,2 +1,0 @@
-Zip: C:\Users\jeref\Documents\IReranker\data\external\beir\trec-robust04.zip
-Error: File is not a zip file

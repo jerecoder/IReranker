@@ -51,10 +51,32 @@ Comandos útiles dentro del env `IReranker`:
   - `datasets`: lista de datasets BEIR a evaluar (nombres canónicos)
   - `split`: split (p.ej. "test")
   - `max_queries`: límite de queries (o null)
+  - `light_exclude`: lista de datasets que se omiten cuando se corre con `--light`
   - `seed`: semilla
   - `k_values`: cortes de evaluación, p.ej. [1,3,5,10,100]
   - `output_dir`: destino de resultados (absoluto o relativo a REPORTS_DIR)
   - `rankers`: ["all"] o lista de nombres
+  - Ejemplo actual (config/beir_eval.json):
+
+    ```json
+    {
+      "datasets": [
+        "webis-touche2020",
+        "nfcorpus",
+        "trec-covid",
+        "scifact",
+        "fiqa",
+        "dbpedia-entity"
+      ],
+      "split": "test",
+      "max_queries": null,
+      "seed": 69420,
+      "k_values": [1, 3, 5, 10, 100],
+      "light_exclude": ["dbpedia-entity", "trec-covid", "fiqa", "nfcorpus"],
+      "output_dir": "beir-metrics",
+      "rankers": ["all"]
+    }
+    ```
 
 - `config/beir_loader.json`
   - `base_url`: URL base de BEIR
@@ -71,6 +93,7 @@ Comandos útiles dentro del env `IReranker`:
 
 - Overrides:
   - `make beir-eval ARGS="--dataset webis-touche2020"`
+  - `make beir-eval ARGS="--light"` para saltar datasets pesados definidos en `light_exclude`
   - `python -m ireranker.run_beir_eval --dataset trec-covid --max-queries 200`
   - `python -m ireranker.run_beir_eval --config /ruta/a/custom.json`
 

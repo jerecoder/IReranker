@@ -10,8 +10,19 @@
   "split": "test",
   "max_queries": null,
   "seed": 69420,
-  "k_values": [1, 3, 5, 10, 100],
-  
+  "k_values": [
+    1,
+    3,
+    5,
+    10,
+    100
+  ],
+  "light_exclude": [
+    "dbpedia-entity",
+    "fiqa"
+  ],
   "output_dir": "beir-metrics",
-  "rankers": ["all"]
+  "rankers": [
+    "all"
+  ]
 }

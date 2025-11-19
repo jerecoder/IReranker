@@ -18,6 +18,7 @@ def run_from_config(
     config_path: Optional[Path] = None,
     *,
     dataset_override: Optional[str] = None,
+    light_mode: bool = False,
 ) -> None:
     cfg_path = config_path or (PROJ_ROOT / "config" / "beir_eval.json")
 
@@ -38,6 +39,16 @@ def run_from_config(
         raise ValueError("Config is missing 'datasets' list")
     ds_names = [_beir_supported_name(d) for d in raw_ds]
     ds_names = [d for d in ds_names if d]
+    if light_mode and dataset_override is None:
+        cfg_exclude = cfg.get("light_exclude")
+        exclude = {_beir_supported_name(d) for d in cfg_exclude} if isinstance(cfg_exclude, list) else set()
+        exclude = {d for d in exclude if d}
+        if exclude:
+            before = set(ds_names)
+            ds_names = [d for d in ds_names if d not in exclude]
+            skipped = sorted(before - set(ds_names))
+            if skipped:
+                logger.info(f"Light mode skipping datasets: {', '.join(skipped)}")
     if not ds_names:
         raise ValueError("No supported BEIR datasets to evaluate.")
 
@@ -135,10 +146,15 @@ def main() -> None:
         default=None,
         help="Run evaluation only on this dataset name.",
     )
+    parser.add_argument(
+        "--light",
+        action="store_true",
+        help="Skip datasets listed in config/light_exclude.",
+    )
     args = parser.parse_args()
 
     cfg_path = Path(args.config) if args.config else None
-    run_from_config(cfg_path, dataset_override=args.dataset)
+    run_from_config(cfg_path, dataset_override=args.dataset, light_mode=args.light)
 
 
 if __name__ == "__main__":

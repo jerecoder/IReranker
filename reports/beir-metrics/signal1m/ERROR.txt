@@ -1,2 +1,0 @@
-Zip: C:\Users\jeref\Documents\IReranker\data\external\beir\signal1m.zip
-Error: File is not a zip file
