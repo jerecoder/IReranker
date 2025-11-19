@@ -1,5 +1,5 @@
-# Ensure built-in baselines are registered on import
-from . import baselines as _baselines  # noqa: F401
-from .base import Ranker  # noqa: F401
-from .BubbleRank import BubbleRanker as BubbleRanker
+# Ensure built-in rankers are registered on import
+from . import RandomRanker as _RandomRanker  # noqa: F401
+from .BubbleRanker import BubbleRanker as BubbleRanker
+from .Ranker import Ranker  # noqa: F401
 from .registry import get_ranker, list_rankers, register_ranker  # noqa: F401

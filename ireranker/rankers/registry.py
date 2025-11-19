@@ -4,7 +4,7 @@ from typing import Callable, Dict, List, Type
 
 from ireranker.types import Oracle
 
-from .base import Ranker
+from .Ranker import Ranker
 
 _REGISTRY: Dict[str, Type[Ranker]] = {}
 

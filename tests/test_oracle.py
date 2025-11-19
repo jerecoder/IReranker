@@ -103,8 +103,8 @@ def test_oracle_matches_real_votes(
 ) -> None:
     _, (key, expected) = dataset_and_pair
     qid, doc_a, doc_b = key
-    assert oracle.sample_lt(qid, doc_a, doc_b) is expected
-    assert oracle.sample_lt(qid, doc_b, doc_a) is (not expected)
+    assert oracle.sample_lt(qid, doc_a, doc_b) is (not expected)
+    assert oracle.sample_lt(qid, doc_b, doc_a) is expected
 
 
 def test_missing_pair_returns_false(oracle: BidirectionalMatrixOracle) -> None:

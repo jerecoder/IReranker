@@ -21,9 +21,10 @@ RAG reranking con IR.
 │  ├─ types.py             # RankingTask, RankingDataset
 │  ├─ rankers
 │  │  ├─ __init__.py
-│  │  ├─ base.py
+│  │  ├─ Ranker.py
 │  │  ├─ registry.py
-│  │  └─ baselines.py
+│  │  ├─ RandomRanker.py
+│  │  └─ BubbleRanker.py
 │  ├─ data
 │  │  └─ loaders.py        # Loader BEIR
 │  ├─ evaluation

@@ -5,6 +5,7 @@ from ireranker.evaluation.beir import (
     evaluate_rankers_beir,
 )
 from ireranker.rankers import get_ranker
+import ireranker.rankers.RandomRanker  # noqa: F401
 from ireranker.types import RankingDataset, RankingTask
 
 
@@ -14,7 +15,7 @@ def test_beir_qrels_and_eval_basic(dummy_oracle):
     y_true = [float(4 - i) for i in range(5)]
     tasks.append(RankingTask(query_id="q0", candidate_ids=cands, y_true=y_true))
     ds = RankingDataset(tasks=tasks)
-    r = get_ranker("identity", oracle=dummy_oracle)
+    r = get_ranker("random", oracle=dummy_oracle, seed=0)
 
     qrels = dataset_to_beir_qrels(ds)
     assert len(qrels) == 1
@@ -25,7 +26,7 @@ def test_beir_qrels_and_eval_basic(dummy_oracle):
     rows = evaluate_rankers_beir([r], ds, [1, 3, 5])
     assert len(rows) == 3
     for row in rows:
-        assert row["ranker"] == "identity"
+        assert row["ranker"] == "random"
         assert row["k"] in (1, 3, 5)
         for key in ("NDCG", "MAP", "Recall", "Precision"):
             val = float(row[key])

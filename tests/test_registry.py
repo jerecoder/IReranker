@@ -1,12 +1,12 @@
 from ireranker.rankers import get_ranker, list_rankers
-import ireranker.rankers.baselines  # noqa: F401 - ensure registration side effects
+import ireranker.rankers.RandomRanker  # noqa: F401 - ensure registration side effects
+import ireranker.rankers.BubbleRanker  # noqa: F401 - ensure registration side effects
 from ireranker.types import RankingDataset, RankingTask
 
 
 def test_registry_lists_baselines():
     names = list_rankers()
-    assert "identity" in names
-    assert "reverse" in names
+    assert "bubbly" in names
     assert "random" in names
 
 

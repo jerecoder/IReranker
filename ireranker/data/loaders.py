@@ -20,91 +20,6 @@ from ireranker.types import RankingDataset, RankingTask
 
 # --- BEIR dataset loader utilities -------------------------------------------------------
 _BEIR_CFG_CACHE: Optional[Dict[str, object]] = None
-_GENERIC_LOADER_CLS = None
-
-
-class _JsonlGenericDataLoader:
-    """Minimal stand-in for BEIR's GenericDataLoader when the package is unavailable."""
-
-    def __init__(self, data_path: str | Path):
-        self.data_path = Path(data_path)
-
-    def load(self, split: str = "test"):
-        corpus = self._read_corpus()
-        queries = self._read_queries()
-        qrels = self._read_qrels(split)
-        return corpus, queries, qrels
-
-    def _read_corpus(self) -> Dict[str, Dict[str, object]]:
-        path = self.data_path / "corpus.jsonl"
-        if not path.exists():
-            raise FileNotFoundError(f"Missing BEIR file: {path}")
-        records: Dict[str, Dict[str, object]] = {}
-        with path.open("r", encoding="utf-8") as f:
-            for line in f:
-                raw = line.strip()
-                if not raw:
-                    continue
-                obj = json.loads(raw)
-                doc_id = obj.get("_id")
-                if isinstance(doc_id, str):
-                    records[doc_id] = {
-                        "title": obj.get("title"),
-                        "text": obj.get("text"),
-                        "metadata": obj.get("metadata") or {},
-                    }
-        return records
-
-    def _read_queries(self) -> Dict[str, str]:
-        path = self.data_path / "queries.jsonl"
-        if not path.exists():
-            raise FileNotFoundError(f"Missing BEIR queries file: {path}")
-        queries: Dict[str, str] = {}
-        with path.open("r", encoding="utf-8") as f:
-            for line in f:
-                raw = line.strip()
-                if not raw:
-                    continue
-                obj = json.loads(raw)
-                qid = obj.get("_id")
-                text = obj.get("text")
-                if isinstance(qid, str) and isinstance(text, str):
-                    queries[qid] = text
-        return queries
-
-    def _read_qrels(self, split: str) -> Dict[str, Dict[str, int]]:
-        path = self.data_path / "qrels" / f"{split}.tsv"
-        if not path.exists():
-            raise FileNotFoundError(f"Missing BEIR qrels file: {path}")
-        qrels: Dict[str, Dict[str, int]] = {}
-        with path.open("r", encoding="utf-8") as f:
-            reader = csv.reader(f, delimiter="\t")
-            for row in reader:
-                if not row or row[0] == "query-id":
-                    continue
-                if len(row) < 3:
-                    continue
-                qid, doc_id, score = row[0], row[1], row[2]
-                try:
-                    score_val = int(score)
-                except ValueError:
-                    continue
-                qrels.setdefault(qid, {})[doc_id] = score_val
-        return qrels
-
-
-def _get_generic_loader():
-    global _GENERIC_LOADER_CLS
-    if _GENERIC_LOADER_CLS is not None:
-        return _GENERIC_LOADER_CLS
-    try:
-        from beir.datasets.data_loader import GenericDataLoader
-
-        _GENERIC_LOADER_CLS = GenericDataLoader
-    except ModuleNotFoundError:
-        logger.warning("beir package not installed; using simplified JSONL loader instead")
-        _GENERIC_LOADER_CLS = _JsonlGenericDataLoader
-    return _GENERIC_LOADER_CLS
 
 
 def _load_beir_config() -> Dict[str, object]:
@@ -247,6 +162,29 @@ def _load_rerank_matrix(dataset: str, split: str) -> Optional[Dict[str, List[str
         return None
 
 
+def _read_beir_qrels(data_path: Path, split: str) -> Dict[str, Dict[str, int]]:
+    """Parse the BEIR qrels TSV for the requested split."""
+    path = data_path / "qrels" / f"{split}.tsv"
+    if not path.exists():
+        raise FileNotFoundError(f"Missing BEIR qrels file: {path}")
+
+    qrels: Dict[str, Dict[str, int]] = {}
+    with path.open("r", encoding="utf-8") as f:
+        reader = csv.reader(f, delimiter="\t")
+        for row in reader:
+            if not row or row[0] == "query-id":
+                continue
+            if len(row) < 3:
+                continue
+            qid, doc_id, score = row[0], row[1], row[2]
+            try:
+                score_val = int(score)
+            except ValueError:
+                continue
+            qrels.setdefault(qid, {})[doc_id] = score_val
+    return qrels
+
+
 def load_beir_dataset(
     dataset: str,
     *,
@@ -278,23 +216,10 @@ def load_beir_dataset(
 
     data_path = _download_beir_once(canonical, base_out)
 
-    loader_cls = _get_generic_loader()
-    corpus, queries, qrels = loader_cls(data_path).load(split=split)
-
     tasks: List[RankingTask] = []
 
-    q_ids = list(queries.keys())
-    q_ids.sort()
-    if max_queries is not None:
-        q_ids = q_ids[:max_queries]
-
     matrix = _load_rerank_matrix(canonical, split)
-    if matrix is not None:
-        total = len(q_ids)
-        q_ids = [qid for qid in q_ids if qid in matrix]
-        used = len(q_ids)
-        logger.info(f"Using rerank matrix for {used} of {total} queries in {canonical}/{split}")
-    else:
+    if matrix is None:
         from ireranker.config import EXTERNAL_DATA_DIR
 
         base_only = EXTERNAL_DATA_DIR / "reranking-matrices"
@@ -305,11 +230,17 @@ def load_beir_dataset(
             f"Rerank matrix not found for {canonical}/{split}. Skipping dataset."
         )
 
+    q_ids = sorted(matrix.keys())
+    if max_queries is not None:
+        q_ids = q_ids[:max_queries]
+    logger.info(f"Using rerank matrix for {len(q_ids)} queries in {canonical}/{split}")
+
+    qrels = _read_beir_qrels(Path(data_path), split)
+
     for qid in q_ids:
         rel_map: Dict[str, int] = qrels.get(qid, {})
 
-        allowed = [doc for doc in matrix[qid] if doc in corpus]  # type: ignore[index]
-        cand_ids: List[str] = allowed
+        cand_ids: List[str] = matrix[qid]
 
         y_true = [float(rel_map.get(doc_id, 0)) for doc_id in cand_ids]
 

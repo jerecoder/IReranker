@@ -5,7 +5,7 @@ from typing import Dict, Iterable, List, Tuple
 
 from tqdm import tqdm
 
-from ireranker.rankers.base import Ranker
+from ireranker.rankers.Ranker import Ranker
 from ireranker.types import RankingDataset
 
 try:
