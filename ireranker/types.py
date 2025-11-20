@@ -42,7 +42,7 @@ class Oracle(ABC):
 
     @abstractmethod
     def sample_lt(self, task: RankingTask, i: int, j: int) -> bool:
-        """Return True when doc in position i should be ranked ahead of doc in position j."""
+        """Return True when doc at index i should be ranked after doc at index j."""
 
 
 class BidirectionalMatrixOracle(Oracle):
@@ -57,10 +57,19 @@ class BidirectionalMatrixOracle(Oracle):
         self._matrix = self._load_matrix(dataset, split)
         self._dataset = dataset
 
-    def sample_lt(self, task: RankingTask, i: int, j: int) -> bool:
+    def sample_lt(self, task: RankingTask | str, i: int | str, j: int | str) -> bool:
         matrix = self._ensure_matrix_loaded()
-        forward_key = (task.query_id, task.candidate_ids[i], task.candidate_ids[j])
-        reverse_key = (task.query_id, task.candidate_ids[j], task.candidate_ids[i])
+        if isinstance(task, RankingTask):
+            qid = task.query_id
+            doc_a = task.candidate_ids[i]
+            doc_b = task.candidate_ids[j]
+        else:
+            qid = str(task)
+            doc_a = str(i)
+            doc_b = str(j)
+
+        forward_key = (qid, doc_a, doc_b)
+        reverse_key = (qid, doc_b, doc_a)
 
         forward_entry = matrix.get(forward_key)
         reverse_entry = matrix.get(reverse_key)
@@ -133,9 +142,7 @@ class BidirectionalMatrixOracle(Oracle):
                 if dataset_key in path.name.lower():
                     candidates.append(path)
         if not candidates:
-            raise FileNotFoundError(
-                f"No rerank matrix found for dataset '{dataset}' in {base}"
-            )
+            raise FileNotFoundError(f"No rerank matrix found for dataset '{dataset}' in {base}")
         best = max(candidates, key=lambda p: p.stat().st_mtime)
         with best.open("rb") as f:
             obj = pickle.load(f)

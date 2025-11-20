@@ -99,7 +99,7 @@ Useful commands inside the `IReranker` env:
 ## Output
 
 Per dataset: CSV `summary.csv` with one row per ranker & k
-- Columns: `ranker,k,NDCG,MAP,Recall,Precision`
+- Columns: `ranker,k,NDCG,MAP,Recall,Precision,Comparisons,NDCG_per_comp` (`NDCG_per_comp` is NDCG divided by comparisons)
 - Directory: `reports/beir-metrics/<dataset>/` or `output_dir`
 
 ## Notes
@@ -107,3 +107,36 @@ Per dataset: CSV `summary.csv` with one row per ranker & k
 - Existing dataset directories are reused (no re-download).
 - After extraction the ZIP is removed to save space.
 - Download errors are logged and the dataset creates an `ERROR.txt` so the run continues.
+
+
+## BEIR results
+
+Table 1 shows per-dataset averages over all rows in `summary.csv` (all rankers and k values), including the NDCG/Comparisons rate. Table 2 shows NDCG@10 for each dataset/ranker. Datasets without results show `n/a`. Both tables update after each BEIR evaluation.
+
+<!-- BEGIN_BEIR_RESULTS -->
+| Dataset | NDCG | MAP | Recall | Precision | NDCG/Comparisons |
+| --- | --- | --- | --- | --- | --- |
+| dbpedia-entity | n/a | n/a | n/a | n/a | n/a |
+| fiqa | n/a | n/a | n/a | n/a | n/a |
+| nfcorpus | 0.4689 | 0.2651 | 0.4285 | 0.2900 | 0.0000 |
+| robust04 | n/a | n/a | n/a | n/a | n/a |
+| scifact | 0.4128 | 0.3730 | 0.5396 | 0.1329 | 0.0000 |
+| signal1m | n/a | n/a | n/a | n/a | n/a |
+| trec-covid | 0.6943 | 0.1790 | 0.2688 | 0.6768 | 0.0000 |
+| trec-news | n/a | n/a | n/a | n/a | n/a |
+| trec-robust04 | n/a | n/a | n/a | n/a | n/a |
+| webis-touche2020 | 0.2745 | 0.0899 | 0.2805 | 0.1950 | 0.0000 |
+
+| Dataset | bubbly | mohajer | random |
+| --- | --- | --- | --- |
+| dbpedia-entity | n/a | n/a | n/a |
+| fiqa | n/a | n/a | n/a |
+| nfcorpus | 0.4809 | 0.6035 | 0.2596 |
+| robust04 | n/a | n/a | n/a |
+| scifact | 0.5329 | 0.6789 | 0.0440 |
+| signal1m | n/a | n/a | n/a |
+| trec-covid | 0.7177 | 0.7713 | 0.3915 |
+| trec-news | n/a | n/a | n/a |
+| trec-robust04 | n/a | n/a | n/a |
+| webis-touche2020 | 0.2362 | 0.2763 | 0.1128 |
+<!-- END_BEIR_RESULTS -->

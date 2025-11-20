@@ -30,7 +30,16 @@ class Ranker(ABC):
         """Return a permutation of indices for the candidate list."""
         raise NotImplementedError
 
-    def lt(self, i: int, j: int):
-        """Sample comparisson from the oracle"""
-        self.oracle.sample_lt(self.task, i, j)
+    def lt(self, i: int, j: int) -> bool:
+        """Return True when item i should be ranked after item j."""
         self.comparissons += 1
+        return self.oracle.sample_lt(self.task, i, j)
+
+    def reset_comparisons(self) -> None:
+        """Reset comparison counter before a new evaluation."""
+        self.comparissons = 0
+
+    @property
+    def comparisons(self) -> int:
+        """Return the number of comparisons made by this ranker."""
+        return self.comparissons

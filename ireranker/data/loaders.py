@@ -8,8 +8,7 @@ import shutil
 from typing import Dict, List, Optional
 import zipfile
 
-from loguru import logger
-
+from ireranker.config import logger
 from ireranker.types import RankingDataset, RankingTask
 
 # --- BEIR dataset loader utilities -------------------------------------------------------

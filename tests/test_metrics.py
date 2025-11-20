@@ -28,3 +28,5 @@ def test_beir_metrics_on_minimal(dummy_oracle):
         for key in ("NDCG", "MAP", "Recall", "Precision"):
             val = float(row[key])
             assert 0.0 <= val <= 1.0
+        assert int(row["Comparisons"]) >= 0
+        assert float(row["NDCG_per_comp"]) >= 0.0

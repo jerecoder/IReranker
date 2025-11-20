@@ -1,7 +1,54 @@
+import logging
 from pathlib import Path
 
-from dotenv import load_dotenv
-from loguru import logger
+try:
+    from loguru import logger as _loguru_logger
+except ModuleNotFoundError:  # pragma: no cover - optional dependency
+
+    class _FallbackLogger:
+        """Minimal logger compatible with loguru calls used in this project."""
+
+        def __init__(self) -> None:
+            self._logger = logging.getLogger("ireranker")
+            if not self._logger.handlers:
+                handler = logging.StreamHandler()
+                handler.setFormatter(logging.Formatter("%(message)s"))
+                self._logger.addHandler(handler)
+            self._logger.setLevel(logging.INFO)
+
+        def info(self, msg: str, *args, **kwargs):
+            self._logger.info(msg, *args, **kwargs)
+
+        def warning(self, msg: str, *args, **kwargs):
+            self._logger.warning(msg, *args, **kwargs)
+
+        def error(self, msg: str, *args, **kwargs):
+            self._logger.error(msg, *args, **kwargs)
+
+        def debug(self, msg: str, *args, **kwargs):
+            self._logger.debug(msg, *args, **kwargs)
+
+        def success(self, msg: str, *args, **kwargs):
+            self._logger.info(msg, *args, **kwargs)
+
+        def remove(self, *args, **kwargs):
+            return None
+
+        def add(self, *args, **kwargs):
+            return None
+
+    logger = _FallbackLogger()
+else:
+    logger = _loguru_logger
+
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:  # pragma: no cover - optional dependency
+    logger.warning("python-dotenv not installed; skipping environment file loading")
+
+    def load_dotenv(*args, **kwargs):  # type: ignore[redefine-outer-name]
+        return False
+
 
 load_dotenv()
 

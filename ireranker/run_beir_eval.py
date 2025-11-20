@@ -1,17 +1,160 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
-from loguru import logger
-
-from ireranker.config import PROJ_ROOT, REPORTS_DIR
+from ireranker.config import PROJ_ROOT, REPORTS_DIR, logger
 from ireranker.data.loaders import _beir_supported_name, load_beir_dataset
 from ireranker.evaluation.beir import evaluate_rankers_beir
 from ireranker.rankers import get_ranker
 from ireranker.types import BidirectionalMatrixOracle
+
+_TABLE_START = "<!-- BEGIN_BEIR_RESULTS -->"
+_TABLE_END = "<!-- END_BEIR_RESULTS -->"
+_DISPLAY_COLUMNS = (
+    ("Dataset", "Dataset"),
+    ("NDCG", "NDCG"),
+    ("MAP", "MAP"),
+    ("Recall", "Recall"),
+    ("Precision", "Precision"),
+    ("NDCG_per_comp", "NDCG/Comparisons"),
+)
+_METRIC_KEYS = ("NDCG", "MAP", "Recall", "Precision", "NDCG_per_comp")
+
+
+def _format_mean(value: float | None, *, precision: int = 4, as_int: bool = False) -> str:
+    if value is None or (isinstance(value, float) and (value != value)):  # NaN check
+        return "n/a"
+    if as_int:
+        return str(int(round(value)))
+    return f"{value:.{precision}f}"
+
+
+def _dataset_average_row(dataset: str, out_root: Path) -> Mapping[str, str]:
+    """Average all numeric columns in the dataset's summary.csv."""
+    summary_path = out_root / dataset / "summary.csv"
+    defaults = {"Dataset": dataset, **{col: "n/a" for col in _METRIC_KEYS}}
+    if not summary_path.exists():
+        return defaults
+    totals: Dict[str, float] = {c: 0.0 for c in _METRIC_KEYS}
+    counts: Dict[str, int] = {c: 0 for c in _METRIC_KEYS}
+    try:
+        with summary_path.open("r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                for col in _METRIC_KEYS:
+                    try:
+                        val = float(row.get(col, ""))
+                    except (TypeError, ValueError):
+                        continue
+                    totals[col] += val
+                    counts[col] += 1
+    except Exception as e:  # pragma: no cover - defensive
+        logger.warning(f"Could not read {summary_path}: {e}")
+        return defaults
+
+    result: Dict[str, str] = {"Dataset": dataset}
+    for col in _METRIC_KEYS:
+        result[col] = _format_mean(totals[col] / counts[col]) if counts[col] > 0 else "n/a"
+    return result
+
+
+def _render_results_table(rows: Iterable[Mapping[str, str]]) -> str:
+    headers = [label for _, label in _DISPLAY_COLUMNS]
+    keys = [key for key, _ in _DISPLAY_COLUMNS]
+    header = "| " + " | ".join(headers) + " |"
+    divider = "| " + " | ".join("---" for _ in headers) + " |"
+    body = ["| " + " | ".join(r.get(key, "n/a") for key in keys) + " |" for r in rows]
+    return "\n".join([header, divider, *body])
+
+
+def _datasets_for_table(requested: Sequence[str], out_root: Path) -> List[str]:
+    names = {d.lower(): d for d in requested}
+    if out_root.exists():
+        for child in out_root.iterdir():
+            if child.is_dir():
+                names[child.name.lower()] = child.name
+    return [names[k] for k in sorted(names.keys())]
+
+
+def _ndcg10_by_dataset(
+    out_root: Path, datasets: Sequence[str]
+) -> tuple[Dict[str, Dict[str, float]], List[str]]:
+    scores: Dict[str, Dict[str, float]] = {}
+    ranker_names: set[str] = set()
+    for ds in datasets:
+        path = out_root / ds / "summary.csv"
+        scores[ds] = {}
+        if not path.exists():
+            continue
+        try:
+            with path.open("r", encoding="utf-8", newline="") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    try:
+                        k_val = int(row.get("k", ""))
+                    except Exception:
+                        continue
+                    if k_val != 10:
+                        continue
+                    ranker = row.get("ranker")
+                    if not ranker:
+                        continue
+                    try:
+                        ndcg_val = float(row.get("NDCG", ""))
+                    except (TypeError, ValueError):
+                        continue
+                    scores[ds][ranker] = ndcg_val
+                    ranker_names.add(ranker)
+        except Exception as e:  # pragma: no cover - defensive
+            logger.warning(f"Could not parse {path}: {e}")
+    return scores, sorted(ranker_names)
+
+
+def _render_ndcg10_grid(out_root: Path, datasets: Sequence[str]) -> str:
+    score_map, rankers = _ndcg10_by_dataset(out_root, datasets)
+    if not rankers:
+        rankers = ["n/a"]
+    header = "| Dataset | " + " | ".join(rankers) + " |"
+    divider = "| --- | " + " | ".join("---" for _ in rankers) + " |"
+    lines = [header, divider]
+    for ds in datasets:
+        row_scores = score_map.get(ds, {})
+        cells = []
+        for r in rankers:
+            val = row_scores.get(r)
+            cells.append(_format_mean(val) if val is not None else "n/a")
+        lines.append("| " + ds + " | " + " | ".join(cells) + " |")
+    return "\n".join(lines)
+
+
+def _update_readme_results_table(out_root: Path, requested: Sequence[str]) -> None:
+    readme_path = PROJ_ROOT / "README.md"
+    all_datasets = _datasets_for_table(requested, out_root)
+    rows = [_dataset_average_row(ds, out_root) for ds in all_datasets]
+    table_md = _render_results_table(rows)
+    ndcg10_grid = _render_ndcg10_grid(out_root, all_datasets)
+    block = f"{_TABLE_START}\n{table_md}\n\n{ndcg10_grid}\n{_TABLE_END}"
+    if readme_path.exists():
+        text = readme_path.read_text(encoding="utf-8")
+    else:
+        text = ""
+    if _TABLE_START in text and _TABLE_END in text:
+        prefix, rest = text.split(_TABLE_START, 1)
+        _, suffix = rest.split(_TABLE_END, 1)
+        new_text = prefix + block + suffix
+    else:
+        section = (
+            "\n## BEIR results\n\n"
+            "Average over all rows in `summary.csv` for each dataset (all rankers and k values). "
+            "Datasets without results show `n/a`. This table updates after each BEIR evaluation.\n\n"
+            f"{block}\n"
+        )
+        new_text = text.rstrip() + "\n\n" + section
+    readme_path.write_text(new_text, encoding="utf-8")
 
 
 def run_from_config(
@@ -96,8 +239,6 @@ def run_from_config(
                 ranker.set_dataset(d, split=split)
             rows = evaluate_rankers_beir(rs, dataset, k_values)
 
-            import pandas as pd
-
             d_out = eff_out_root / d
             d_out.mkdir(parents=True, exist_ok=True)
             summary_path = d_out / "summary.csv"
@@ -108,7 +249,21 @@ def run_from_config(
                         old.unlink()
                     except OSError:
                         logger.warning(f"Could not remove stale file {old}")
-            pd.DataFrame(rows).to_csv(summary_path, index=False)
+            fieldnames = [
+                "ranker",
+                "k",
+                "NDCG",
+                "MAP",
+                "Recall",
+                "Precision",
+                "Comparisons",
+                "NDCG_per_comp",
+            ]
+            with summary_path.open("w", encoding="utf-8", newline="") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                for row in rows:
+                    writer.writerow({k: row.get(k) for k in fieldnames})
             logger.success(f"Saved BEIR evaluation summary to {d_out / 'summary.csv'}")  # type: ignore
         except Exception as e:
             from ireranker.config import EXTERNAL_DATA_DIR
@@ -131,6 +286,12 @@ def run_from_config(
                     logger.warning(f"Could not remove stale file {err_file}")
             err_file.write_text(f"Zip: {zip_path}\nError: {e}\n")
             failed.append(d)
+
+    try:
+        _update_readme_results_table(eff_out_root, ds_names)
+        logger.info("Updated README with BEIR results table.")
+    except Exception as e:  # pragma: no cover - defensive
+        logger.warning(f"Could not update README results table: {e}")
 
     if failed:
         logger.warning(f"Completed with failures for datasets: {', '.join(failed)}")
