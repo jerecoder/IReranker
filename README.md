@@ -111,21 +111,16 @@ Per dataset: CSV `summary.csv` with one row per ranker & k
 
 ## BEIR results
 
-Table 1 shows per-dataset averages over all rows in `summary.csv` (all rankers and k values), including the NDCG/Comparisons rate. Table 2 shows NDCG@10 for each dataset/ranker. Datasets without results show `n/a`. Both tables update after each BEIR evaluation.
+Auto-updated after each BEIR evaluation:
+- Average NDCG@10 per comparison for each ranker (scientific notation; higher is better).
+- NDCG@10 per dataset/ranker grid. `n/a` when results are missing.
 
 <!-- BEGIN_BEIR_RESULTS -->
-| Dataset | NDCG | MAP | Recall | Precision | NDCG/Comparisons |
-| --- | --- | --- | --- | --- | --- |
-| dbpedia-entity | n/a | n/a | n/a | n/a | n/a |
-| fiqa | n/a | n/a | n/a | n/a | n/a |
-| nfcorpus | 0.4689 | 0.2651 | 0.4285 | 0.2900 | 0.0000 |
-| robust04 | n/a | n/a | n/a | n/a | n/a |
-| scifact | 0.4128 | 0.3730 | 0.5396 | 0.1329 | 0.0000 |
-| signal1m | n/a | n/a | n/a | n/a | n/a |
-| trec-covid | 0.6943 | 0.1790 | 0.2688 | 0.6768 | 0.0000 |
-| trec-news | n/a | n/a | n/a | n/a | n/a |
-| trec-robust04 | n/a | n/a | n/a | n/a | n/a |
-| webis-touche2020 | 0.2745 | 0.0899 | 0.2805 | 0.1950 | 0.0000 |
+| Ranker | Avg NDCG@10/Comparisons |
+| --- | --- |
+| bubbly | 1.098e-06 |
+| mohajer | 2.692e-05 |
+| random | 0.000e+00 |
 
 | Dataset | bubbly | mohajer | random |
 | --- | --- | --- | --- |

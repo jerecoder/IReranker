@@ -4,7 +4,7 @@ import argparse
 import csv
 import json
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence
 
 from ireranker.config import PROJ_ROOT, REPORTS_DIR, logger
 from ireranker.data.loaders import _beir_supported_name, load_beir_dataset
@@ -14,15 +14,6 @@ from ireranker.types import BidirectionalMatrixOracle
 
 _TABLE_START = "<!-- BEGIN_BEIR_RESULTS -->"
 _TABLE_END = "<!-- END_BEIR_RESULTS -->"
-_DISPLAY_COLUMNS = (
-    ("Dataset", "Dataset"),
-    ("NDCG", "NDCG"),
-    ("MAP", "MAP"),
-    ("Recall", "Recall"),
-    ("Precision", "Precision"),
-    ("NDCG_per_comp", "NDCG/Comparisons"),
-)
-_METRIC_KEYS = ("NDCG", "MAP", "Recall", "Precision", "NDCG_per_comp")
 
 
 def _format_mean(value: float | None, *, precision: int = 4, as_int: bool = False) -> str:
@@ -33,42 +24,10 @@ def _format_mean(value: float | None, *, precision: int = 4, as_int: bool = Fals
     return f"{value:.{precision}f}"
 
 
-def _dataset_average_row(dataset: str, out_root: Path) -> Mapping[str, str]:
-    """Average all numeric columns in the dataset's summary.csv."""
-    summary_path = out_root / dataset / "summary.csv"
-    defaults = {"Dataset": dataset, **{col: "n/a" for col in _METRIC_KEYS}}
-    if not summary_path.exists():
-        return defaults
-    totals: Dict[str, float] = {c: 0.0 for c in _METRIC_KEYS}
-    counts: Dict[str, int] = {c: 0 for c in _METRIC_KEYS}
-    try:
-        with summary_path.open("r", encoding="utf-8", newline="") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                for col in _METRIC_KEYS:
-                    try:
-                        val = float(row.get(col, ""))
-                    except (TypeError, ValueError):
-                        continue
-                    totals[col] += val
-                    counts[col] += 1
-    except Exception as e:  # pragma: no cover - defensive
-        logger.warning(f"Could not read {summary_path}: {e}")
-        return defaults
-
-    result: Dict[str, str] = {"Dataset": dataset}
-    for col in _METRIC_KEYS:
-        result[col] = _format_mean(totals[col] / counts[col]) if counts[col] > 0 else "n/a"
-    return result
-
-
-def _render_results_table(rows: Iterable[Mapping[str, str]]) -> str:
-    headers = [label for _, label in _DISPLAY_COLUMNS]
-    keys = [key for key, _ in _DISPLAY_COLUMNS]
-    header = "| " + " | ".join(headers) + " |"
-    divider = "| " + " | ".join("---" for _ in headers) + " |"
-    body = ["| " + " | ".join(r.get(key, "n/a") for key in keys) + " |" for r in rows]
-    return "\n".join([header, divider, *body])
+def _format_sci(value: float | None) -> str:
+    if value is None or (isinstance(value, float) and (value != value)):
+        return "n/a"
+    return f"{value:.3e}"
 
 
 def _datasets_for_table(requested: Sequence[str], out_root: Path) -> List[str]:
@@ -131,13 +90,58 @@ def _render_ndcg10_grid(out_root: Path, datasets: Sequence[str]) -> str:
     return "\n".join(lines)
 
 
+def _ndcg10_rate_by_ranker(out_root: Path, datasets: Sequence[str]) -> Dict[str, float]:
+    totals: Dict[str, float] = {}
+    counts: Dict[str, int] = {}
+    for ds in datasets:
+        path = out_root / ds / "summary.csv"
+        if not path.exists():
+            continue
+        try:
+            with path.open("r", encoding="utf-8", newline="") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    try:
+                        k_val = int(row.get("k", ""))
+                    except Exception:
+                        continue
+                    if k_val != 10:
+                        continue
+                    ranker = row.get("ranker")
+                    if not ranker:
+                        continue
+                    try:
+                        rate = float(row.get("NDCG_per_comp", ""))
+                    except (TypeError, ValueError):
+                        continue
+                    totals[ranker] = totals.get(ranker, 0.0) + rate
+                    counts[ranker] = counts.get(ranker, 0) + 1
+        except Exception as e:  # pragma: no cover - defensive
+            logger.warning(f"Could not parse {path}: {e}")
+    averages: Dict[str, float] = {}
+    for rnk, total in totals.items():
+        cnt = counts.get(rnk, 0)
+        if cnt > 0:
+            averages[rnk] = total / cnt
+    return averages
+
+
+def _render_rate_table(out_root: Path, datasets: Sequence[str]) -> str:
+    rates = _ndcg10_rate_by_ranker(out_root, datasets)
+    if not rates:
+        return "| Ranker | Avg NDCG@10/Comparisons |\n| --- | --- |\n| n/a | n/a |"
+    header = "| Ranker | Avg NDCG@10/Comparisons |"
+    divider = "| --- | --- |"
+    body = ["| " + r + " | " + _format_sci(rate) + " |" for r, rate in sorted(rates.items())]
+    return "\n".join([header, divider, *body])
+
+
 def _update_readme_results_table(out_root: Path, requested: Sequence[str]) -> None:
     readme_path = PROJ_ROOT / "README.md"
     all_datasets = _datasets_for_table(requested, out_root)
-    rows = [_dataset_average_row(ds, out_root) for ds in all_datasets]
-    table_md = _render_results_table(rows)
+    rate_table = _render_rate_table(out_root, all_datasets)
     ndcg10_grid = _render_ndcg10_grid(out_root, all_datasets)
-    block = f"{_TABLE_START}\n{table_md}\n\n{ndcg10_grid}\n{_TABLE_END}"
+    block = f"{_TABLE_START}\n{rate_table}\n\n{ndcg10_grid}\n{_TABLE_END}"
     if readme_path.exists():
         text = readme_path.read_text(encoding="utf-8")
     else:
@@ -149,8 +153,7 @@ def _update_readme_results_table(out_root: Path, requested: Sequence[str]) -> No
     else:
         section = (
             "\n## BEIR results\n\n"
-            "Average over all rows in `summary.csv` for each dataset (all rankers and k values). "
-            "Datasets without results show `n/a`. This table updates after each BEIR evaluation.\n\n"
+            "Tables auto-updated after each BEIR evaluation.\n\n"
             f"{block}\n"
         )
         new_text = text.rstrip() + "\n\n" + section
