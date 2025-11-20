@@ -1,105 +1,12 @@
 from __future__ import annotations
 
-import math
-from typing import Dict, Iterable, List, Tuple
+from typing import Dict, Iterable, List
 
-try:
-    from tqdm import tqdm
-except ModuleNotFoundError:  # pragma: no cover - optional dependency
-
-    def tqdm(iterable, **kwargs):
-        return iterable
-
+from beir.retrieval.evaluation import EvaluateRetrieval  # type: ignore
+from tqdm import tqdm
 
 from ireranker.rankers.Ranker import Ranker
 from ireranker.types import RankingDataset
-
-try:
-    from beir.retrieval.evaluation import EvaluateRetrieval  # type: ignore
-except ModuleNotFoundError:  # pragma: no cover - fallback evaluator
-
-    class EvaluateRetrieval:
-        """Lightweight evaluator implementing NDCG, MAP, Recall, Precision."""
-
-        @staticmethod
-        def evaluate(
-            qrels: Dict[str, Dict[str, int]],
-            results: Dict[str, Dict[str, float]],
-            k_values: List[int],
-        ) -> Tuple[Dict[str, float], Dict[str, float], Dict[str, float], Dict[str, float]]:
-            ks = sorted(set(int(k) for k in k_values))
-            metrics = {
-                "ndcg": {k: 0.0 for k in ks},
-                "map": {k: 0.0 for k in ks},
-                "recall": {k: 0.0 for k in ks},
-                "precision": {k: 0.0 for k in ks},
-            }
-            total = max(len(qrels), 1)
-
-            for qid, rel_map in qrels.items():
-                retrieved = results.get(qid, {})
-                ranked = sorted(retrieved.items(), key=lambda kv: kv[1], reverse=True)
-                rel_count = sum(1 for v in rel_map.values() if v > 0)
-
-                for k in ks:
-                    top_docs = ranked[:k]
-                    gains = [rel_map.get(doc_id, 0) for doc_id, _ in top_docs]
-                    metrics["ndcg"][k] += EvaluateRetrieval._ndcg(gains, rel_map, k)
-                    metrics["map"][k] += EvaluateRetrieval._ap(gains, rel_count)
-                    metrics["recall"][k] += EvaluateRetrieval._recall(gains, rel_count)
-                    metrics["precision"][k] += EvaluateRetrieval._precision(gains, k)
-
-            ndcg = {f"NDCG@{k}": val / total for k, val in metrics["ndcg"].items()}
-            mp = {f"MAP@{k}": val / total for k, val in metrics["map"].items()}
-            recall = {f"Recall@{k}": val / total for k, val in metrics["recall"].items()}
-            precision = {f"P@{k}": val / total for k, val in metrics["precision"].items()}
-            return ndcg, mp, recall, precision
-
-        @staticmethod
-        def _ndcg(
-            gains: List[int],
-            rel_map: Dict[str, int],
-            k: int,
-        ) -> float:
-            dcg = 0.0
-            for idx, rel in enumerate(gains):
-                if rel <= 0:
-                    continue
-                dcg += (2**rel - 1) / math.log2(idx + 2)
-
-            ideal_rels = sorted((v for v in rel_map.values() if v > 0), reverse=True)
-            ideal = 0.0
-            for idx, rel in enumerate(ideal_rels[:k]):
-                ideal += (2**rel - 1) / math.log2(idx + 2)
-            if ideal == 0:
-                return 0.0
-            return dcg / ideal
-
-        @staticmethod
-        def _ap(gains: List[int], rel_count: int) -> float:
-            if rel_count == 0:
-                return 0.0
-            hits = 0
-            acc = 0.0
-            for idx, rel in enumerate(gains, start=1):
-                if rel > 0:
-                    hits += 1
-                    acc += hits / idx
-            return acc / rel_count if rel_count else 0.0
-
-        @staticmethod
-        def _recall(gains: List[int], rel_count: int) -> float:
-            if rel_count == 0:
-                return 0.0
-            hits = sum(1 for rel in gains if rel > 0)
-            return hits / rel_count
-
-        @staticmethod
-        def _precision(gains: List[int], k: int) -> float:
-            if k == 0:
-                return 0.0
-            hits = sum(1 for rel in gains if rel > 0)
-            return hits / k
 
 
 def _progress(iterable: Iterable, **kwargs) -> Iterable:
@@ -166,9 +73,9 @@ def evaluate_rankers_beir(
                     "Recall": float(recall.get(f"Recall@{k}", 0.0)),
                     "Precision": float(precision.get(f"P@{k}", 0.0)),
                     "Comparisons": total_comparisons,
-                    "NDCG_per_comp": float(ndcg_k / total_comparisons)
-                    if total_comparisons
-                    else 0.0,
+                    "NDCG_per_comp": (
+                        float(ndcg_k / total_comparisons) if total_comparisons else 0.0
+                    ),
                 }
             )
     return rows
