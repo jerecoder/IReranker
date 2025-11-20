@@ -18,6 +18,8 @@ class Ranker(ABC):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         self.seed = seed
         self.oracle = oracle
+        self.comparissons = 0
+        self.task: RankingTask
 
     def set_dataset(self, dataset: str, *, split: str = "test") -> None:
         """Update the oracle with a new dataset before ranking."""
@@ -27,3 +29,8 @@ class Ranker(ABC):
     def rank(self, task: RankingTask) -> List[int]:
         """Return a permutation of indices for the candidate list."""
         raise NotImplementedError
+
+    def lt(self, i: int, j: int):
+        """Sample comparisson from the oracle"""
+        self.oracle.sample_lt(self.task, i, j)
+        self.comparissons += 1
