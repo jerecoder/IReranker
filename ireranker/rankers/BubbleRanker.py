@@ -8,7 +8,7 @@ from .Ranker import Ranker
 from .registry import register_ranker
 
 
-# @register_ranker("bubbly")
+@register_ranker("bubbly")
 class BubbleRanker(Ranker):
     """Performs Bubble Sort based on the comparisson matrices"""
 
