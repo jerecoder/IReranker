@@ -2,13 +2,14 @@ from __future__ import annotations
 
 from typing import List
 
+from ireranker.rankers.registry import register_ranker
 from ireranker.types import Oracle, RankingTask
 
-from .Ranker import Ranker
+from .Ranker import CacheRanker
 
 
-# @register_ranker("bubbly")
-class BubbleRanker(Ranker):
+@register_ranker("bubbly")
+class BubbleRanker(CacheRanker):
     """Performs Bubble Sort based on the comparisson matrices"""
 
     def __init__(self, oracle: Oracle, seed: int | None = None):

@@ -5,12 +5,12 @@ from typing import List
 
 from ireranker.types import Oracle, RankingTask
 
-from .Ranker import Ranker
+from .Ranker import SampleRanker
 from .registry import register_ranker
 
 
 @register_ranker("mohajer")
-class MohajerRanker(Ranker):
+class MohajerRanker(SampleRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         super().__init__(oracle, seed)
         self.k = 10

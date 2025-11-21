@@ -5,12 +5,12 @@ from typing import List
 
 from ireranker.types import Oracle, RankingTask
 
-from .Ranker import Ranker
+from .Ranker import CacheRanker
 from .registry import register_ranker
 
 
 @register_ranker("random")
-class RandomRanker(Ranker):
+class RandomRanker(CacheRanker):
     """Returns a deterministic pseudo-random permutation given a seed."""
 
     def __init__(self, oracle: Oracle, seed: int | None = None):

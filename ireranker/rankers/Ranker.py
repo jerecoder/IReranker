@@ -30,10 +30,10 @@ class Ranker(ABC):
         """Return a permutation of indices for the candidate list."""
         raise NotImplementedError
 
+    @abstractmethod
     def lt(self, i: int, j: int) -> bool:
         """Return True when item i should be ranked after item j."""
-        self.comparissons += 1
-        return self.oracle.sample_lt(self.task, i, j)
+        raise NotImplementedError
 
     def reset_comparisons(self) -> None:
         """Reset comparison counter before a new evaluation."""
@@ -43,3 +43,55 @@ class Ranker(ABC):
     def comparisons(self) -> int:
         """Return the number of comparisons made by this ranker."""
         return self.comparissons
+
+
+class CacheRanker(Ranker):
+    """Ranker base that caches pairwise comparisons within the same task."""
+
+    def __init__(self, oracle: Oracle, seed: int | None = None):
+        super().__init__(oracle, seed)
+        self._comparison_cache: dict[tuple[int, int], bool] = {}
+        self._cache_signature: tuple[str, tuple[str, ...]] | None = None
+
+    def set_dataset(self, dataset: str, *, split: str = "test") -> None:
+        super().set_dataset(dataset, split=split)
+        self._comparison_cache.clear()
+        self._cache_signature = None
+
+    def reset_comparisons(self) -> None:
+        """Reset comparison counter and drop any cached results."""
+        super().reset_comparisons()
+        self._comparison_cache.clear()
+        self._cache_signature = None
+
+    def _ensure_cache_for_task(self) -> None:
+        """Clear the cache when switching to a different task."""
+        if not hasattr(self, "task"):
+            raise RuntimeError(
+                "Callers must set self.task before requesting comparisons."
+            )
+        signature = (self.task.query_id, tuple(self.task.candidate_ids))
+        if signature != self._cache_signature:
+            self._comparison_cache.clear()
+            self._cache_signature = signature
+
+    def lt(self, i: int, j: int) -> bool:
+        """Return True when item i should be ranked after item j, caching the result."""
+        self._ensure_cache_for_task()
+        key = (i, j)
+        if key not in self._comparison_cache:
+            self.comparissons += 1
+            self._comparison_cache[key] = self.oracle.sample_lt(self.task, i, j)
+        return self._comparison_cache[key]
+
+
+class SampleRanker(Ranker):
+    """Ranker base that samples comparisons within the same task."""
+
+    def __init__(self, oracle: Oracle, seed: int | None = None):
+        super().__init__(oracle, seed)
+
+    def lt(self, i: int, j: int) -> bool:
+        """Return True when item i should be ranked after item j."""
+        self.comparissons += 1
+        return self.oracle.sample_lt(self.task, i, j)
