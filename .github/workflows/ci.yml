@@ -32,7 +32,7 @@ jobs:
 
       - name: Install package and dependencies
         run: |
-          pip install .
+          pip install ".[dev]"
 
       - name: Lint (ruff)
         run: |

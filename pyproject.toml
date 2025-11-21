@@ -16,17 +16,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License"
 ]
 dependencies = [
-    "ipython",
-    "jupyterlab",
     "loguru",
-    "matplotlib",
-    "notebook",
     "numpy",
     "pandas",
-    "pip",
-    "pytest",
     "python-dotenv",
-    "ruff==0.6.4",
     "scikit-learn",
     "tqdm",
     "typer",
@@ -36,6 +29,16 @@ requires-python = "~=3.10.0"
 
  [project.scripts]
 
+
+[project.optional-dependencies]
+dev = [
+    "ipython",
+    "jupyterlab",
+    "matplotlib",
+    "notebook",
+    "pytest",
+    "ruff==0.6.4",
+]
 
 [tool.ruff]
 line-length = 99
