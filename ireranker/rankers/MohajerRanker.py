@@ -99,8 +99,7 @@ class MohajerRanker(SampleRanker):
                 new_champ = self.select_winner(task, groups[champ_og_group])
                 champ_to_group[new_champ] = champ_og_group
                 heapq.heappush(winner_heap, _HeapItem(self, task, new_champ))
-        # print(f"ranking: {ranking}")
-        # print(f"ranking epic: {ranking + [idx for idx in list(ranfge(len(task.candidate_ids))) if idx not in ranking]}")
+
         return ranking + [
             idx for idx in list(range(len(task.candidate_ids))) if idx not in ranking
         ]
