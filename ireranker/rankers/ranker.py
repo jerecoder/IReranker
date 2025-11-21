@@ -18,7 +18,7 @@ class Ranker(ABC):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         self.seed = seed
         self.oracle = oracle
-        self.comparissons = 0
+        self._comparisons = 0
         self.task: RankingTask
 
     def set_dataset(self, dataset: str, *, split: str = "test") -> None:
@@ -37,12 +37,17 @@ class Ranker(ABC):
 
     def reset_comparisons(self) -> None:
         """Reset comparison counter before a new evaluation."""
-        self.comparissons = 0
+        self._comparisons = 0
 
     @property
     def comparisons(self) -> int:
         """Return the number of comparisons made by this ranker."""
-        return self.comparissons
+        return self._comparisons
+
+    @property
+    def comparissons(self) -> int:  # pragma: no cover - backward compatibility typo
+        """Legacy alias for comparisons."""
+        return self._comparisons
 
 
 class CacheRanker(Ranker):
@@ -78,7 +83,7 @@ class CacheRanker(Ranker):
         self._ensure_cache_for_task()
         key = (i, j)
         if key not in self._comparison_cache:
-            self.comparissons += 1
+            self._comparisons += 1
             self._comparison_cache[key] = self.oracle.sample_lt(self.task, i, j)
         return self._comparison_cache[key]
 
@@ -91,5 +96,5 @@ class SampleRanker(Ranker):
 
     def lt(self, i: int, j: int) -> bool:
         """Return True when item i should be ranked after item j."""
-        self.comparissons += 1
+        self._comparisons += 1
         return self.oracle.sample_lt(self.task, i, j)

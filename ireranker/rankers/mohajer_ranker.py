@@ -5,7 +5,7 @@ from typing import List
 
 from ireranker.types import Oracle, RankingTask
 
-from .Ranker import SampleRanker
+from .ranker import SampleRanker
 from .registry import register_ranker
 
 

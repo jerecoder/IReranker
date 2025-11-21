@@ -5,7 +5,7 @@ from ireranker.evaluation.beir import (
     evaluate_rankers_beir,
 )
 from ireranker.rankers import get_ranker
-import ireranker.rankers.RandomRanker  # noqa: F401
+import ireranker.rankers.random_ranker  # noqa: F401
 from ireranker.types import RankingDataset, RankingTask
 
 

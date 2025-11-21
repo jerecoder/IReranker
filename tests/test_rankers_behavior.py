@@ -1,4 +1,4 @@
-import ireranker.rankers.MohajerRanker  # noqa: F401 - ensure registration side effects
+import ireranker.rankers.mohajer_ranker  # noqa: F401 - ensure registration side effects
 from ireranker.rankers import get_ranker
 from ireranker.types import Oracle, RankingTask
 

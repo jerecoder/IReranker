@@ -5,7 +5,7 @@ from typing import Dict, Iterable, List
 from beir.retrieval.evaluation import EvaluateRetrieval  # type: ignore
 from tqdm import tqdm
 
-from ireranker.rankers.Ranker import Ranker
+from ireranker.rankers.ranker import Ranker
 from ireranker.types import RankingDataset
 
 

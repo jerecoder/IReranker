@@ -5,12 +5,12 @@ from typing import List
 from ireranker.rankers.registry import register_ranker
 from ireranker.types import Oracle, RankingTask
 
-from .Ranker import CacheRanker
+from .ranker import CacheRanker
 
 
 @register_ranker("bubbly")
 class BubbleRanker(CacheRanker):
-    """Performs Bubble Sort based on the comparisson matrices"""
+    """Performs Bubble Sort based on the comparison matrices."""
 
     def __init__(self, oracle: Oracle, seed: int | None = None):
         super().__init__(oracle, seed)

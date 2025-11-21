@@ -1,6 +1,6 @@
 from ireranker.rankers import get_ranker, list_rankers
-import ireranker.rankers.RandomRanker  # noqa: F401 - ensure registration side effects
-import ireranker.rankers.MohajerRanker  # noqa: F401 - ensure registration side effects
+import ireranker.rankers.random_ranker  # noqa: F401 - ensure registration side effects
+import ireranker.rankers.mohajer_ranker  # noqa: F401 - ensure registration side effects
 from ireranker.types import RankingDataset, RankingTask
 
 

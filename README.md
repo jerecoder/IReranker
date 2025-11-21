@@ -18,18 +18,18 @@ RAG reranking with IR.
 ├─ notebooks/
 ├─ references/
 ├─ reports/
-│  └─ beir-metrics/        # Salidas por dataset (CSV), o según config/output_dir
+│  └─ beir-metrics/        # Ejemplos de salidas por dataset (CSV); se regeneran
 ├─ ireranker/
 │  ├─ __init__.py
 │  ├─ config.py            # Rutas y logging
 │  ├─ types.py             # RankingTask, RankingDataset
-│  ├─ plots.py
+│  ├─ plots.py             # Plot de NDCG@k a partir de summary.csv
 │  ├─ run_beir_eval.py     # CLI/runner para evaluación BEIR
 │  ├─ rankers/
-│  │  ├─ Ranker.py
-│  │  ├─ BubbleRanker.py
-│  │  ├─ MohajerRanker.py
-│  │  ├─ RandomRanker.py
+│  │  ├─ ranker.py
+│  │  ├─ bubble_ranker.py
+│  │  ├─ mohajer_ranker.py
+│  │  ├─ random_ranker.py
 │  │  └─ registry.py
 │  ├─ data/
 │  │  └─ loaders.py        # Loader BEIR
@@ -116,6 +116,8 @@ Per dataset: CSV `summary.csv` with one row per ranker & k
 - After extraction the ZIP is removed to save space.
 - Download errors are logged and the dataset creates an `ERROR.txt` so the run continues.
 - `BubbleRanker` is implemented but intentionally not registered by default because it is expensive; import and instantiate it directly if you need it.
+- `reports/beir-metrics/` contiene ejemplos de salidas; puedes borrarlas o regenerarlas con `make beir-eval`.
+- Graficar NDCG@k desde un `summary.csv`: `python -m ireranker.plots ndcg-bar nfcorpus --k 10`.
 
 
 ## BEIR results

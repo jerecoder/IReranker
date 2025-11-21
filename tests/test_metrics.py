@@ -2,7 +2,7 @@ from ireranker.evaluation.beir import dataset_to_beir_qrels, evaluate_rankers_be
 from ireranker.rankers import get_ranker
 
 # Ensure built-in rankers are registered
-import ireranker.rankers.RandomRanker  # noqa: F401
+import ireranker.rankers.random_ranker  # noqa: F401
 from ireranker.types import RankingDataset, RankingTask
 
 
