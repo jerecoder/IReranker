@@ -8,7 +8,7 @@ from ireranker.types import Oracle, RankingTask
 from .ranker import CacheRanker
 
 
-@register_ranker("bubbly")
+# @register_ranker("bubbly")
 class BubbleRanker(CacheRanker):
     """Performs Bubble Sort based on the comparison matrices."""
 
