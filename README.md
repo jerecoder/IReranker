@@ -14,7 +14,6 @@ RAG reranking with IR.
 │  └─ beir_loader.json     # Config del loader BEIR (base_url, cache_subdir)
 ├─ data/
 │  └─ external/            # Cache de datasets BEIR
-├─ docs/
 ├─ notebooks/
 ├─ references/
 ├─ reports/
@@ -58,7 +57,6 @@ Useful commands inside the `IReranker` env:
 - `config/beir_eval.json`
   - `datasets`: list of BEIR datasets to evaluate (canonical names)
   - `split`: BEIR split (e.g., "test")
-  - `max_queries`: query cap (or null)
   - `light_exclude`: datasets to skip when running with `--light`
   - `seed`: RNG seed
   - `k_values`: evaluation cutoffs, e.g., [1,3,5,10,100]
@@ -77,7 +75,6 @@ Useful commands inside the `IReranker` env:
         "dbpedia-entity"
       ],
       "split": "test",
-      "max_queries": null,
       "seed": 69420,
       "k_values": [1, 3, 5, 10, 100],
       "light_exclude": ["dbpedia-entity", "fiqa"],
@@ -101,7 +98,6 @@ Useful commands inside the `IReranker` env:
 - Overrides:
   - `make beir-eval ARGS="--dataset webis-touche2020"`
   - `make beir-eval ARGS="--light"` to skip datasets from `light_exclude`
-  - `python -m ireranker.run_beir_eval --dataset trec-covid --max-queries 200`
   - `python -m ireranker.run_beir_eval --config /path/to/custom.json`
 
 ## Output
