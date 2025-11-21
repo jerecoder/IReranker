@@ -5,10 +5,9 @@ from typing import List
 from ireranker.types import Oracle, RankingTask
 
 from .Ranker import Ranker
-from .registry import register_ranker
 
 
-@register_ranker("bubbly")
+# @register_ranker("bubbly")
 class BubbleRanker(Ranker):
     """Performs Bubble Sort based on the comparisson matrices"""
 

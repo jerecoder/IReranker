@@ -1,4 +1,3 @@
-import ireranker.rankers.BubbleRanker  # noqa: F401 - ensure registration side effects
 import ireranker.rankers.MohajerRanker  # noqa: F401 - ensure registration side effects
 from ireranker.rankers import get_ranker
 from ireranker.types import Oracle, RankingTask
@@ -12,7 +11,6 @@ class ScoreOracle(Oracle):
         return None
 
     def sample_lt(self, task: RankingTask, i: int, j: int) -> bool:  # noqa: ARG002
-        # True when item i is worse (lower score) than item j
         return self.scores[i] < self.scores[j]
 
 
@@ -23,9 +21,6 @@ def test_rankers_follow_oracle_pref_order():
         query_id="q0",
         candidate_ids=[f"d{n}" for n in range(len(scores))],
     )
-
-    bubbly = get_ranker("bubbly", oracle=ScoreOracle(scores))
-    assert bubbly.rank(task) == expected
 
     mohajer = get_ranker("mohajer", oracle=ScoreOracle(scores))
     assert mohajer.rank(task) == expected

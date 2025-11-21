@@ -1,13 +1,13 @@
 from ireranker.rankers import get_ranker, list_rankers
 import ireranker.rankers.RandomRanker  # noqa: F401 - ensure registration side effects
-import ireranker.rankers.BubbleRanker  # noqa: F401 - ensure registration side effects
+import ireranker.rankers.MohajerRanker  # noqa: F401 - ensure registration side effects
 from ireranker.types import RankingDataset, RankingTask
 
 
 def test_registry_lists_baselines():
     names = list_rankers()
-    assert "bubbly" in names
     assert "random" in names
+    assert "mohajer" in names
 
 
 def test_get_ranker_seed_determinism(dummy_oracle_factory):

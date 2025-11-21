@@ -8,42 +8,50 @@ RAG reranking with IR.
 ├─ LICENSE
 ├─ Makefile
 ├─ README.md
-├─ config
+├─ pyproject.toml
+├─ config/
 │  ├─ beir_eval.json       # Config de evaluación (datasets, k_values, output_dir, etc.)
 │  └─ beir_loader.json     # Config del loader BEIR (base_url, cache_subdir)
-├─ data
-│  └─ external             # Cache de datasets BEIR
-├─ reports
-│  └─ beir-metrics         # Salidas por dataset (CSV), o según config/output_dir
-├─ ireranker
+├─ data/
+│  └─ external/            # Cache de datasets BEIR
+├─ docs/
+├─ notebooks/
+├─ references/
+├─ reports/
+│  └─ beir-metrics/        # Salidas por dataset (CSV), o según config/output_dir
+├─ ireranker/
 │  ├─ __init__.py
 │  ├─ config.py            # Rutas y logging
 │  ├─ types.py             # RankingTask, RankingDataset
-│  ├─ rankers
-│  │  ├─ __init__.py
+│  ├─ plots.py
+│  ├─ run_beir_eval.py     # CLI/runner para evaluación BEIR
+│  ├─ rankers/
 │  │  ├─ Ranker.py
-│  │  ├─ registry.py
+│  │  ├─ BubbleRanker.py
+│  │  ├─ MohajerRanker.py
 │  │  ├─ RandomRanker.py
-│  │  └─ BubbleRanker.py
-│  ├─ data
+│  │  └─ registry.py
+│  ├─ data/
 │  │  └─ loaders.py        # Loader BEIR
-│  ├─ evaluation
-│  │  └─ beir.py           # Evaluación con BEIR
-│  └─ cli
-│     └─ beir_eval.py      # CLI de evaluación
-└─ pyproject.toml
+│  └─ evaluation/
+│     └─ beir.py           # Evaluación con BEIR
+└─ tests/
+   ├─ test_beir_eval_module.py
+   ├─ test_metrics.py
+   └─ ...
 ```
 
 ## Installation with conda (recommended)
 
-  - `make environment` (creates `IReranker` env with Python 3.10 and installs deps)
+  - `make create_environment` (creates `IReranker` env with Python 3.10)
   - `conda activate IReranker`
 
 Useful commands inside the `IReranker` env:
-- Install project dependencies: `make requirements`
+- Install project dependencies for development (lint/tests): `make requirements` (installs `.[dev]`)
 - Lint/format: `make lint` / `make format`
 - Tests: `make test`
 - BEIR evaluation (uses configs): `make beir-eval`
+- Runtime-only install (no dev tools): `pip install .`
 
 ## Configuration
 
@@ -72,7 +80,7 @@ Useful commands inside the `IReranker` env:
       "max_queries": null,
       "seed": 69420,
       "k_values": [1, 3, 5, 10, 100],
-      "light_exclude": ["dbpedia-entity", "trec-covid", "fiqa", "nfcorpus"],
+      "light_exclude": ["dbpedia-entity", "fiqa"],
       "output_dir": "beir-metrics",
       "rankers": ["all"]
     }
@@ -107,6 +115,7 @@ Per dataset: CSV `summary.csv` with one row per ranker & k
 - Existing dataset directories are reused (no re-download).
 - After extraction the ZIP is removed to save space.
 - Download errors are logged and the dataset creates an `ERROR.txt` so the run continues.
+- `BubbleRanker` is implemented but intentionally not registered by default because it is expensive; import and instantiate it directly if you need it.
 
 
 ## BEIR results
