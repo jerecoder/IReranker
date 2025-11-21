@@ -8,7 +8,7 @@ from typing import Dict, Tuple
 import pytest
 
 from ireranker.config import EXTERNAL_DATA_DIR
-from ireranker.types import BidirectionalMatrixOracle, MatrixKey
+from ireranker.oracles import BidirectionalMatrixOracle, MatrixKey
 
 
 def _dataset_from_path(path: Path) -> str:

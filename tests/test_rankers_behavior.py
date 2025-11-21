@@ -1,6 +1,7 @@
 import ireranker.rankers.mohajer_ranker  # noqa: F401 - ensure registration side effects
+from ireranker.oracles import Oracle
 from ireranker.rankers import get_ranker
-from ireranker.types import Oracle, RankingTask
+from ireranker.types import RankingTask
 
 
 class ScoreOracle(Oracle):

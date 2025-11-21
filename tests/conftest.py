@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from ireranker.types import Oracle
+from ireranker.oracles import Oracle
 
 
 class DummyOracle(Oracle):

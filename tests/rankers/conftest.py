@@ -10,7 +10,8 @@ DATASET_NAME = "webis-touche2020"
 EXPECTED_RESULTS_PATH = Path(__file__).with_name("expected_webis_results.csv")
 
 if TYPE_CHECKING:
-    from ireranker.types import BidirectionalMatrixOracle, RankingDataset
+    from ireranker.oracles import BidirectionalMatrixOracle
+    from ireranker.types import RankingDataset
 
 
 def _project_root() -> Path:
@@ -63,7 +64,7 @@ def webis_touche_dataset() -> RankingDataset:
 @pytest.fixture(scope="session")
 def webis_touche_oracle() -> BidirectionalMatrixOracle:
     _ensure_beir_artifacts_available()
-    from ireranker.types import BidirectionalMatrixOracle
+    from ireranker.oracles import BidirectionalMatrixOracle
 
     oracle = BidirectionalMatrixOracle()
     oracle.load_dataset(DATASET_NAME)

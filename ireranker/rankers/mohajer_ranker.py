@@ -3,7 +3,8 @@ from __future__ import annotations
 import heapq
 from typing import List
 
-from ireranker.types import Oracle, RankingTask
+from ireranker.oracles import Oracle
+from ireranker.types import RankingTask
 
 from .ranker import SampleRanker
 from .registry import register_ranker

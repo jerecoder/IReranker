@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Callable, Dict, List, Type
 
-from ireranker.types import Oracle
+from ireranker.oracles import Oracle
 
 from .ranker import Ranker
 

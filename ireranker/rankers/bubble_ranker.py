@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from typing import List
 
+from ireranker.oracles import Oracle
 from ireranker.rankers.registry import register_ranker
-from ireranker.types import Oracle, RankingTask
+from ireranker.types import RankingTask
 
 from .ranker import CacheRanker
 

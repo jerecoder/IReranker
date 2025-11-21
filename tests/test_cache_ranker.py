@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import pytest
 
+from ireranker.oracles import Oracle
 from ireranker.rankers.ranker import CacheRanker
-from ireranker.types import Oracle, RankingTask
+from ireranker.types import RankingTask
 
 
 class RecordingOracle(Oracle):

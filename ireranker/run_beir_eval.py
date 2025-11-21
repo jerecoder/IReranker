@@ -9,8 +9,8 @@ from typing import Any, Dict, List, Optional, Sequence
 from ireranker.config import PROJ_ROOT, REPORTS_DIR, logger
 from ireranker.data.loaders import _beir_supported_name, load_beir_dataset
 from ireranker.evaluation.beir import evaluate_rankers_beir
+from ireranker.oracles import BidirectionalMatrixOracle
 from ireranker.rankers import get_ranker
-from ireranker.types import BidirectionalMatrixOracle
 
 _TABLE_START = "<!-- BEGIN_BEIR_RESULTS -->"
 _TABLE_END = "<!-- END_BEIR_RESULTS -->"
