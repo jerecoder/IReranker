@@ -9,6 +9,7 @@ import pytest
 
 from ireranker.config import EXTERNAL_DATA_DIR
 from ireranker.oracles import BidirectionalMatrixOracle, MatrixKey
+from ireranker.types import RankingTask
 
 
 def _dataset_from_path(path: Path) -> str:
@@ -103,9 +104,11 @@ def test_oracle_matches_real_votes(
 ) -> None:
     _, (key, expected) = dataset_and_pair
     qid, doc_a, doc_b = key
-    assert oracle.sample_lt(qid, doc_a, doc_b) is (not expected)
-    assert oracle.sample_lt(qid, doc_b, doc_a) is expected
+    task = RankingTask(query_id=qid, candidate_ids=[doc_a, doc_b])
+    assert oracle.sample_lt(task, 0, 1) is (not expected)
+    assert oracle.sample_lt(task, 1, 0) is expected
 
 
 def test_missing_pair_returns_false(oracle: BidirectionalMatrixOracle) -> None:
-    assert oracle.sample_lt("__missing__", "docA", "docB") is False
+    task = RankingTask(query_id="__missing__", candidate_ids=["docA", "docB"])
+    assert oracle.sample_lt(task, 0, 1) is False

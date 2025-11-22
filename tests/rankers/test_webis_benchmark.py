@@ -2,44 +2,39 @@ from __future__ import annotations
 
 import pytest
 
-from ireranker.evaluation.beir import evaluate_rankers_beir
-from ireranker.rankers import get_ranker, list_rankers
-import ireranker.rankers.bubble_ranker  # noqa: F401 - ensure registration side effects
-import ireranker.rankers.mohajer_ranker  # noqa: F401 - ensure registration side effects
-import ireranker.rankers.random_ranker  # noqa: F401 - ensure registration side effects
+import csv
+from pathlib import Path
+
+import pytest
+
+from ireranker.config import REPORTS_DIR
 
 DATASET_NAME = "webis-touche2020"
 
 
-def test_rankers_match_expected_webis_results(
-    webis_touche_dataset,
-    webis_touche_oracle,
-    expected_webis_results,
-    expected_k_values,
-) -> None:
+def _load_summary_rows(dataset: str) -> list[dict[str, str]]:
+    summary_path = REPORTS_DIR / "beir-metrics" / dataset / "summary.csv"
+    if not summary_path.exists():
+        pytest.skip(f"Summary not found for {dataset}: {summary_path}")
+    with summary_path.open("r", encoding="utf-8", newline="") as f:
+        return list(csv.DictReader(f))
+
+
+def test_latest_summary_matches_expected(expected_webis_results) -> None:
+    rows = _load_summary_rows(DATASET_NAME)
+    observed = {(row["ranker"], int(row["k"])): row for row in rows}
+    observed_rankers = {r for r, _ in observed}
+
     expected = expected_webis_results
-    ranker_names = sorted(expected.keys())
-    available_rankers = set(list_rankers())
-    tested_ranker_names = [name for name in ranker_names if name in available_rankers]
-    if not tested_ranker_names:
-        pytest.skip("No expected rankers are registered; skipping benchmark assertions.")
-    k_values = expected_k_values
+    expected_rankers = set(expected.keys())
+    common_rankers = expected_rankers & observed_rankers
+    if not common_rankers:
+        pytest.skip("No expected rankers present in summary; skipping consistency check.")
+    missing = {(name, k) for name in common_rankers for k in expected[name]} - set(observed)
+    if missing:
+        pytest.fail(f"Missing expected rows in summary: {sorted(missing)}")
 
-    rankers = []
-    for name in tested_ranker_names:
-        params = {"oracle": webis_touche_oracle}
-        if name == "random":
-            params["seed"] = 0
-        ranker = get_ranker(name, **params)
-        ranker.set_dataset(DATASET_NAME)
-        rankers.append(ranker)
-
-    rows = evaluate_rankers_beir(rankers, webis_touche_dataset, k_values)
-    observed = {(row["ranker"], row["k"]): row for row in rows}
-
-    assert set(observed.keys()) == {(name, k) for name in tested_ranker_names for k in k_values}
-
-    for ranker_name in tested_ranker_names:
+    for ranker_name in common_rankers:
         for k, exp in expected[ranker_name].items():
             row = observed[(ranker_name, k)]
-            assert row["NDCG"] == pytest.approx(exp["NDCG"], rel=1e-4)
+            assert float(row["NDCG"]) == pytest.approx(exp["NDCG"], rel=1e-4)

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import pickle
 from numbers import Real
 from pathlib import Path
+import pickle
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from ireranker.types import RankingTask
@@ -105,9 +105,7 @@ class BidirectionalMatrixOracle(Oracle):
                 if dataset_key in path.name.lower():
                     candidates.append(path)
         if not candidates:
-            raise FileNotFoundError(
-                f"No rerank matrix found for dataset '{dataset}' in {base}"
-            )
+            raise FileNotFoundError(f"No rerank matrix found for dataset '{dataset}' in {base}")
         best = max(candidates, key=lambda p: p.stat().st_mtime)
         with best.open("rb") as f:
             obj = pickle.load(f)
