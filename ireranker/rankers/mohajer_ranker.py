@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import heapq
+import math
+import random
 from typing import List
 
 from ireranker.oracles import Oracle
@@ -15,6 +17,8 @@ class MohajerRanker(SampleRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         super().__init__(oracle, seed)
         self.k = 10
+        self.m = 1.5
+        self._rng = random.Random(self.seed)
 
     def select_winner(self, task: RankingTask, indices: list[int]):
         order = list(indices)
@@ -106,10 +110,14 @@ class MohajerRanker(SampleRanker):
         ]
 
     def _better(self, i: int, j: int) -> bool:
-        return not self.lt(
-            i,
-            j,
-        )
+        full = math.floor(self.m)
+        frac = self.m - full
+        wins = sum(not self.lt(i, j) for _ in range(full))
+        total = full
+        if frac > 0 and self._rng.random() < frac:
+            wins += not self.lt(i, j)
+            total += 1
+        return wins >= total / 2
 
 
 class _HeapItem:

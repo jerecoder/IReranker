@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+import random
+
 from ireranker.types import RankingTask
 
 from .oracle import MatrixOracle
 
 
-class BidirectionalMatrixOracle(MatrixOracle):
-    """Oracle backed by rerank matrices that store (qid, doc_a, doc_b) and its reverse."""
+class SamplingMatrixOracle(MatrixOracle):
+    """Oracle that samples direction when both forward/reverse preferences exist."""
 
     def sample_lt(self, task: RankingTask, i: int, j: int) -> bool:
         matrix = self._ensure_matrix_loaded()
@@ -28,4 +30,7 @@ class BidirectionalMatrixOracle(MatrixOracle):
         if forward_pref is None or reverse_pref is None:
             return False
 
-        return forward_pref == "B" and reverse_pref == "A"
+        # Sample which direction to respect.
+        if random.randint(0, 1) == 1:
+            return forward_pref == "B"
+        return reverse_pref == "A"

@@ -22,7 +22,8 @@ def dataset_to_beir_qrels(dataset: RankingDataset) -> Dict[str, Dict[str, int]]:
         for doc_id, rel in zip(task.candidate_ids, task.y_true):
             if rel and rel > 0:
                 rels[doc_id] = int(rel)
-        qrels[task.query_id] = rels
+        if rels:
+            qrels[task.query_id] = rels
     return qrels
 
 
