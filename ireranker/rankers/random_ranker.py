@@ -17,8 +17,8 @@ class RandomRanker(CacheRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         super().__init__(oracle, seed)
 
-    def rank(self, task: RankingTask) -> List[int]:
+    def _rank(self) -> List[int]:
         rng = random.Random(self.seed)
-        idx = list(range(len(task.candidate_ids)))
+        idx = list(range(len(self.task.candidate_ids)))
         rng.shuffle(idx)
         return idx

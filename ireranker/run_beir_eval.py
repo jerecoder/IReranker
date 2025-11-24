@@ -16,7 +16,9 @@ _TABLE_START = "<!-- BEGIN_BEIR_RESULTS -->"
 _TABLE_END = "<!-- END_BEIR_RESULTS -->"
 
 
-def _format_mean(value: float | None, *, precision: int = 4, as_int: bool = False) -> str:
+def _format_mean(
+    value: float | None, *, precision: int = 4, as_int: bool = False
+) -> str:
     if value is None or (isinstance(value, float) and (value != value)):  # NaN check
         return "n/a"
     if as_int:
@@ -132,7 +134,9 @@ def _render_rate_table(out_root: Path, datasets: Sequence[str]) -> str:
         return "| Ranker | Avg NDCG@10/Comparisons |\n| --- | --- |\n| n/a | n/a |"
     header = "| Ranker | Avg NDCG@10/Comparisons |"
     divider = "| --- | --- |"
-    body = ["| " + r + " | " + _format_sci(rate) + " |" for r, rate in sorted(rates.items())]
+    body = [
+        "| " + r + " | " + _format_sci(rate) + " |" for r, rate in sorted(rates.items())
+    ]
     return "\n".join([header, divider, *body])
 
 

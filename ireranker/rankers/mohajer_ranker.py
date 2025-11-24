@@ -20,7 +20,7 @@ class MohajerRanker(SampleRanker):
         self.m = 1.5
         self._rng = random.Random(self.seed)
 
-    def select_winner(self, task: RankingTask, indices: list[int]):
+    def select_winner(self, indices: list[int]):
         order = list(indices)
 
         while len(order) > 1:
@@ -42,9 +42,8 @@ class MohajerRanker(SampleRanker):
 
         return order[0]
 
-    def rank(self, task: RankingTask) -> List[int]:
-        self.task = task
-        n = len(task.candidate_ids)
+    def _rank(self) -> List[int]:
+        n = len(self.task.candidate_ids)
 
         # number of groups / desired top-K
         K = min(self.k, n)
@@ -63,7 +62,7 @@ class MohajerRanker(SampleRanker):
             groups.append(group_indices)
 
             if group_indices:
-                champ = self.select_winner(task, group_indices)
+                champ = self.select_winner(group_indices)
                 champions.append(champ)
             else:
                 champions.append(None)
@@ -74,7 +73,7 @@ class MohajerRanker(SampleRanker):
 
         for g, champ in enumerate(champions):
             if champ is not None:
-                heap_item = _HeapItem(self, task, champ)
+                heap_item = _HeapItem(self, champ)
                 heapq.heappush(winner_heap, heap_item)
                 champ_to_group[champ] = g
 
@@ -101,12 +100,14 @@ class MohajerRanker(SampleRanker):
 
             # if group still has items, compute new champion and push into heap
             if groups[champ_og_group]:
-                new_champ = self.select_winner(task, groups[champ_og_group])
+                new_champ = self.select_winner(groups[champ_og_group])
                 champ_to_group[new_champ] = champ_og_group
-                heapq.heappush(winner_heap, _HeapItem(self, task, new_champ))
+                heapq.heappush(winner_heap, _HeapItem(self, new_champ))
 
         return ranking + [
-            idx for idx in list(range(len(task.candidate_ids))) if idx not in ranking
+            idx
+            for idx in list(range(len(self.task.candidate_ids)))
+            if idx not in ranking
         ]
 
     def _better(self, i: int, j: int) -> bool:
@@ -125,9 +126,8 @@ class _HeapItem:
 
     __slots__ = ("ranker", "task", "idx")
 
-    def __init__(self, ranker: "MohajerRanker", task: RankingTask, idx: int):
+    def __init__(self, ranker: "MohajerRanker", idx: int):
         self.ranker = ranker
-        self.task = task
         self.idx = idx
 
     def __lt__(self, other: "_HeapItem") -> bool:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import random
 from typing import Dict, Iterable, List
 
 from beir.retrieval.evaluation import EvaluateRetrieval  # type: ignore
@@ -27,9 +28,15 @@ def dataset_to_beir_qrels(dataset: RankingDataset) -> Dict[str, Dict[str, int]]:
     return qrels
 
 
-def ranker_results_to_beir(ranker: Ranker, dataset: RankingDataset) -> Dict[str, Dict[str, float]]:
+def ranker_results_to_beir(
+    ranker: Ranker, dataset: RankingDataset
+) -> Dict[str, Dict[str, float]]:
     results: Dict[str, Dict[str, float]] = {}
     tasks = dataset.tasks
+
+    for task in tasks:
+        random.shuffle(task.candidate_ids)
+
     iterator = _progress(
         tasks,
         total=len(tasks),

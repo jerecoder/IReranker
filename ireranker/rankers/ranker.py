@@ -26,8 +26,13 @@ class Ranker(ABC):
         """Update the oracle with a new dataset before ranking."""
         self.oracle.load_dataset(dataset, split=split)
 
-    @abstractmethod
     def rank(self, task: RankingTask) -> List[int]:
+        """Return a permutation of indices for the candidate list."""
+        self.task = task
+        return self._rank()
+
+    @abstractmethod
+    def _rank(self) -> List[int]:
         """Return a permutation of indices for the candidate list."""
         raise NotImplementedError
 
@@ -73,7 +78,9 @@ class CacheRanker(Ranker):
     def _ensure_cache_for_task(self) -> None:
         """Clear the cache when switching to a different task."""
         if not hasattr(self, "task"):
-            raise RuntimeError("Callers must set self.task before requesting comparisons.")
+            raise RuntimeError(
+                "Callers must set self.task before requesting comparisons."
+            )
         signature = (self.task.query_id, tuple(self.task.candidate_ids))
         if signature != self._cache_signature:
             self._comparison_cache.clear()
