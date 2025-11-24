@@ -83,9 +83,7 @@ class CacheRanker(Ranker):
     def _ensure_cache_for_task(self) -> None:
         """Clear the cache when switching to a different task."""
         if not hasattr(self, "task"):
-            raise RuntimeError(
-                "Callers must set self.task before requesting comparisons."
-            )
+            raise RuntimeError("Callers must set self.task before requesting comparisons.")
         signature = (self.task.query_id, tuple(self.task.candidate_ids))
         if signature != self._cache_signature:
             self._comparison_cache.clear()

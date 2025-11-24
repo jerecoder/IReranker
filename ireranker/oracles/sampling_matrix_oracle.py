@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import random
 
-from ireranker.types import RankingTask
-
 from .oracle import MatrixOracle
 
 

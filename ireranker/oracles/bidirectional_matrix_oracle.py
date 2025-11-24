@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from ireranker.types import RankingTask
-
 from .oracle import MatrixOracle
 
 

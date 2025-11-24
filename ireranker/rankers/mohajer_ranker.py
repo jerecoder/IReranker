@@ -6,7 +6,6 @@ import random
 from typing import List
 
 from ireranker.oracles import Oracle
-from ireranker.types import RankingTask
 
 from .ranker import SampleRanker
 from .registry import register_ranker
@@ -43,7 +42,6 @@ class MohajerRanker(SampleRanker):
         return order[0]
 
     def _rank(self) -> List[int]:
-
         # number of groups / desired top-K
         K = min(self.k, self.n)
 

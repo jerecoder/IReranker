@@ -4,7 +4,6 @@ import random
 from typing import List
 
 from ireranker.oracles import Oracle
-from ireranker.types import RankingTask
 
 from .ranker import CacheRanker
 from .registry import register_ranker
