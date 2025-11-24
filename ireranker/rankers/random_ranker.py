@@ -19,6 +19,6 @@ class RandomRanker(CacheRanker):
 
     def _rank(self) -> List[int]:
         rng = random.Random(self.seed)
-        idx = list(range(len(self.task.candidate_ids)))
+        idx = list(range(self.n))
         rng.shuffle(idx)
         return idx

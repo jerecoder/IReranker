@@ -8,12 +8,15 @@ from .oracle import MatrixOracle
 class BidirectionalMatrixOracle(MatrixOracle):
     """Oracle backed by rerank matrices that store (qid, doc_a, doc_b) and its reverse."""
 
-    def sample_lt(self, task: RankingTask, i: int, j: int) -> bool:
+    def sample_lt(self, i: int, j: int) -> bool:
         matrix = self._ensure_matrix_loaded()
 
-        qid = task.query_id
-        doc_a = task.candidate_ids[i]
-        doc_b = task.candidate_ids[j]
+        if self.current_task is None:
+            return False
+
+        qid = self.current_task.query_id
+        doc_a = self.current_task.candidate_ids[i]
+        doc_b = self.current_task.candidate_ids[j]
 
         forward_key = (qid, doc_a, doc_b)
         reverse_key = (qid, doc_b, doc_a)

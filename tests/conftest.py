@@ -7,12 +7,13 @@ from ireranker.oracles import Oracle
 
 class DummyOracle(Oracle):
     def __init__(self) -> None:
+        super().__init__()
         self.loaded: list[tuple[str, str]] = []
 
     def load_dataset(self, dataset: str, *, split: str = "test") -> None:
         self.loaded.append((dataset, split))
 
-    def sample_lt(self, task, i: int, j: int) -> bool:  # noqa: ARG002 - test helper
+    def sample_lt(self, i: int, j: int) -> bool:  # noqa: ARG002 - test helper
         return False
 
 

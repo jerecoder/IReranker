@@ -10,12 +10,23 @@ from .oracle import MatrixOracle
 class SamplingMatrixOracle(MatrixOracle):
     """Oracle that samples direction when both forward/reverse preferences exist."""
 
-    def sample_lt(self, task: RankingTask, i: int, j: int) -> bool:
+    def __init__(self, base_dir=None, seed: int | None = None):
+        super().__init__(base_dir=base_dir)
+        self._rng = random.Random(seed)
+
+    def set_seed(self, seed: int | None) -> None:
+        super().set_seed(seed)
+        self._rng = random.Random(seed)
+
+    def sample_lt(self, i: int, j: int) -> bool:
         matrix = self._ensure_matrix_loaded()
 
-        qid = task.query_id
-        doc_a = task.candidate_ids[i]
-        doc_b = task.candidate_ids[j]
+        if self.current_task is None:
+            return False
+
+        qid = self.current_task.query_id
+        doc_a = self.current_task.candidate_ids[i]
+        doc_b = self.current_task.candidate_ids[j]
 
         forward_key = (qid, doc_a, doc_b)
         reverse_key = (qid, doc_b, doc_a)
@@ -31,6 +42,6 @@ class SamplingMatrixOracle(MatrixOracle):
             return False
 
         # Sample which direction to respect.
-        if random.randint(0, 1) == 1:
+        if self._rng.randint(0, 1) == 1:
             return forward_pref == "B"
         return reverse_pref == "A"

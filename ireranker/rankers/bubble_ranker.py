@@ -17,7 +17,7 @@ class BubbleRanker(CacheRanker):
 
     def _rank(self) -> List[int]:
         self.task = self.task
-        order = list(range(len(self.task.candidate_ids)))
+        order = list(range(self.n))
         swapped = True
         while swapped:
             swapped = False

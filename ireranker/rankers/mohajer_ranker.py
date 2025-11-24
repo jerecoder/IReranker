@@ -43,13 +43,12 @@ class MohajerRanker(SampleRanker):
         return order[0]
 
     def _rank(self) -> List[int]:
-        n = len(self.task.candidate_ids)
 
         # number of groups / desired top-K
-        K = min(self.k, n)
+        K = min(self.k, self.n)
 
         # group size Q = ceil(n / K)
-        Q = (n + K - 1) // K
+        Q = (self.n + K - 1) // K
 
         groups: list[list[int]] = []
         champions: list[int | None] = []
@@ -57,7 +56,7 @@ class MohajerRanker(SampleRanker):
         # 1) build groups and find each group's champion using SELECT
         for g in range(K):
             start = g * Q
-            end = min((g + 1) * Q, n)
+            end = min((g + 1) * Q, self.n)
             group_indices = list(range(start, end))
             groups.append(group_indices)
 
@@ -104,11 +103,7 @@ class MohajerRanker(SampleRanker):
                 champ_to_group[new_champ] = champ_og_group
                 heapq.heappush(winner_heap, _HeapItem(self, new_champ))
 
-        return ranking + [
-            idx
-            for idx in list(range(len(self.task.candidate_ids)))
-            if idx not in ranking
-        ]
+        return ranking + [idx for idx in list(range(self.n)) if idx not in ranking]
 
     def _better(self, i: int, j: int) -> bool:
         full = math.floor(self.m)
