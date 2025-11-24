@@ -125,19 +125,19 @@ Auto-updated after each BEIR evaluation:
 <!-- BEGIN_BEIR_RESULTS -->
 | Ranker | Avg NDCG@10/Comparisons |
 | --- | --- |
-| mohajer | 1.377e-05 |
+| mohajer | 1.371e-05 |
 | random | 0.000e+00 |
 
 | Dataset | mohajer | random |
 | --- | --- | --- |
 | dbpedia-entity | 0.5400 | 0.0950 |
 | fiqa | 0.4248 | 0.0634 |
-| nfcorpus | 0.6028 | 0.2391 |
+| nfcorpus | 0.6047 | 0.2537 |
 | robust04 | n/a | n/a |
-| scifact | 0.6733 | 0.0472 |
+| scifact | 0.6785 | 0.0401 |
 | signal1m | n/a | n/a |
-| trec-covid | 0.7709 | 0.3927 |
+| trec-covid | 0.7695 | 0.4241 |
 | trec-news | n/a | n/a |
 | trec-robust04 | n/a | n/a |
-| webis-touche2020 | 0.2895 | 0.1066 |
+| webis-touche2020 | 0.2807 | 0.0837 |
 <!-- END_BEIR_RESULTS -->
