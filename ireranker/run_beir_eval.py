@@ -1,14 +1,18 @@
 from __future__ import annotations
 
 import argparse
+import cProfile
 import csv
+import io
 import json
 from pathlib import Path
+import pstats
 from typing import Any, Dict, List, Optional, Sequence
 
 from ireranker.config import PROJ_ROOT, REPORTS_DIR, logger
 from ireranker.data.loaders import _beir_supported_name, load_beir_dataset
 from ireranker.evaluation.beir import evaluate_rankers_beir
+from ireranker.oracles.oracle import clear_matrix_cache
 from ireranker.rankers import get_ranker
 
 _TABLE_START = "<!-- BEGIN_BEIR_RESULTS -->"
@@ -164,6 +168,12 @@ def run_from_config(
     *,
     dataset_override: Optional[str] = None,
     light_mode: bool = False,
+    rankers_override: Optional[List[str]] = None,
+    max_queries_override: Optional[int] = None,
+    profile_output: Optional[Path] = None,
+    profile_limit: int = 30,
+    profile_sort: str = "cumulative",
+    skip_readme_update: bool = False,
 ) -> None:
     cfg_path = config_path or (PROJ_ROOT / "config" / "beir_eval.json")
 
@@ -210,6 +220,8 @@ def run_from_config(
         eff_rankers = _list()
     else:
         eff_rankers = cfg_rankers
+    if rankers_override is not None:
+        eff_rankers = rankers_override
 
     seed = int(cfg.get("seed") or 123)
 
@@ -228,73 +240,115 @@ def run_from_config(
     split = str(cfg.get("split") or "test")
     max_queries = cfg.get("max_queries")
     max_queries = int(max_queries) if max_queries not in (None, "", "null") else None
+    if max_queries_override is not None:
+        max_queries = max_queries_override
+    if profile_output and max_queries is None:
+        logger.warning(
+            "Profiling without max_queries override; consider a small limit to avoid heavy runs."
+        )
 
     failed: List[str] = []
-    for d in ds_names:
-        try:
-            logger.info(f"Loading BEIR dataset: {d} (split={split})")
-            dataset = load_beir_dataset(
-                d,
-                split=split,
-                max_queries=max_queries,
-            )
-            for ranker in rs:
-                ranker.set_dataset(d, split=split)
-            rows = evaluate_rankers_beir(rs, dataset, k_values, seed=seed)
 
-            d_out = eff_out_root / d
-            d_out.mkdir(parents=True, exist_ok=True)
-            summary_path = d_out / "summary.csv"
-            error_path = d_out / "ERROR.txt"
-            for old in (summary_path, error_path):
-                if old.exists():
+    def _run_eval() -> None:
+        nonlocal failed
+        clear_matrix_cache()
+        for d in ds_names:
+            try:
+                logger.info(f"Loading BEIR dataset: {d} (split={split})")
+                dataset = load_beir_dataset(
+                    d,
+                    split=split,
+                    max_queries=max_queries,
+                )
+                task_qids = [t.query_id for t in dataset.tasks]
+                for ranker in rs:
+                    ranker.set_dataset(d, split=split, query_ids=task_qids)
+                rows = evaluate_rankers_beir(rs, dataset, k_values, seed=seed)
+
+                d_out = eff_out_root / d
+                d_out.mkdir(parents=True, exist_ok=True)
+                summary_path = d_out / "summary.csv"
+                error_path = d_out / "ERROR.txt"
+                for old in (summary_path, error_path):
+                    if old.exists():
+                        try:
+                            old.unlink()
+                        except OSError:
+                            logger.warning(f"Could not remove stale file {old}")
+                fieldnames = [
+                    "ranker",
+                    "k",
+                    "NDCG",
+                    "MAP",
+                    "Recall",
+                    "Precision",
+                    "Comparisons",
+                    "NDCG_per_comp",
+                ]
+                with summary_path.open("w", encoding="utf-8", newline="") as f:
+                    writer = csv.DictWriter(f, fieldnames=fieldnames)
+                    writer.writeheader()
+                    for row in rows:
+                        writer.writerow({k: row.get(k) for k in fieldnames})
+                logger.success(f"Saved BEIR evaluation summary to {d_out / 'summary.csv'}")  # type: ignore
+            except Exception as e:
+                from ireranker.config import EXTERNAL_DATA_DIR
+
+                zip_path = EXTERNAL_DATA_DIR / "beir" / f"{d}.zip"
+                logger.error(f"Failed dataset '{d}'. Zip: {zip_path}. Error: {e}")
+                err_dir = eff_out_root / d
+                err_dir.mkdir(parents=True, exist_ok=True)
+                summary_path = err_dir / "summary.csv"
+                if summary_path.exists():
                     try:
-                        old.unlink()
+                        summary_path.unlink()
                     except OSError:
-                        logger.warning(f"Could not remove stale file {old}")
-            fieldnames = [
-                "ranker",
-                "k",
-                "NDCG",
-                "MAP",
-                "Recall",
-                "Precision",
-                "Comparisons",
-                "NDCG_per_comp",
-            ]
-            with summary_path.open("w", encoding="utf-8", newline="") as f:
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
-                writer.writeheader()
-                for row in rows:
-                    writer.writerow({k: row.get(k) for k in fieldnames})
-            logger.success(f"Saved BEIR evaluation summary to {d_out / 'summary.csv'}")  # type: ignore
-        except Exception as e:
-            from ireranker.config import EXTERNAL_DATA_DIR
+                        logger.warning(f"Could not remove stale file {summary_path}")
+                err_file = err_dir / "ERROR.txt"
+                if err_file.exists():
+                    try:
+                        err_file.unlink()
+                    except OSError:
+                        logger.warning(f"Could not remove stale file {err_file}")
+                err_file.write_text(f"Zip: {zip_path}\nError: {e}\n")
+                failed.append(d)
+            finally:
+                clear_matrix_cache()
 
-            zip_path = EXTERNAL_DATA_DIR / "beir" / f"{d}.zip"
-            logger.error(f"Failed dataset '{d}'. Zip: {zip_path}. Error: {e}")
-            err_dir = eff_out_root / d
-            err_dir.mkdir(parents=True, exist_ok=True)
-            summary_path = err_dir / "summary.csv"
-            if summary_path.exists():
-                try:
-                    summary_path.unlink()
-                except OSError:
-                    logger.warning(f"Could not remove stale file {summary_path}")
-            err_file = err_dir / "ERROR.txt"
-            if err_file.exists():
-                try:
-                    err_file.unlink()
-                except OSError:
-                    logger.warning(f"Could not remove stale file {err_file}")
-            err_file.write_text(f"Zip: {zip_path}\nError: {e}\n")
-            failed.append(d)
+    if profile_output:
+        prof = cProfile.Profile()
+        prof.enable()
+        try:
+            _run_eval()
+        finally:
+            prof.disable()
+            profile_output.parent.mkdir(parents=True, exist_ok=True)
+            prof.dump_stats(profile_output)
+            try:
+                stats = pstats.Stats(prof).strip_dirs().sort_stats(profile_sort)
+                stream = io.StringIO()
+                stats.stream = stream
+                stats.print_stats(profile_limit)
+                logger.info(
+                    "Top %d profile rows (sort=%s):\n%s",
+                    profile_limit,
+                    profile_sort,
+                    stream.getvalue(),
+                )
+            except Exception as e:  # pragma: no cover - defensive
+                logger.warning(f"Could not render profile summary: {e}")
+            logger.info(f"Profile stats saved to {profile_output}")
+    else:
+        _run_eval()
 
-    try:
-        _update_readme_results_table(eff_out_root, ds_names)
-        logger.info("Updated README with BEIR results table.")
-    except Exception as e:  # pragma: no cover - defensive
-        logger.warning(f"Could not update README results table: {e}")
+    if not skip_readme_update:
+        try:
+            _update_readme_results_table(eff_out_root, ds_names)
+            logger.info("Updated README with BEIR results table.")
+        except Exception as e:  # pragma: no cover - defensive
+            logger.warning(f"Could not update README results table: {e}")
+    else:
+        logger.info("Skip README update requested; results left on disk.")
 
     if failed:
         logger.warning(f"Completed with failures for datasets: {', '.join(failed)}")
@@ -319,10 +373,59 @@ def main() -> None:
         action="store_true",
         help="Skip datasets listed in config/light_exclude.",
     )
+    parser.add_argument(
+        "--rankers",
+        type=str,
+        default=None,
+        help="Comma-separated ranker names to run (overrides config).",
+    )
+    parser.add_argument(
+        "--max-queries",
+        type=int,
+        default=None,
+        help="Limit number of queries per dataset for a quick/profiled run.",
+    )
+    parser.add_argument(
+        "--profile-out",
+        type=str,
+        default=None,
+        help="Optional path to write cProfile stats for the whole run.",
+    )
+    parser.add_argument(
+        "--profile-limit",
+        type=int,
+        default=30,
+        help="Number of rows to show in the console profile summary (when --profile-out is set).",
+    )
+    parser.add_argument(
+        "--profile-sort",
+        type=str,
+        default="cumulative",
+        help="Sort key for the console profile summary (cumulative, time, calls, etc.).",
+    )
+    parser.add_argument(
+        "--skip-readme-update",
+        action="store_true",
+        help="Do not rewrite README tables (useful for dry-run/profiling).",
+    )
     args = parser.parse_args()
 
     cfg_path = Path(args.config) if args.config else None
-    run_from_config(cfg_path, dataset_override=args.dataset, light_mode=args.light)
+    rankers_override = None
+    if args.rankers:
+        rankers_override = [r.strip() for r in args.rankers.split(",") if r.strip()]
+    profile_out = Path(args.profile_out) if args.profile_out else None
+    run_from_config(
+        cfg_path,
+        dataset_override=args.dataset,
+        light_mode=args.light,
+        rankers_override=rankers_override,
+        max_queries_override=args.max_queries,
+        profile_output=profile_out,
+        profile_limit=args.profile_limit,
+        profile_sort=args.profile_sort,
+        skip_readme_update=args.skip_readme_update,
+    )
 
 
 if __name__ == "__main__":

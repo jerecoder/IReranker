@@ -42,7 +42,9 @@ def test_beir_eval_reseeds_rankers():
 
             self._rng = random.Random(0)
 
-        def load_dataset(self, dataset: str, *, split: str = "test") -> None:  # noqa: ARG002
+        def load_dataset(
+            self, dataset: str, *, split: str = "test", query_ids=None
+        ) -> None:  # noqa: ARG002, ANN001
             return None
 
         def sample_lt(self, i: int, j: int) -> bool:  # noqa: ARG002

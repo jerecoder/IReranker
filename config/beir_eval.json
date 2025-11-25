@@ -9,7 +9,7 @@
   ],
   "split": "test",
   "max_queries": null,
-  "seed": 69420,
+  "seed": 42,
   "k_values": [
     1,
     3,

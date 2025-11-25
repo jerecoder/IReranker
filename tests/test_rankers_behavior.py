@@ -9,7 +9,9 @@ class ScoreOracle(Oracle):
         super().__init__()
         self.scores = scores
 
-    def load_dataset(self, dataset: str, *, split: str = "test") -> None:  # noqa: ARG002
+    def load_dataset(
+        self, dataset: str, *, split: str = "test", query_ids=None
+    ) -> None:  # noqa: ARG002, ANN001
         return None
 
     def sample_lt(self, i: int, j: int) -> bool:  # noqa: ARG002

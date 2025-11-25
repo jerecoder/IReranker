@@ -29,9 +29,11 @@ class Ranker(ABC):
         except AttributeError:
             pass
 
-    def set_dataset(self, dataset: str, *, split: str = "test") -> None:
+    def set_dataset(
+        self, dataset: str, *, split: str = "test", query_ids: list[str] | None = None
+    ) -> None:
         """Update the oracle with a new dataset before ranking."""
-        self.oracle.load_dataset(dataset, split=split)
+        self.oracle.load_dataset(dataset, split=split, query_ids=query_ids)
 
     def rank(self, task: RankingTask) -> List[int]:
         """Return a permutation of indices for the candidate list."""
@@ -73,8 +75,10 @@ class CacheRanker(Ranker):
         self._comparison_cache: dict[tuple[int, int], bool] = {}
         self._cache_signature: tuple[str, tuple[str, ...]] | None = None
 
-    def set_dataset(self, dataset: str, *, split: str = "test") -> None:
-        super().set_dataset(dataset, split=split)
+    def set_dataset(
+        self, dataset: str, *, split: str = "test", query_ids: list[str] | None = None
+    ) -> None:
+        super().set_dataset(dataset, split=split, query_ids=query_ids)
         self._comparison_cache.clear()
         self._cache_signature = None
 

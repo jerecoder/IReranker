@@ -1,4 +1,5 @@
 ranker,k,NDCG
-bubbly,10,0.23623
-mohajer,10,0.28074
-random,10,0.08372
+mohajer,10,0.28270
+quicky,10,0.27259
+random,10,0.11138
+sliding,10,0.22912

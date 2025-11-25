@@ -15,7 +15,9 @@ class RecordingOracle(Oracle):
         self.calls: list[tuple[str, int, int]] = []
         self.dataset_loads: list[tuple[str, str]] = []
 
-    def load_dataset(self, dataset: str, *, split: str = "test") -> None:
+    def load_dataset(
+        self, dataset: str, *, split: str = "test", query_ids=None
+    ) -> None:  # noqa: ANN001 - test helper
         self.dataset_loads.append((dataset, split))
 
     def sample_lt(self, i: int, j: int) -> bool:

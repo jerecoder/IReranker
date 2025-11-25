@@ -3,12 +3,12 @@ from __future__ import annotations
 import csv
 import json
 from pathlib import Path
-import pickle
 import shutil
 from typing import Dict, List, Optional
 import zipfile
 
 from ireranker.config import logger
+from ireranker.oracles.oracle import load_matrix
 from ireranker.types import RankingDataset, RankingTask
 
 # --- BEIR dataset loader utilities -------------------------------------------------------
@@ -115,7 +115,9 @@ def _download_beir_once(canonical: str, base_out: Path) -> str:
         raise
 
 
-def _load_rerank_matrix(dataset: str, split: str) -> Optional[Dict[str, List[str]]]:
+def _load_rerank_matrix(
+    dataset: str, split: str, *, max_queries: Optional[int] = None
+) -> Optional[Dict[str, List[str]]]:
     """Load per-query candidate restrictions from a single canonical base path.
 
     Canonical base: EXTERNAL_DATA_DIR / "reranking-matrices"
@@ -124,32 +126,30 @@ def _load_rerank_matrix(dataset: str, split: str) -> Optional[Dict[str, List[str
     selects the most recent match.
     """
     try:
-        from ireranker.config import EXTERNAL_DATA_DIR
-
-        base = EXTERNAL_DATA_DIR / "reranking-matrices"
-        # Try pickle formats
-        # Recursively scan a single canonical base for matching *.pkl
-        candidates: List[Path] = []
-        if base.exists():
-            for p in base.rglob("*.pkl"):
-                name = p.name.lower()
-                if dataset.lower() in name:
-                    candidates.append(p)
-        if candidates:
-            # Choose most recent modification time
-            best = max(candidates, key=lambda p: p.stat().st_mtime)
-            with open(best, "rb") as f:
-                obj = pickle.load(f)
-            if isinstance(obj, dict):
-                acc: Dict[str, set] = {}
-                for k in obj.keys():
-                    if isinstance(k, tuple) and len(k) == 3:
-                        qid, a, b = k
-                        if isinstance(qid, str) and isinstance(a, str) and isinstance(b, str):
-                            acc.setdefault(qid, set()).update([a, b])
-                logger.info(f"Loaded rerank matrix from {best} (queries: {len(acc)})")
-                return {qid: sorted(list(s)) for qid, s in acc.items()}
-        return None
+        matrix = load_matrix(dataset, split=split)
+        acc: Dict[str, set] = {}
+        for key in list(matrix.keys()):
+            if isinstance(key, tuple) and len(key) == 3:
+                qid, a, b = key
+                if isinstance(qid, str) and isinstance(a, str) and isinstance(b, str):
+                    acc.setdefault(qid, set()).update([a, b])
+        qid_order = sorted(acc.keys())
+        if max_queries is not None:
+            keep = set(qid_order[:max_queries])
+            if keep:
+                matrix_keys = list(matrix.keys())
+                for k in matrix_keys:
+                    if k[0] not in keep:
+                        matrix.pop(k, None)
+                acc = {qid: acc[qid] for qid in qid_order if qid in keep}
+                logger.info(
+                    "Filtered rerank matrix for %s/%s down to %d queries",
+                    dataset,
+                    split,
+                    len(keep),
+                )
+        logger.info(f"Loaded rerank matrix for {dataset}/{split} (queries: {len(acc)})")
+        return {qid: sorted(list(s)) for qid, s in acc.items()}
     except Exception as e:
         logger.warning(f"Failed to load rerank matrix for {dataset}/{split}: {e}")
         return None
@@ -211,7 +211,7 @@ def load_beir_dataset(
 
     tasks: List[RankingTask] = []
 
-    matrix = _load_rerank_matrix(canonical, split)
+    matrix = _load_rerank_matrix(canonical, split, max_queries=max_queries)
     if matrix is None:
         from ireranker.config import EXTERNAL_DATA_DIR
 

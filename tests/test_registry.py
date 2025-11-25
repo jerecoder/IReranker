@@ -11,7 +11,7 @@ def test_registry_lists_baselines():
     assert "random" in names
     assert "mohajer" in names
     assert "sliding" in names
-    assert "quicksort_topk" in names
+    assert "quicky" in names
 
 
 def test_get_ranker_seed_determinism(dummy_oracle_factory):

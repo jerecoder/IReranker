@@ -75,7 +75,7 @@ Useful commands inside the `IReranker` env:
         "dbpedia-entity"
       ],
       "split": "test",
-      "seed": 69420,
+      "seed": 42,
       "k_values": [1, 3, 5, 10, 100],
       "light_exclude": ["dbpedia-entity", "fiqa"],
       "output_dir": "beir-metrics",
@@ -98,6 +98,8 @@ Useful commands inside the `IReranker` env:
 - Overrides:
   - `make beir-eval ARGS="--dataset webis-touche2020"`
   - `make beir-eval ARGS="--light"` to skip datasets from `light_exclude`
+  - `make beir-eval ARGS="--max-queries 20 --rankers random"` for a quick/safe run
+  - `make beir-eval ARGS="--profile-out reports/profiles/beir_eval.prof --skip-readme-update"` to profile without touching docs
   - `python -m ireranker.run_beir_eval --config /path/to/custom.json`
 
 ## Output
@@ -111,6 +113,7 @@ Per dataset: CSV `summary.csv` with one row per ranker & k
 - Existing dataset directories are reused (no re-download).
 - After extraction the ZIP is removed to save space.
 - Download errors are logged and the dataset creates an `ERROR.txt` so the run continues.
+- Low-memory runs: pass `--max-queries <N>` (and optionally `--dataset ...`/`--light`) to prune rerank matrices to that many queries and avoid loading multiple copies in RAM.
 - `BubbleRanker` is implemented but intentionally not registered by default because it is expensive; import and instantiate it directly if you need it.
 - `reports/beir-metrics/` contiene ejemplos de salidas; puedes borrarlas o regenerarlas con `make beir-eval`.
 - Graficar NDCG@k desde un `summary.csv`: `python -m ireranker.plots ndcg-bar nfcorpus --k 10`.
@@ -125,20 +128,21 @@ Auto-updated after each BEIR evaluation:
 <!-- BEGIN_BEIR_RESULTS -->
 | Ranker | Avg NDCG@10/Comparisons |
 | --- | --- |
-| mohajer | 1.336e-05 |
+| mohajer | 1.352e-05 |
+| quicky | 5.940e-06 |
 | random | 0.000e+00 |
-| sliding | 8.329e-06 |
+| sliding | 8.130e-06 |
 
-| Dataset | mohajer | random | sliding |
-| --- | --- | --- | --- |
-| dbpedia-entity | 0.5573 | 0.0977 | 0.4228 |
-| fiqa | 0.4413 | 0.0582 | 0.2488 |
-| nfcorpus | 0.6079 | 0.2537 | 0.5170 |
-| robust04 | n/a | n/a | n/a |
-| scifact | 0.6961 | 0.0401 | 0.5293 |
-| signal1m | n/a | n/a | n/a |
-| trec-covid | 0.7671 | 0.4241 | 0.7016 |
-| trec-news | n/a | n/a | n/a |
-| trec-robust04 | n/a | n/a | n/a |
-| webis-touche2020 | 0.2807 | 0.0837 | 0.2566 |
+| Dataset | mohajer | quicky | random | sliding |
+| --- | --- | --- | --- | --- |
+| dbpedia-entity | 0.5435 | 0.5719 | 0.1133 | 0.4063 |
+| fiqa | 0.4334 | 0.4757 | 0.0515 | 0.2277 |
+| nfcorpus | 0.5910 | 0.5993 | 0.2515 | 0.5119 |
+| robust04 | n/a | n/a | n/a | n/a |
+| scifact | 0.6851 | 0.6831 | 0.0427 | 0.5317 |
+| signal1m | n/a | n/a | n/a | n/a |
+| trec-covid | 0.7946 | 0.7805 | 0.3863 | 0.6967 |
+| trec-news | n/a | n/a | n/a | n/a |
+| trec-robust04 | n/a | n/a | n/a | n/a |
+| webis-touche2020 | 0.2827 | 0.2726 | 0.1114 | 0.2291 |
 <!-- END_BEIR_RESULTS -->

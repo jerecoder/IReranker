@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from functools import lru_cache
 from numbers import Real
 from pathlib import Path
 import pickle
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
 from ireranker.types import RankingTask
 
@@ -17,7 +18,13 @@ class Oracle(ABC):
         self.seed: Optional[int] = None
 
     @abstractmethod
-    def load_dataset(self, dataset: str, *, split: str = "test") -> None:
+    def load_dataset(
+        self,
+        dataset: str,
+        *,
+        split: str = "test",
+        query_ids: Optional[Iterable[str]] = None,
+    ) -> None:
         """Load comparison data for the given dataset, replacing any previous state."""
 
     def set_task(self, task: RankingTask) -> None:
@@ -45,8 +52,20 @@ class MatrixOracle(Oracle):
         self._matrix: Optional[Dict[MatrixKey, Mapping[str, Any]]] = None
         self._dataset: Optional[str] = None
 
-    def load_dataset(self, dataset: str, *, split: str = "test") -> None:
+    def load_dataset(
+        self,
+        dataset: str,
+        *,
+        split: str = "test",
+        query_ids: Optional[Iterable[str]] = None,
+    ) -> None:
         self._matrix = self._load_matrix(dataset, split)
+        if query_ids is not None:
+            allowed = {str(qid) for qid in query_ids}
+            if allowed:
+                matrix_qids = {k[0] for k in self._matrix.keys()}
+                if not allowed.issuperset(matrix_qids):
+                    self._matrix = {k: v for k, v in self._matrix.items() if k[0] in allowed}
         self._dataset = dataset
 
     def _ensure_matrix_loaded(self) -> Dict[MatrixKey, Mapping[str, Any]]:
@@ -94,29 +113,54 @@ class MatrixOracle(Oracle):
     ) -> Dict[MatrixKey, Mapping[str, Any]]:
         dataset_key = dataset.lower().strip()
         split_key = split.lower().strip() if split else ""
-        base = self._base_dir or self._default_base_dir()  # type: ignore
-        if not base.exists():
-            raise FileNotFoundError(f"Rerank matrix directory not found: {base}")
+        base = (self._base_dir or _default_base_dir()).resolve()
+        return _load_matrix_cached(dataset_key, split_key, base)
 
-        candidates: List[Path] = []
+
+@lru_cache(maxsize=8)
+def _load_matrix_cached(
+    dataset_key: str, split_key: str, base: Path
+) -> Dict[MatrixKey, Mapping[str, Any]]:
+    if not base.exists():
+        raise FileNotFoundError(f"Rerank matrix directory not found: {base}")
+
+    candidates: List[Path] = []
+    for path in base.rglob("*.pkl"):
+        name = path.name.lower()
+        if dataset_key in name and (not split_key or split_key in name):
+            candidates.append(path)
+    if not candidates and split_key:
         for path in base.rglob("*.pkl"):
-            name = path.name.lower()
-            if dataset_key in name and (not split_key or split_key in name):
+            if dataset_key in path.name.lower():
                 candidates.append(path)
-        if not candidates and split_key:
-            for path in base.rglob("*.pkl"):
-                if dataset_key in path.name.lower():
-                    candidates.append(path)
-        if not candidates:
-            raise FileNotFoundError(f"No rerank matrix found for dataset '{dataset}' in {base}")
-        best = max(candidates, key=lambda p: p.stat().st_mtime)
-        with best.open("rb") as f:
-            obj = pickle.load(f)
-        if not isinstance(obj, dict):
-            raise ValueError(f"Unexpected rerank matrix format in {best}: {type(obj)}")
-        return obj  # type: ignore[return-value]
+    if not candidates:
+        raise FileNotFoundError(f"No rerank matrix found for dataset '{dataset_key}' in {base}")
+    best = max(candidates, key=lambda p: p.stat().st_mtime)
+    with best.open("rb") as f:
+        obj = pickle.load(f)
+    if not isinstance(obj, dict):
+        raise ValueError(f"Unexpected rerank matrix format in {best}: {type(obj)}")
+    return obj  # type: ignore[return-value]
 
-    def _default_base_dir(self) -> Path:
-        from ireranker.config import EXTERNAL_DATA_DIR
 
-        return EXTERNAL_DATA_DIR / "reranking-matrices"
+def clear_matrix_cache() -> None:
+    """Drop any cached rerank matrices to free memory."""
+    _load_matrix_cached.cache_clear()
+
+
+def load_matrix(
+    dataset: str,
+    split: str = "test",
+    base_dir: Optional[Path] = None,
+) -> Dict[MatrixKey, Mapping[str, Any]]:
+    """Public helper to load a rerank matrix with caching."""
+    base = (base_dir or _default_base_dir()).resolve()
+    return _load_matrix_cached(
+        dataset.lower().strip(), split.lower().strip() if split else "", base
+    )
+
+
+def _default_base_dir() -> Path:
+    from ireranker.config import EXTERNAL_DATA_DIR
+
+    return EXTERNAL_DATA_DIR / "reranking-matrices"
