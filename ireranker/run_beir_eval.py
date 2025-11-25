@@ -9,7 +9,6 @@ from typing import Any, Dict, List, Optional, Sequence
 from ireranker.config import PROJ_ROOT, REPORTS_DIR, logger
 from ireranker.data.loaders import _beir_supported_name, load_beir_dataset
 from ireranker.evaluation.beir import evaluate_rankers_beir
-from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
 from ireranker.rankers import get_ranker
 
 _TABLE_START = "<!-- BEGIN_BEIR_RESULTS -->"
@@ -214,12 +213,7 @@ def run_from_config(
 
     seed = int(cfg.get("seed") or 123)
 
-    def _oracle_for_ranker(name: str):
-        if name.lower() == "mohajer":
-            return SamplingMatrixOracle(seed=seed)
-        return BidirectionalMatrixOracle()
-
-    rs = [get_ranker(r, seed=seed, oracle=_oracle_for_ranker(r)) for r in eff_rankers]
+    rs = [get_ranker(r, seed=seed) for r in eff_rankers]
 
     cfg_kvals = cfg.get("k_values") if isinstance(cfg.get("k_values"), list) else None
     k_values = list(cfg_kvals) if cfg_kvals else [1, 3, 5, 10, 100]

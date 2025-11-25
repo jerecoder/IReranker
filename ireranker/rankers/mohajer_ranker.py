@@ -5,13 +5,13 @@ import math
 import random
 from typing import List
 
-from ireranker.oracles import Oracle
+from ireranker.oracles import Oracle, SamplingMatrixOracle
 
 from .ranker import SampleRanker
 from .registry import register_ranker
 
 
-@register_ranker("mohajer")
+@register_ranker("mohajer", default_oracle_factory=lambda seed: SamplingMatrixOracle(seed=seed))
 class MohajerRanker(SampleRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         self.k = 10
