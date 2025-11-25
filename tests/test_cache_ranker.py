@@ -11,22 +11,23 @@ class RecordingOracle(Oracle):
     """Test double that records every pairwise query."""
 
     def __init__(self) -> None:
+        super().__init__()
         self.calls: list[tuple[str, int, int]] = []
         self.dataset_loads: list[tuple[str, str]] = []
 
     def load_dataset(self, dataset: str, *, split: str = "test") -> None:
         self.dataset_loads.append((dataset, split))
 
-    def sample_lt(self, task: RankingTask, i: int, j: int) -> bool:
-        self.calls.append((task.query_id, i, j))
+    def sample_lt(self, i: int, j: int) -> bool:
+        assert self.current_task is not None
+        self.calls.append((self.current_task.query_id, i, j))
         return i < j
 
 
 class DuplicateCompareRanker(CacheRanker):
     """Ranker stub that queries the same pair twice to exercise caching."""
 
-    def rank(self, task: RankingTask) -> list[int]:
-        self.task = task
+    def _rank(self) -> list[int]:
         self.lt(0, 1)
         self.lt(0, 1)
         return [0, 1]
@@ -35,9 +36,8 @@ class DuplicateCompareRanker(CacheRanker):
 class NoopRanker(CacheRanker):
     """Ranker stub that exposes lt without preparing a task."""
 
-    def rank(self, task: RankingTask) -> list[int]:  # pragma: no cover - not used
-        self.task = task
-        return list(range(len(task.candidate_ids)))
+    def _rank(self) -> list[int]:  # pragma: no cover - not used
+        return list(range(len(self.task.candidate_ids)))
 
 
 @pytest.fixture()

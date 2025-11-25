@@ -4,7 +4,6 @@ import random
 from typing import List
 
 from ireranker.oracles import Oracle
-from ireranker.types import RankingTask
 
 from .ranker import CacheRanker
 from .registry import register_ranker
@@ -17,8 +16,8 @@ class RandomRanker(CacheRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         super().__init__(oracle, seed)
 
-    def rank(self, task: RankingTask) -> List[int]:
+    def _rank(self) -> List[int]:
         rng = random.Random(self.seed)
-        idx = list(range(len(task.candidate_ids)))
+        idx = list(range(self.n))
         rng.shuffle(idx)
         return idx

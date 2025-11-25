@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import List
 
 from ireranker.oracles import Oracle
-from ireranker.types import RankingTask
 
 from .ranker import CacheRanker
 
@@ -15,9 +14,9 @@ class BubbleRanker(CacheRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         super().__init__(oracle, seed)
 
-    def rank(self, task: RankingTask) -> List[int]:
-        self.task = task
-        order = list(range(len(task.candidate_ids)))
+    def _rank(self) -> List[int]:
+        self.task = self.task
+        order = list(range(self.n))
         swapped = True
         while swapped:
             swapped = False

@@ -214,17 +214,12 @@ def run_from_config(
 
     seed = int(cfg.get("seed") or 123)
 
-    oracle_factory = {
-        "mohajer": SamplingMatrixOracle,
-    }
-    rs = [
-        get_ranker(
-            r,
-            seed=seed,
-            oracle=oracle_factory.get(r.lower(), BidirectionalMatrixOracle)(),
-        )
-        for r in eff_rankers
-    ]
+    def _oracle_for_ranker(name: str):
+        if name.lower() == "mohajer":
+            return SamplingMatrixOracle(seed=seed)
+        return BidirectionalMatrixOracle()
+
+    rs = [get_ranker(r, seed=seed, oracle=_oracle_for_ranker(r)) for r in eff_rankers]
 
     cfg_kvals = cfg.get("k_values") if isinstance(cfg.get("k_values"), list) else None
     k_values = list(cfg_kvals) if cfg_kvals else [1, 3, 5, 10, 100]
@@ -251,7 +246,7 @@ def run_from_config(
             )
             for ranker in rs:
                 ranker.set_dataset(d, split=split)
-            rows = evaluate_rankers_beir(rs, dataset, k_values)
+            rows = evaluate_rankers_beir(rs, dataset, k_values, seed=seed)
 
             d_out = eff_out_root / d
             d_out.mkdir(parents=True, exist_ok=True)

@@ -6,7 +6,6 @@ import random
 from typing import List
 
 from ireranker.oracles import Oracle
-from ireranker.types import RankingTask
 
 from .ranker import SampleRanker
 from .registry import register_ranker
@@ -20,7 +19,7 @@ class MohajerRanker(SampleRanker):
         self.m = 1.5
         self._rng = random.Random(self.seed)
 
-    def select_winner(self, task: RankingTask, indices: list[int]):
+    def select_winner(self, indices: list[int]):
         order = list(indices)
 
         while len(order) > 1:
@@ -42,15 +41,12 @@ class MohajerRanker(SampleRanker):
 
         return order[0]
 
-    def rank(self, task: RankingTask) -> List[int]:
-        self.task = task
-        n = len(task.candidate_ids)
-
+    def _rank(self) -> List[int]:
         # number of groups / desired top-K
-        K = min(self.k, n)
+        K = min(self.k, self.n)
 
         # group size Q = ceil(n / K)
-        Q = (n + K - 1) // K
+        Q = (self.n + K - 1) // K
 
         groups: list[list[int]] = []
         champions: list[int | None] = []
@@ -58,12 +54,12 @@ class MohajerRanker(SampleRanker):
         # 1) build groups and find each group's champion using SELECT
         for g in range(K):
             start = g * Q
-            end = min((g + 1) * Q, n)
+            end = min((g + 1) * Q, self.n)
             group_indices = list(range(start, end))
             groups.append(group_indices)
 
             if group_indices:
-                champ = self.select_winner(task, group_indices)
+                champ = self.select_winner(group_indices)
                 champions.append(champ)
             else:
                 champions.append(None)
@@ -74,7 +70,7 @@ class MohajerRanker(SampleRanker):
 
         for g, champ in enumerate(champions):
             if champ is not None:
-                heap_item = _HeapItem(self, task, champ)
+                heap_item = _HeapItem(self, champ)
                 heapq.heappush(winner_heap, heap_item)
                 champ_to_group[champ] = g
 
@@ -101,13 +97,11 @@ class MohajerRanker(SampleRanker):
 
             # if group still has items, compute new champion and push into heap
             if groups[champ_og_group]:
-                new_champ = self.select_winner(task, groups[champ_og_group])
+                new_champ = self.select_winner(groups[champ_og_group])
                 champ_to_group[new_champ] = champ_og_group
-                heapq.heappush(winner_heap, _HeapItem(self, task, new_champ))
+                heapq.heappush(winner_heap, _HeapItem(self, new_champ))
 
-        return ranking + [
-            idx for idx in list(range(len(task.candidate_ids))) if idx not in ranking
-        ]
+        return ranking + [idx for idx in list(range(self.n)) if idx not in ranking]
 
     def _better(self, i: int, j: int) -> bool:
         full = math.floor(self.m)
@@ -125,9 +119,8 @@ class _HeapItem:
 
     __slots__ = ("ranker", "task", "idx")
 
-    def __init__(self, ranker: "MohajerRanker", task: RankingTask, idx: int):
+    def __init__(self, ranker: "MohajerRanker", idx: int):
         self.ranker = ranker
-        self.task = task
         self.idx = idx
 
     def __lt__(self, other: "_HeapItem") -> bool:

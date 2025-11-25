@@ -6,12 +6,13 @@ from ireranker.types import RankingTask
 
 class ScoreOracle(Oracle):
     def __init__(self, scores: list[float]):
+        super().__init__()
         self.scores = scores
 
     def load_dataset(self, dataset: str, *, split: str = "test") -> None:  # noqa: ARG002
         return None
 
-    def sample_lt(self, task: RankingTask, i: int, j: int) -> bool:  # noqa: ARG002
+    def sample_lt(self, i: int, j: int) -> bool:  # noqa: ARG002
         return self.scores[i] < self.scores[j]
 
 

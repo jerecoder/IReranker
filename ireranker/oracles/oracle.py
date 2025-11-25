@@ -12,13 +12,25 @@ from ireranker.types import RankingTask
 class Oracle(ABC):
     """Abstract oracle that answers pairwise comparison queries."""
 
+    def __init__(self) -> None:
+        self.current_task: Optional[RankingTask] = None
+        self.seed: Optional[int] = None
+
     @abstractmethod
     def load_dataset(self, dataset: str, *, split: str = "test") -> None:
         """Load comparison data for the given dataset, replacing any previous state."""
 
+    def set_task(self, task: RankingTask) -> None:
+        """Set the current ranking task for comparison queries."""
+        self.current_task = task
+
     @abstractmethod
-    def sample_lt(self, task: RankingTask, i: int, j: int) -> bool:
+    def sample_lt(self, i: int, j: int) -> bool:
         """Return True when doc at index i should be ranked after doc at index j."""
+
+    def set_seed(self, seed: int | None) -> None:
+        """Set a deterministic seed for any stochastic behavior."""
+        self.seed = seed
 
 
 MatrixKey = Tuple[str, str, str]
@@ -28,6 +40,7 @@ class MatrixOracle(Oracle):
     """Oracle backed by rerank matrices that store (qid, doc_a, doc_b) and its reverse."""
 
     def __init__(self, base_dir: Optional[Path] = None):
+        super().__init__()
         self._base_dir = Path(base_dir) if base_dir else None
         self._matrix: Optional[Dict[MatrixKey, Mapping[str, Any]]] = None
         self._dataset: Optional[str] = None

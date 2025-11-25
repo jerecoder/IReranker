@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import random
 from typing import Dict, Iterable, List
 
 from beir.retrieval.evaluation import EvaluateRetrieval  # type: ignore
 from tqdm import tqdm
 
 from ireranker.rankers.ranker import Ranker
-from ireranker.types import RankingDataset
+from ireranker.types import RankingDataset, RankingTask
 
 
 def _progress(iterable: Iterable, **kwargs) -> Iterable:
@@ -27,9 +28,12 @@ def dataset_to_beir_qrels(dataset: RankingDataset) -> Dict[str, Dict[str, int]]:
     return qrels
 
 
-def ranker_results_to_beir(ranker: Ranker, dataset: RankingDataset) -> Dict[str, Dict[str, float]]:
+def ranker_results_to_beir(
+    ranker: Ranker, dataset: RankingDataset, rng: random.Random
+) -> Dict[str, Dict[str, float]]:
     results: Dict[str, Dict[str, float]] = {}
     tasks = dataset.tasks
+
     iterator = _progress(
         tasks,
         total=len(tasks),
@@ -37,19 +41,31 @@ def ranker_results_to_beir(ranker: Ranker, dataset: RankingDataset) -> Dict[str,
         leave=False,
     )
     for task in iterator:
-        indices = ranker.rank(task)
+        shuffled_task = RankingTask(
+            query_id=task.query_id,
+            candidate_ids=list(task.candidate_ids),
+            y_true=list(task.y_true) if task.y_true is not None else None,
+            dataset_path=task.dataset_path,
+        )
+        rng.shuffle(shuffled_task.candidate_ids)
+
+        indices = ranker.rank(shuffled_task)
         n = len(indices)
         res: Dict[str, float] = {}
         for pos, idx in enumerate(indices):
-            doc_id = task.candidate_ids[idx]
+            doc_id = shuffled_task.candidate_ids[idx]
             score = float(n - pos)
             res[doc_id] = score
-        results[task.query_id] = res
+        results[shuffled_task.query_id] = res
     return results
 
 
 def evaluate_rankers_beir(
-    rankers: List[Ranker], dataset: RankingDataset, k_values: List[int]
+    rankers: List[Ranker],
+    dataset: RankingDataset,
+    k_values: List[int],
+    *,
+    seed: int | None = None,
 ) -> List[Dict[str, float | int | str]]:
     """Evaluate rankers using BEIR metrics and return flattened rows for CSV.
 
@@ -57,10 +73,12 @@ def evaluate_rankers_beir(
     """
     qrels = dataset_to_beir_qrels(dataset)
     rows: List[Dict[str, float | int | str]] = []
+    base_seed = seed if seed is not None else 0
     iter_rankers = _progress(rankers, desc="Evaluating rankers", leave=True)
     for r in iter_rankers:
         r.reset_comparisons()
-        res = ranker_results_to_beir(r, dataset)
+        rng = random.Random(base_seed)
+        res = ranker_results_to_beir(r, dataset, rng)
         ndcg, _map, recall, precision = EvaluateRetrieval.evaluate(qrels, res, k_values)
         total_comparisons = int(r.comparisons)
         for k in k_values:

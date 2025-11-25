@@ -105,10 +105,12 @@ def test_oracle_matches_real_votes(
     _, (key, expected) = dataset_and_pair
     qid, doc_a, doc_b = key
     task = RankingTask(query_id=qid, candidate_ids=[doc_a, doc_b])
-    assert oracle.sample_lt(task, 0, 1) is (not expected)
-    assert oracle.sample_lt(task, 1, 0) is expected
+    oracle.set_task(task)
+    assert oracle.sample_lt(0, 1) is (not expected)
+    assert oracle.sample_lt(1, 0) is expected
 
 
 def test_missing_pair_returns_false(oracle: BidirectionalMatrixOracle) -> None:
     task = RankingTask(query_id="__missing__", candidate_ids=["docA", "docB"])
-    assert oracle.sample_lt(task, 0, 1) is False
+    oracle.set_task(task)
+    assert oracle.sample_lt(0, 1) is False

@@ -17,17 +17,27 @@ class Ranker(ABC):
     name: str = "base"
 
     def __init__(self, oracle: Oracle, seed: int | None = None):
-        self.seed = seed
+        self.seed = seed if seed is not None else 0
         self.oracle = oracle
+        try:
+            self.oracle.set_seed(self.seed)
+        except AttributeError:
+            pass
         self._comparisons = 0
-        self.task: RankingTask
 
     def set_dataset(self, dataset: str, *, split: str = "test") -> None:
         """Update the oracle with a new dataset before ranking."""
         self.oracle.load_dataset(dataset, split=split)
 
-    @abstractmethod
     def rank(self, task: RankingTask) -> List[int]:
+        """Return a permutation of indices for the candidate list."""
+        self.oracle.set_task(task)
+        self.task = task
+        self.n = len(task.candidate_ids)
+        return self._rank()
+
+    @abstractmethod
+    def _rank(self) -> List[int]:
         """Return a permutation of indices for the candidate list."""
         raise NotImplementedError
 
@@ -85,7 +95,7 @@ class CacheRanker(Ranker):
         key = (i, j)
         if key not in self._comparison_cache:
             self._comparisons += 1
-            self._comparison_cache[key] = self.oracle.sample_lt(self.task, i, j)
+            self._comparison_cache[key] = self.oracle.sample_lt(i, j)
         return self._comparison_cache[key]
 
 
@@ -98,4 +108,4 @@ class SampleRanker(Ranker):
     def lt(self, i: int, j: int) -> bool:
         """Return True when item i should be ranked after item j."""
         self._comparisons += 1
-        return self.oracle.sample_lt(self.task, i, j)
+        return self.oracle.sample_lt(i, j)
