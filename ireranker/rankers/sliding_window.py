@@ -3,12 +3,12 @@ from __future__ import annotations
 from typing import List
 
 from ireranker.oracles import Oracle
-from ireranker.types import RankingTask
 
 from .ranker import CacheRanker
+from .registry import register_ranker
 
 
-# @register_ranker("sliding")
+@register_ranker("sliding")
 class SlidingWindowRanker(CacheRanker):
     """PRP-Sliding-K: sliding-window passes starting from the bottom of the list.
 
@@ -27,10 +27,9 @@ class SlidingWindowRanker(CacheRanker):
         super().__init__(oracle, seed)
         self.passes = passes
 
-    def rank(self, task: RankingTask) -> List[int]:
-        self.task = task
-        order = list(range(len(task.candidate_ids)))
-        n = len(order)
+    def _rank(self) -> List[int]:
+        n = self.n
+        order = list(range(n))
 
         if n <= 1:
             return order
