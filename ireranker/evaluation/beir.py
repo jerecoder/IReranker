@@ -76,6 +76,7 @@ def evaluate_rankers_beir(
     base_seed = seed if seed is not None else 0
     iter_rankers = _progress(rankers, desc="Evaluating rankers", leave=True)
     for r in iter_rankers:
+        r.set_seed(base_seed)
         r.reset_comparisons()
         rng = random.Random(base_seed)
         res = ranker_results_to_beir(r, dataset, rng)

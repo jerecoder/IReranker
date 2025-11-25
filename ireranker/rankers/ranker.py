@@ -17,13 +17,17 @@ class Ranker(ABC):
     name: str = "base"
 
     def __init__(self, oracle: Oracle, seed: int | None = None):
-        self.seed = seed if seed is not None else 0
         self.oracle = oracle
+        self._comparisons = 0
+        self.set_seed(seed)
+
+    def set_seed(self, seed: int | None) -> None:
+        """Set the deterministic seed for this ranker and its oracle (if supported)."""
+        self.seed = seed if seed is not None else 0
         try:
             self.oracle.set_seed(self.seed)
         except AttributeError:
             pass
-        self._comparisons = 0
 
     def set_dataset(self, dataset: str, *, split: str = "test") -> None:
         """Update the oracle with a new dataset before ranking."""

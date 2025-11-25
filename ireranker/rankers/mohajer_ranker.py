@@ -14,9 +14,12 @@ from .registry import register_ranker
 @register_ranker("mohajer")
 class MohajerRanker(SampleRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
-        super().__init__(oracle, seed)
         self.k = 10
         self.m = 1.5
+        super().__init__(oracle, seed)
+
+    def set_seed(self, seed: int | None) -> None:
+        super().set_seed(seed)
         self._rng = random.Random(self.seed)
 
     def select_winner(self, indices: list[int]):
