@@ -23,6 +23,7 @@ dependencies = [
     "tqdm",
     "typer",
     "beir",
+    "pyserini",
 ]
 requires-python = "~=3.10.0"
 
