@@ -61,6 +61,7 @@ Useful commands inside the `IReranker` env:
   - `seed`: RNG seed
   - `k_values`: evaluation cutoffs, e.g., [1,3,5,10,100]
   - `output_dir`: results destination (absolute or relative to REPORTS_DIR)
+  - `matrix_models`: list of rerank matrix model filters (matches rerank filename/path, e.g., `"flan-t5-large"`). Each model is evaluated separately and always gets its own output folder/README tables. If omitted, models are auto-discovered from the available rerank matrices.
   - `rankers`: ["all"] or a list of names
   - Current example (`config/beir_eval.json`):
 
@@ -79,6 +80,7 @@ Useful commands inside the `IReranker` env:
       "k_values": [1, 3, 5, 10, 100],
       "light_exclude": ["dbpedia-entity", "fiqa"],
       "output_dir": "beir-metrics",
+      "matrix_models": ["flan-t5-large", "flan-t5-xl"],
       "rankers": ["all"]
     }
     ```
@@ -100,13 +102,14 @@ Useful commands inside the `IReranker` env:
   - `make beir-eval ARGS="--light"` to skip datasets from `light_exclude`
   - `make beir-eval ARGS="--max-queries 20 --rankers random"` for a quick/safe run
   - `make beir-eval ARGS="--profile-out reports/profiles/beir_eval.prof --skip-readme-update"` to profile without touching docs
+  - `make beir-eval ARGS="--matrix-models flan-t5-large,flan-t5-xl"` to evaluate specific rerank matrix models (one output folder/table per model); omit only if models are set in config or auto-discovery suffices
   - `python -m ireranker.run_beir_eval --config /path/to/custom.json`
 
 ## Output
 
 Per dataset: CSV `summary.csv` with one row per ranker & k
 - Columns: `ranker,k,NDCG,MAP,Recall,Precision,Comparisons,NDCG_per_comp` (`NDCG_per_comp` is NDCG divided by comparisons)
-- Directory: `reports/beir-metrics/<dataset>/` or `output_dir`
+- Directory: always `reports/beir-metrics/<model>/<dataset>/` (or `<output_dir>/<model>/<dataset>/`) so results are separated per rerank model
 
 ## Notes
 
@@ -124,25 +127,36 @@ Per dataset: CSV `summary.csv` with one row per ranker & k
 Auto-updated after each BEIR evaluation:
 - Average NDCG@10 per comparison for each ranker (scientific notation; higher is better).
 - NDCG@10 per dataset/ranker grid. `n/a` when results are missing.
+- Tables are grouped by rerank matrix model (one section per model in `matrix_models` or auto-discovered models).
 
 <!-- BEGIN_BEIR_RESULTS -->
+### flan-t5-large
 | Ranker | Avg NDCG@10/Comparisons |
 | --- | --- |
-| mohajer | 1.352e-05 |
-| quicky | 5.940e-06 |
+| mohajer (ir) | 2.712e-05 |
+| quick sort (classic) | 1.102e-05 |
 | random | 0.000e+00 |
-| sliding | 8.130e-06 |
+| sliding window prp (classic) | 1.125e-05 |
 
-| Dataset | mohajer | quicky | random | sliding |
+| Dataset | mohajer (ir) | quick sort (classic) | random | sliding window prp (classic) |
 | --- | --- | --- | --- | --- |
-| dbpedia-entity | 0.5435 | 0.5719 | 0.1133 | 0.4063 |
-| fiqa | 0.4334 | 0.4757 | 0.0515 | 0.2277 |
-| nfcorpus | 0.5910 | 0.5993 | 0.2515 | 0.5119 |
-| robust04 | n/a | n/a | n/a | n/a |
-| scifact | 0.6851 | 0.6831 | 0.0427 | 0.5317 |
-| signal1m | n/a | n/a | n/a | n/a |
-| trec-covid | 0.7946 | 0.7805 | 0.3863 | 0.6967 |
-| trec-news | n/a | n/a | n/a | n/a |
-| trec-robust04 | n/a | n/a | n/a | n/a |
-| webis-touche2020 | 0.2827 | 0.2726 | 0.1114 | 0.2291 |
+| nfcorpus | 0.5431 | 0.5348 | 0.2515 | 0.4613 |
+| scifact | 0.6383 | 0.6271 | 0.0427 | 0.4654 |
+| trec-covid | 0.7526 | 0.7608 | 0.3863 | 0.6331 |
+| webis-touche2020 | 0.2773 | 0.2715 | 0.1114 | 0.1686 |
+
+### flan-t5-xl
+| Ranker | Avg NDCG@10/Comparisons |
+| --- | --- |
+| mohajer (ir) | 2.810e-05 |
+| quick sort (classic) | 1.138e-05 |
+| random | 0.000e+00 |
+| sliding window prp (classic) | 1.127e-05 |
+
+| Dataset | mohajer (ir) | quick sort (classic) | random | sliding window prp (classic) |
+| --- | --- | --- | --- | --- |
+| nfcorpus | 0.5986 | 0.5926 | 0.2515 | 0.5119 |
+| scifact | 0.6827 | 0.6744 | 0.0427 | 0.5317 |
+| trec-covid | 0.7736 | 0.7695 | 0.3863 | 0.6967 |
+| webis-touche2020 | 0.2809 | 0.2896 | 0.1114 | 0.2291 |
 <!-- END_BEIR_RESULTS -->

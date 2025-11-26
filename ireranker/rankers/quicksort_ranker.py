@@ -2,13 +2,16 @@ from __future__ import annotations
 
 from typing import List
 
-from ireranker.oracles import Oracle
+from ireranker.oracles import Oracle, SamplingMatrixOracle
 
 from .ranker import CacheRanker
 from .registry import register_ranker
 
 
-@register_ranker("quicky")
+@register_ranker(
+    "Quick Sort (Classic)",
+    default_oracle_factory=lambda seed: SamplingMatrixOracle(seed=seed),
+)
 class QuicksortTopKRanker(CacheRanker):
     """PRP-QuickSort with Partial QuickSort (top-k stopping)."""
 

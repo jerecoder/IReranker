@@ -8,7 +8,7 @@ from .ranker import CacheRanker
 from .registry import register_ranker
 
 
-@register_ranker("sliding")
+@register_ranker("Sliding Window PRP (Classic)")
 class SlidingWindowRanker(CacheRanker):
     """PRP-Sliding-K: sliding-window passes starting from the bottom of the list.
 

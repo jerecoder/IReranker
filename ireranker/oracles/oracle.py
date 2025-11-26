@@ -24,6 +24,7 @@ class Oracle(ABC):
         *,
         split: str = "test",
         query_ids: Optional[Iterable[str]] = None,
+        matrix_model: Optional[str] = None,
     ) -> None:
         """Load comparison data for the given dataset, replacing any previous state."""
 
@@ -58,8 +59,9 @@ class MatrixOracle(Oracle):
         *,
         split: str = "test",
         query_ids: Optional[Iterable[str]] = None,
+        matrix_model: Optional[str] = None,
     ) -> None:
-        self._matrix = self._load_matrix(dataset, split)
+        self._matrix = self._load_matrix(dataset, split, matrix_model=matrix_model)
         if query_ids is not None:
             allowed = {str(qid) for qid in query_ids}
             if allowed:
@@ -110,16 +112,18 @@ class MatrixOracle(Oracle):
         self,
         dataset: str,
         split: str = "test",
+        matrix_model: Optional[str] = None,
     ) -> Dict[MatrixKey, Mapping[str, Any]]:
         dataset_key = dataset.lower().strip()
         split_key = split.lower().strip() if split else ""
+        model_key = matrix_model.lower().strip() if matrix_model else None
         base = (self._base_dir or _default_base_dir()).resolve()
-        return _load_matrix_cached(dataset_key, split_key, base)
+        return _load_matrix_cached(dataset_key, split_key, model_key, base)
 
 
 @lru_cache(maxsize=8)
 def _load_matrix_cached(
-    dataset_key: str, split_key: str, base: Path
+    dataset_key: str, split_key: str, model_key: Optional[str], base: Path
 ) -> Dict[MatrixKey, Mapping[str, Any]]:
     if not base.exists():
         raise FileNotFoundError(f"Rerank matrix directory not found: {base}")
@@ -128,10 +132,19 @@ def _load_matrix_cached(
     for path in base.rglob("*.pkl"):
         name = path.name.lower()
         if dataset_key in name and (not split_key or split_key in name):
+            if model_key and model_key not in name and model_key not in path.parent.name.lower():
+                continue
             candidates.append(path)
     if not candidates and split_key:
         for path in base.rglob("*.pkl"):
-            if dataset_key in path.name.lower():
+            name = path.name.lower()
+            if dataset_key in name:
+                if (
+                    model_key
+                    and model_key not in name
+                    and model_key not in path.parent.name.lower()
+                ):
+                    continue
                 candidates.append(path)
     if not candidates:
         raise FileNotFoundError(f"No rerank matrix found for dataset '{dataset_key}' in {base}")
@@ -152,11 +165,15 @@ def load_matrix(
     dataset: str,
     split: str = "test",
     base_dir: Optional[Path] = None,
+    matrix_model: Optional[str] = None,
 ) -> Dict[MatrixKey, Mapping[str, Any]]:
     """Public helper to load a rerank matrix with caching."""
     base = (base_dir or _default_base_dir()).resolve()
     return _load_matrix_cached(
-        dataset.lower().strip(), split.lower().strip() if split else "", base
+        dataset.lower().strip(),
+        split.lower().strip() if split else "",
+        matrix_model.lower().strip() if matrix_model else None,
+        base,
     )
 
 

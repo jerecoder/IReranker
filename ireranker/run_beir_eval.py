@@ -7,9 +7,10 @@ import io
 import json
 from pathlib import Path
 import pstats
-from typing import Any, Dict, List, Optional, Sequence
+import re
+from typing import Any, Dict, List, NamedTuple, Optional, Sequence
 
-from ireranker.config import PROJ_ROOT, REPORTS_DIR, logger
+from ireranker.config import EXTERNAL_DATA_DIR, PROJ_ROOT, REPORTS_DIR, logger
 from ireranker.data.loaders import _beir_supported_name, load_beir_dataset
 from ireranker.evaluation.beir import evaluate_rankers_beir
 from ireranker.oracles.oracle import clear_matrix_cache
@@ -17,6 +18,39 @@ from ireranker.rankers import get_ranker
 
 _TABLE_START = "<!-- BEGIN_BEIR_RESULTS -->"
 _TABLE_END = "<!-- END_BEIR_RESULTS -->"
+
+
+class _ModelContext(NamedTuple):
+    label: str
+    model_key: str
+    out_root: Path
+
+
+def _model_slug(model: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", model.lower()).strip("-")
+    return slug or "model"
+
+
+def _extract_model_name(path: Path) -> Optional[str]:
+    """Best-effort model extraction from matrix filename."""
+    stem = path.name.rsplit(".", 1)[0]
+    parts = stem.split("_")
+    if len(parts) < 2:
+        return None
+    model = parts[-2].strip()
+    return model or None
+
+
+def _discover_matrix_models(base_dir: Path) -> List[str]:
+    """Discover available matrix models by scanning the reranking-matrices directory."""
+    models: set[str] = set()
+    if not base_dir.exists():
+        return []
+    for path in base_dir.rglob("*.pkl"):
+        model = _extract_model_name(path)
+        if model:
+            models.add(model)
+    return sorted(models)
 
 
 def _format_mean(value: float | None, *, precision: int = 4, as_int: bool = False) -> str:
@@ -139,12 +173,18 @@ def _render_rate_table(out_root: Path, datasets: Sequence[str]) -> str:
     return "\n".join([header, divider, *body])
 
 
-def _update_readme_results_table(out_root: Path, requested: Sequence[str]) -> None:
+def _update_readme_results_table(
+    models: Sequence[_ModelContext], requested: Sequence[str]
+) -> None:
     readme_path = PROJ_ROOT / "README.md"
-    all_datasets = _datasets_for_table(requested, out_root)
-    rate_table = _render_rate_table(out_root, all_datasets)
-    ndcg10_grid = _render_ndcg10_grid(out_root, all_datasets)
-    block = f"{_TABLE_START}\n{rate_table}\n\n{ndcg10_grid}\n{_TABLE_END}"
+    blocks: list[str] = []
+    for ctx in models:
+        all_datasets = _datasets_for_table(requested, ctx.out_root)
+        rate_table = _render_rate_table(ctx.out_root, all_datasets)
+        ndcg10_grid = _render_ndcg10_grid(ctx.out_root, all_datasets)
+        heading = f"### {ctx.label}\n" if ctx.label else ""
+        blocks.append(f"{heading}{rate_table}\n\n{ndcg10_grid}")
+    block = f"{_TABLE_START}\n" + "\n\n".join(blocks) + f"\n{_TABLE_END}"
     if readme_path.exists():
         text = readme_path.read_text(encoding="utf-8")
     else:
@@ -174,6 +214,7 @@ def run_from_config(
     profile_limit: int = 30,
     profile_sort: str = "cumulative",
     skip_readme_update: bool = False,
+    matrix_models_override: Optional[List[str]] = None,
 ) -> None:
     cfg_path = config_path or (PROJ_ROOT / "config" / "beir_eval.json")
 
@@ -223,6 +264,32 @@ def run_from_config(
     if rankers_override is not None:
         eff_rankers = rankers_override
 
+    raw_models = cfg.get("matrix_models") if isinstance(cfg.get("matrix_models"), list) else None
+    matrix_models: List[str] = []
+    if raw_models:
+        matrix_models = [str(m).strip() for m in raw_models if str(m).strip()]
+    if matrix_models_override is not None:
+        matrix_models = [str(m).strip() for m in matrix_models_override if str(m).strip()]
+    if not matrix_models:
+        discovered = _discover_matrix_models(EXTERNAL_DATA_DIR / "reranking-matrices")
+        if discovered:
+            matrix_models = discovered
+    matrix_models = [m for m in matrix_models if m]
+    seen_models: set[str] = set()
+    deduped: List[str] = []
+    for m in matrix_models:
+        key = m.lower()
+        if key in seen_models:
+            continue
+        seen_models.add(key)
+        deduped.append(m)
+    matrix_models = deduped
+    if not matrix_models:
+        raise ValueError(
+            "No rerank matrix models specified or discovered. "
+            "Provide matrix_models in config or --matrix-models."
+        )
+
     seed = int(cfg.get("seed") or 123)
 
     rs = [get_ranker(r, seed=seed) for r in eff_rankers]
@@ -237,6 +304,11 @@ def run_from_config(
     else:
         eff_out_root = REPORTS_DIR / "beir-metrics"
 
+    model_contexts: List[_ModelContext] = []
+    for m in matrix_models:
+        out_root = eff_out_root / _model_slug(m)
+        model_contexts.append(_ModelContext(label=m, model_key=m, out_root=out_root))
+
     split = str(cfg.get("split") or "test")
     max_queries = cfg.get("max_queries")
     max_queries = int(max_queries) if max_queries not in (None, "", "null") else None
@@ -247,25 +319,34 @@ def run_from_config(
             "Profiling without max_queries override; consider a small limit to avoid heavy runs."
         )
 
-    failed: List[str] = []
-
-    def _run_eval() -> None:
-        nonlocal failed
+    def _run_eval(ctx: _ModelContext) -> List[str]:
+        failed: List[str] = []
+        logger.info(
+            f"Evaluating rerank matrices for model '{ctx.label}' " f"(output: {ctx.out_root})"
+        )
         clear_matrix_cache()
         for d in ds_names:
             try:
-                logger.info(f"Loading BEIR dataset: {d} (split={split})")
+                logger.info(
+                    f"Loading BEIR dataset: {d} (split={split}, matrix_model={ctx.model_key})"
+                )
                 dataset = load_beir_dataset(
                     d,
                     split=split,
                     max_queries=max_queries,
+                    matrix_model=ctx.model_key,
                 )
                 task_qids = [t.query_id for t in dataset.tasks]
                 for ranker in rs:
-                    ranker.set_dataset(d, split=split, query_ids=task_qids)
+                    ranker.set_dataset(
+                        d,
+                        split=split,
+                        query_ids=task_qids,
+                        matrix_model=ctx.model_key,
+                    )
                 rows = evaluate_rankers_beir(rs, dataset, k_values, seed=seed)
 
-                d_out = eff_out_root / d
+                d_out = ctx.out_root / d
                 d_out.mkdir(parents=True, exist_ok=True)
                 summary_path = d_out / "summary.csv"
                 error_path = d_out / "ERROR.txt"
@@ -295,8 +376,10 @@ def run_from_config(
                 from ireranker.config import EXTERNAL_DATA_DIR
 
                 zip_path = EXTERNAL_DATA_DIR / "beir" / f"{d}.zip"
-                logger.error(f"Failed dataset '{d}'. Zip: {zip_path}. Error: {e}")
-                err_dir = eff_out_root / d
+                logger.error(
+                    f"Failed dataset '{d}' for model '{ctx.label}'. Zip: {zip_path}. Error: {e}"
+                )
+                err_dir = ctx.out_root / d
                 err_dir.mkdir(parents=True, exist_ok=True)
                 summary_path = err_dir / "summary.csv"
                 if summary_path.exists():
@@ -314,12 +397,20 @@ def run_from_config(
                 failed.append(d)
             finally:
                 clear_matrix_cache()
+        return failed
 
+    def _run_all_models() -> Dict[str, List[str]]:
+        failures: Dict[str, List[str]] = {}
+        for ctx in model_contexts:
+            failures[ctx.label] = _run_eval(ctx)
+        return failures
+
+    failures: Dict[str, List[str]] = {}
     if profile_output:
         prof = cProfile.Profile()
         prof.enable()
         try:
-            _run_eval()
+            failures = _run_all_models()
         finally:
             prof.disable()
             profile_output.parent.mkdir(parents=True, exist_ok=True)
@@ -339,19 +430,23 @@ def run_from_config(
                 logger.warning(f"Could not render profile summary: {e}")
             logger.info(f"Profile stats saved to {profile_output}")
     else:
-        _run_eval()
+        failures = _run_all_models()
 
     if not skip_readme_update:
         try:
-            _update_readme_results_table(eff_out_root, ds_names)
+            _update_readme_results_table(model_contexts, ds_names)
             logger.info("Updated README with BEIR results table.")
         except Exception as e:  # pragma: no cover - defensive
             logger.warning(f"Could not update README results table: {e}")
     else:
         logger.info("Skip README update requested; results left on disk.")
 
-    if failed:
-        logger.warning(f"Completed with failures for datasets: {', '.join(failed)}")
+    failed_summary = {label: ds for label, ds in failures.items() if ds}
+    if failed_summary:
+        for label, ds in failed_summary.items():
+            logger.warning(
+                f"Completed with failures for model '{label}' datasets: {', '.join(ds)}"
+            )
 
 
 def main() -> None:
@@ -408,12 +503,25 @@ def main() -> None:
         action="store_true",
         help="Do not rewrite README tables (useful for dry-run/profiling).",
     )
+    parser.add_argument(
+        "--matrix-models",
+        type=str,
+        default=None,
+        help=(
+            "Comma-separated rerank matrix models (matches rerank filename/path). "
+            "Examples: flan-t5-large,flan-t5-xl. "
+            "Required unless provided in config; falls back to auto-discovery."
+        ),
+    )
     args = parser.parse_args()
 
     cfg_path = Path(args.config) if args.config else None
     rankers_override = None
     if args.rankers:
         rankers_override = [r.strip() for r in args.rankers.split(",") if r.strip()]
+    matrix_models_override = None
+    if args.matrix_models:
+        matrix_models_override = [m.strip() for m in args.matrix_models.split(",") if m.strip()]
     profile_out = Path(args.profile_out) if args.profile_out else None
     run_from_config(
         cfg_path,
@@ -425,6 +533,7 @@ def main() -> None:
         profile_limit=args.profile_limit,
         profile_sort=args.profile_sort,
         skip_readme_update=args.skip_readme_update,
+        matrix_models_override=matrix_models_override,
     )
 
 

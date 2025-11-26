@@ -11,11 +11,13 @@ from .ranker import SampleRanker
 from .registry import register_ranker
 
 
-@register_ranker("mohajer", default_oracle_factory=lambda seed: SamplingMatrixOracle(seed=seed))
+@register_ranker(
+    "Mohajer (IR)", default_oracle_factory=lambda seed: SamplingMatrixOracle(seed=seed)
+)
 class MohajerRanker(SampleRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         self.k = 10
-        self.m = 1.5
+        self.m = 1.0
         super().__init__(oracle, seed)
 
     def set_seed(self, seed: int | None) -> None:

@@ -116,17 +116,23 @@ def _download_beir_once(canonical: str, base_out: Path) -> str:
 
 
 def _load_rerank_matrix(
-    dataset: str, split: str, *, max_queries: Optional[int] = None
+    dataset: str,
+    split: str,
+    *,
+    max_queries: Optional[int] = None,
+    matrix_model: Optional[str] = None,
 ) -> Optional[Dict[str, List[str]]]:
     """Load per-query candidate restrictions from a single canonical base path.
 
     Canonical base: EXTERNAL_DATA_DIR / "reranking-matrices"
     File format: a pickle (.pkl) of a dict keyed by (query_id, doc_id_A, doc_id_B)
     Recursively scans for *.pkl whose filename contains the dataset name and
-    selects the most recent match.
+    selects the most recent match, filtered by matrix_model (substring
+    match against filename/parent). Callers should always provide matrix_model
+    to keep results segmented by inference model.
     """
     try:
-        matrix = load_matrix(dataset, split=split)
+        matrix = load_matrix(dataset, split=split, matrix_model=matrix_model)
         acc: Dict[str, set] = {}
         for key in list(matrix.keys()):
             if isinstance(key, tuple) and len(key) == 3:
@@ -183,17 +189,19 @@ def load_beir_dataset(
     *,
     split: str = "test",
     max_queries: Optional[int] = None,
+    matrix_model: Optional[str] = None,
 ) -> RankingDataset:
     """Load a BEIR dataset as a RankingDataset using a rerank matrix.
 
     - Candidate sets come strictly from the rerank matrix for each query.
     - y_true are aligned with candidate_ids using qrels labels (missing defaults to 0).
-    - Raises FileNotFoundError if the rerank matrix is not found; calling CLI skips dataset.
+    - Raises FileNotFoundError if the rerank matrix is not found for the requested model; calling CLI skips dataset.
 
     Parameters
     - dataset: BEIR dataset name (canonical, lowercased).
     - split: BEIR split to load (usually "test").
     - seed: removed; ranker seeds are handled at ranker construction.
+    - matrix_model: rerank matrix model name to filter candidate matrices (required for disambiguation).
     - max_queries: optional limit of queries for a quick run (applied before filtering by matrix).
     """
     canonical = _beir_supported_name(dataset)
@@ -211,7 +219,9 @@ def load_beir_dataset(
 
     tasks: List[RankingTask] = []
 
-    matrix = _load_rerank_matrix(canonical, split, max_queries=max_queries)
+    matrix = _load_rerank_matrix(
+        canonical, split, max_queries=max_queries, matrix_model=matrix_model
+    )
     if matrix is None:
         from ireranker.config import EXTERNAL_DATA_DIR
 

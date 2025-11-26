@@ -22,6 +22,10 @@
     "fiqa"
   ],
   "output_dir": "beir-metrics",
+  "matrix_models": [
+    "flan-t5-large",
+    "flan-t5-xl"
+  ],
   "rankers": [
     "all"
   ]

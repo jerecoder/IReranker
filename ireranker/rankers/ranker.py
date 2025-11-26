@@ -30,10 +30,17 @@ class Ranker(ABC):
             pass
 
     def set_dataset(
-        self, dataset: str, *, split: str = "test", query_ids: list[str] | None = None
+        self,
+        dataset: str,
+        *,
+        split: str = "test",
+        query_ids: list[str] | None = None,
+        matrix_model: str | None = None,
     ) -> None:
         """Update the oracle with a new dataset before ranking."""
-        self.oracle.load_dataset(dataset, split=split, query_ids=query_ids)
+        self.oracle.load_dataset(
+            dataset, split=split, query_ids=query_ids, matrix_model=matrix_model
+        )
 
     def rank(self, task: RankingTask) -> List[int]:
         """Return a permutation of indices for the candidate list."""
@@ -76,9 +83,14 @@ class CacheRanker(Ranker):
         self._cache_signature: tuple[str, tuple[str, ...]] | None = None
 
     def set_dataset(
-        self, dataset: str, *, split: str = "test", query_ids: list[str] | None = None
+        self,
+        dataset: str,
+        *,
+        split: str = "test",
+        query_ids: list[str] | None = None,
+        matrix_model: str | None = None,
     ) -> None:
-        super().set_dataset(dataset, split=split, query_ids=query_ids)
+        super().set_dataset(dataset, split=split, query_ids=query_ids, matrix_model=matrix_model)
         self._comparison_cache.clear()
         self._cache_signature = None
 
