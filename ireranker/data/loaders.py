@@ -204,6 +204,8 @@ def load_beir_dataset(
     - matrix_model: rerank matrix model name to filter candidate matrices (required for disambiguation).
     - max_queries: optional limit of queries for a quick run (applied before filtering by matrix).
     """
+    # max_queries = None  # force full BEIR dataset; disable query pruning
+    
     canonical = _beir_supported_name(dataset)
     if canonical is None:
         raise ValueError(f"Dataset '{dataset}' not supported via BEIR loader yet.")
@@ -243,7 +245,8 @@ def load_beir_dataset(
     for qid in q_ids:
         rel_map: Dict[str, int] = qrels.get(qid, {})
 
-        cand_ids: List[str] = matrix[qid]
+        # cand_ids: List[str] = matrix[qid]
+        cand_ids: List[str] = sorted(set(matrix.get(qid, [])) | set(rel_map.keys()))
 
         y_true = [float(rel_map.get(doc_id, 0)) for doc_id in cand_ids]
 

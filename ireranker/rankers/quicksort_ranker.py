@@ -59,26 +59,26 @@ class QuicksortTopKRanker(CacheRanker):
         order[store], order[hi] = order[hi], order[store]
         return store
 
-    def _partial_quicksort(
-        self,
-        order: List[int],
-        lo: int,
-        hi: int,
-        k: int,
-    ) -> None:
+    def _partial_quicksort(self, order: List[int], lo: int, hi: int, k: int) -> None:
         """
         Partial QuickSort (Martínez 2004): only recurse into segments
         intersecting the [0, k) prefix (top-k region).
+        Converted to an explicit stack to avoid recursion-depth blowups.
         """
-
         if lo >= hi or lo >= k:
             return
 
-        p = self._partition(order, lo, hi)
-        self._partial_quicksort(order, lo, p - 1, k)
+        stack: list[tuple[int, int]] = [(lo, hi)]
+        while stack:
+            l, h = stack.pop()
+            if l >= h or l >= k:
+                continue
 
-        if p < k - 1:
-            self._partial_quicksort(order, p + 1, hi, k)
+            p = self._partition(order, l, h)
+
+            stack.append((l, p - 1))
+            if p < k - 1:
+                stack.append((p + 1, h))
 
 
 # Legacy class alias for backward compatibility (does not register an alias name)

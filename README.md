@@ -133,32 +133,32 @@ Auto-updated after each BEIR evaluation:
 ### flan-t5-large
 | Ranker | Avg NDCG@10/Comparisons |
 | --- | --- |
-| mohajer (ir) | 2.653e-05 |
+| mohajer (ir) | 7.060e-06 |
 | nothing | 0.000e+00 |
-| quick sort (classic) | 1.078e-05 |
+| quick sort (classic) | 1.854e-06 |
 | random | 0.000e+00 |
-| sliding window prp (classic) | 1.965e-05 |
+| sliding window prp (classic) | 1.148e-05 |
 
 | Dataset | mohajer (ir) | nothing | quick sort (classic) | random | sliding window prp (classic) |
 | --- | --- | --- | --- | --- | --- |
-| nfcorpus | 0.5272 | 0.5453 | 0.5384 | 0.2611 | 0.5922 |
-| scifact | 0.5726 | 0.7302 | 0.6338 | 0.0436 | 0.7455 |
-| trec-covid | 0.7555 | 0.6026 | 0.7650 | 0.4280 | 0.7311 |
-| webis-touche2020 | 0.2517 | 0.4769 | 0.2392 | 0.0940 | 0.4805 |
+| nfcorpus | 0.6808 | 0.3982 | 0.4267 | 0.3702 | 0.4212 |
+| scifact | 0.5580 | 0.6789 | 0.5680 | 0.0402 | 0.6925 |
+| trec-covid | 0.2455 | 0.5947 | 0.5385 | 0.3045 | 0.7177 |
+| webis-touche2020 | 0.1020 | 0.4422 | 0.2311 | 0.1609 | 0.4473 |
 
 ### flan-t5-xl
 | Ranker | Avg NDCG@10/Comparisons |
 | --- | --- |
-| mohajer (ir) | 2.814e-05 |
+| mohajer (ir) | 7.529e-06 |
 | nothing | 0.000e+00 |
-| quick sort (classic) | 1.152e-05 |
+| quick sort (classic) | 2.081e-06 |
 | random | 0.000e+00 |
-| sliding window prp (classic) | 1.776e-05 |
+| sliding window prp (classic) | 1.062e-05 |
 
 | Dataset | mohajer (ir) | nothing | quick sort (classic) | random | sliding window prp (classic) |
 | --- | --- | --- | --- | --- | --- |
-| nfcorpus | 0.5944 | 0.5453 | 0.5933 | 0.2611 | 0.6089 |
-| scifact | 0.6450 | 0.7302 | 0.6568 | 0.0436 | 0.7679 |
-| trec-covid | 0.7853 | 0.6026 | 0.7783 | 0.4280 | 0.7581 |
-| webis-touche2020 | 0.2686 | 0.4769 | 0.2992 | 0.0940 | 0.4610 |
+| nfcorpus | 0.6993 | 0.3982 | 0.4544 | 0.3702 | 0.4300 |
+| scifact | 0.6064 | 0.6789 | 0.6251 | 0.0402 | 0.7131 |
+| trec-covid | 0.2455 | 0.5947 | 0.5418 | 0.3045 | 0.7482 |
+| webis-touche2020 | 0.1125 | 0.4422 | 0.2628 | 0.1609 | 0.4282 |
 <!-- END_BEIR_RESULTS -->
