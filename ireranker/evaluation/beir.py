@@ -9,10 +9,15 @@ from tqdm import tqdm
 from ireranker.rankers.ranker import Ranker
 from ireranker.types import RankingDataset, RankingTask
 
+from pyserini.search.lucene import LuceneSearcher
+import json
+from functools import lru_cache
+from pathlib import Path
+
+BM25_TOP_K = 100
 
 def _progress(iterable: Iterable, **kwargs) -> Iterable:
     return tqdm(iterable, **kwargs)
-
 
 def dataset_to_beir_qrels(dataset: RankingDataset) -> Dict[str, Dict[str, int]]:
     qrels: Dict[str, Dict[str, int]] = {}
@@ -47,7 +52,9 @@ def ranker_results_to_beir(
             y_true=list(task.y_true) if task.y_true is not None else None,
             dataset_path=task.dataset_path,
         )
-        rng.shuffle(shuffled_task.candidate_ids)
+
+        # rng.shuffle(shuffled_task.candidate_ids)
+        shuffled_task.candidate_ids = _bm25_order_candidates(shuffled_task)
 
         indices = ranker.rank(shuffled_task)
         n = len(indices)
@@ -99,3 +106,57 @@ def evaluate_rankers_beir(
                 }
             )
     return rows
+
+# ======= BM25 HELPERS ========
+@lru_cache(maxsize=None)
+def _get_lucene_searcher(dataset_root: str) -> LuceneSearcher:
+    """Return a cached LuceneSearcher for the given dataset root."""
+    dataset_root = str(Path(dataset_root).resolve())
+    index_dir = Path(dataset_root) / "lucene-index"
+    searcher = LuceneSearcher(str(index_dir))
+    # Optional: tune BM25 if you want non-default parameters
+    # searcher.set_bm25(k1=0.9, b=0.4)
+    return searcher
+
+
+@lru_cache(maxsize=None)
+def _get_queries(dataset_root: str) -> Dict[str, str]:
+    """Load BEIR-style queries.jsonl and cache as {query_id: text}."""
+    dataset_root = str(Path(dataset_root).resolve())
+    qpath = Path(dataset_root) / "queries.jsonl"
+    queries: Dict[str, str] = {}
+    with qpath.open("r", encoding="utf-8") as f:
+        for line in f:
+            obj = json.loads(line)
+            queries[obj["_id"]] = obj["text"]
+    return queries
+
+
+def _bm25_order_candidates(task: RankingTask, k: int = BM25_TOP_K) -> List[str]:
+    """Return only the top-k BM25 docs (intersection with candidate_ids)."""
+    if task.dataset_path is None:
+        # Fall back to original order if we don't know where the index is.
+        return task.candidate_ids
+
+    dataset_root = str(Path(task.dataset_path).resolve())
+    searcher = _get_lucene_searcher(dataset_root)
+    queries = _get_queries(dataset_root)
+
+    try:
+        query_text = queries[task.query_id]
+    except KeyError:
+        # If query text is missing, keep original order.
+        return task.candidate_ids
+
+    # 1) Top-k BM25 over the full index
+    hits = searcher.search(query_text, k=k)
+
+    # 2) Keep only docs that are in the original candidate set
+    candidate_set = set(task.candidate_ids)
+    top_ids = [h.docid for h in hits if h.docid in candidate_set]
+
+    # 3) If nothing intersects (unlikely), fall back
+    if not top_ids:
+        return task.candidate_ids
+
+    return top_ids
