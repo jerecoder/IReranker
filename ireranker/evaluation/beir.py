@@ -14,7 +14,6 @@ import json
 from functools import lru_cache
 from pathlib import Path
 
-BM25_TOP_K = 100
 
 def _progress(iterable: Iterable, **kwargs) -> Iterable:
     return tqdm(iterable, **kwargs)
@@ -38,6 +37,10 @@ def ranker_results_to_beir(
 ) -> Dict[str, Dict[str, float]]:
     results: Dict[str, Dict[str, float]] = {}
     tasks = dataset.tasks
+    dataset_name = (
+        Path(tasks[0].dataset_path).name if tasks and tasks[0].dataset_path else ""
+    )
+    bm25_runs = _load_bm25_run(dataset_name) if dataset_name else {}
 
     iterator = _progress(
         tasks,
@@ -53,8 +56,8 @@ def ranker_results_to_beir(
             dataset_path=task.dataset_path,
         )
 
+        shuffled_task.candidate_ids = _bm25_order_candidates(shuffled_task, bm25_runs)
         # rng.shuffle(shuffled_task.candidate_ids)
-        shuffled_task.candidate_ids = _bm25_order_candidates(shuffled_task)
 
         indices = ranker.rank(shuffled_task)
         n = len(indices)
@@ -108,55 +111,37 @@ def evaluate_rankers_beir(
     return rows
 
 # ======= BM25 HELPERS ========
-@lru_cache(maxsize=None)
-def _get_lucene_searcher(dataset_root: str) -> LuceneSearcher:
-    """Return a cached LuceneSearcher for the given dataset root."""
-    dataset_root = str(Path(dataset_root).resolve())
-    index_dir = Path(dataset_root) / "lucene-index"
-    searcher = LuceneSearcher(str(index_dir))
-    # Optional: tune BM25 if you want non-default parameters
-    # searcher.set_bm25(k1=0.9, b=0.4)
-    return searcher
+_BM25_RUN_DIR = Path(__file__).resolve().parents[2] / "data" / "external" / "beir" / "bm25-runs"
 
-
-@lru_cache(maxsize=None)
-def _get_queries(dataset_root: str) -> Dict[str, str]:
-    """Load BEIR-style queries.jsonl and cache as {query_id: text}."""
-    dataset_root = str(Path(dataset_root).resolve())
-    qpath = Path(dataset_root) / "queries.jsonl"
-    queries: Dict[str, str] = {}
-    with qpath.open("r", encoding="utf-8") as f:
+@lru_cache(maxsize=8)
+def _load_bm25_run(dataset: str) -> Dict[str, List[str]]:
+    """Load a TREC BM25 run into {qid: [doc_ids...]}. Missing file -> empty dict."""
+    run_path = _BM25_RUN_DIR / f"run.beir.bm25-flat.{dataset}.txt"
+    runs: Dict[str, List[str]] = {}
+    if not run_path.exists():
+        return runs
+    with run_path.open("r", encoding="utf-8") as f:
         for line in f:
-            obj = json.loads(line)
-            queries[obj["_id"]] = obj["text"]
-    return queries
+            parts = line.strip().split()
+            if len(parts) < 6:
+                continue
+            qid, _, doc_id, *_ = parts
+            runs.setdefault(qid, []).append(doc_id)
+    return runs
 
 
-def _bm25_order_candidates(task: RankingTask, k: int = BM25_TOP_K) -> List[str]:
-    """Return only the top-k BM25 docs (intersection with candidate_ids)."""
-    if task.dataset_path is None:
-        # Fall back to original order if we don't know where the index is.
-        return task.candidate_ids
-
-    dataset_root = str(Path(task.dataset_path).resolve())
-    searcher = _get_lucene_searcher(dataset_root)
-    queries = _get_queries(dataset_root)
-
-    try:
-        query_text = queries[task.query_id]
-    except KeyError:
-        # If query text is missing, keep original order.
-        return task.candidate_ids
-
-    # 1) Top-k BM25 over the full index
-    hits = searcher.search(query_text, k=k)
-
-    # 2) Keep only docs that are in the original candidate set
-    candidate_set = set(task.candidate_ids)
-    top_ids = [h.docid for h in hits if h.docid in candidate_set]
-
-    # 3) If nothing intersects (unlikely), fall back
-    if not top_ids:
-        return task.candidate_ids
-
-    return top_ids
+def _bm25_order_candidates(task: RankingTask, bm25_runs: Dict[str, List[str]]) -> List[str]:
+    """Order candidate_ids by BM25 run; keep any missing candidates at the end."""
+    order = bm25_runs.get(task.query_id)
+    if not order:
+        return list(task.candidate_ids)
+    seen: set[str] = set()
+    ordered: List[str] = []
+    for doc_id in order:
+        if doc_id in task.candidate_ids and doc_id not in seen:
+            ordered.append(doc_id)
+            seen.add(doc_id)
+    for doc_id in task.candidate_ids:
+        if doc_id not in seen:
+            ordered.append(doc_id)
+    return ordered

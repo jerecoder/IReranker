@@ -1,0 +1,32 @@
+RUN_DIR=data/external/beir/bm25-runs
+mkdir -p "$RUN_DIR"
+
+python -m pyserini.search.lucene --threads 16 --batch-size 128 \
+  --index beir-v1.0.0-trec-covid.flat \
+  --topics beir-v1.0.0-trec-covid-test \
+  --output "$RUN_DIR/run.beir.bm25-flat.trec-covid.txt" \
+  --output-format trec --hits 1000 --bm25 --remove-query
+
+python -m pyserini.search.lucene --threads 16 --batch-size 128 \
+  --index beir-v1.0.0-nfcorpus.flat \
+  --topics beir-v1.0.0-nfcorpus-test \
+  --output "$RUN_DIR/run.beir.bm25-flat.nfcorpus.txt" \
+  --output-format trec --hits 1000 --bm25 --remove-query
+
+python -m pyserini.search.lucene --threads 16 --batch-size 128 \
+  --index beir-v1.0.0-fiqa.flat \
+  --topics beir-v1.0.0-fiqa-test \
+  --output "$RUN_DIR/run.beir.bm25-flat.fiqa.txt" \
+  --output-format trec --hits 1000 --bm25 --remove-query
+
+python -m pyserini.search.lucene --threads 16 --batch-size 128 \
+  --index beir-v1.0.0-scifact.flat \
+  --topics beir-v1.0.0-scifact-test \
+  --output "$RUN_DIR/run.beir.bm25-flat.scifact.txt" \
+  --output-format trec --hits 1000 --bm25 --remove-query
+
+python -m pyserini.search.lucene --threads 16 --batch-size 128 \
+  --index beir-v1.0.0-webis-touche2020.flat \
+  --topics beir-v1.0.0-webis-touche2020-test \
+  --output "$RUN_DIR/run.beir.bm25-flat.webis-touche2020.txt" \
+  --output-format trec --hits 1000 --bm25 --remove-query

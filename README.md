@@ -133,30 +133,30 @@ Auto-updated after each BEIR evaluation:
 ### flan-t5-large
 | Ranker | Avg NDCG@10/Comparisons |
 | --- | --- |
-| mohajer (ir) | 2.712e-05 |
-| quick sort (classic) | 1.102e-05 |
+| mohajer (ir) | 2.653e-05 |
+| quick sort (classic) | 1.078e-05 |
 | random | 0.000e+00 |
-| sliding window prp (classic) | 1.125e-05 |
+| sliding window prp (classic) | 1.965e-05 |
 
 | Dataset | mohajer (ir) | quick sort (classic) | random | sliding window prp (classic) |
 | --- | --- | --- | --- | --- |
-| nfcorpus | 0.5431 | 0.5348 | 0.2515 | 0.4613 |
-| scifact | 0.6383 | 0.6271 | 0.0427 | 0.4654 |
-| trec-covid | 0.7526 | 0.7608 | 0.3863 | 0.6331 |
-| webis-touche2020 | 0.2773 | 0.2715 | 0.1114 | 0.1686 |
+| nfcorpus | 0.5272 | 0.5384 | 0.2611 | 0.5922 |
+| scifact | 0.5726 | 0.6338 | 0.0436 | 0.7455 |
+| trec-covid | 0.7555 | 0.7650 | 0.4280 | 0.7311 |
+| webis-touche2020 | 0.2517 | 0.2392 | 0.0940 | 0.4805 |
 
 ### flan-t5-xl
 | Ranker | Avg NDCG@10/Comparisons |
 | --- | --- |
-| mohajer (ir) | 2.810e-05 |
-| quick sort (classic) | 1.138e-05 |
+| mohajer (ir) | 2.814e-05 |
+| quick sort (classic) | 1.152e-05 |
 | random | 0.000e+00 |
-| sliding window prp (classic) | 1.127e-05 |
+| sliding window prp (classic) | 1.776e-05 |
 
 | Dataset | mohajer (ir) | quick sort (classic) | random | sliding window prp (classic) |
 | --- | --- | --- | --- | --- |
-| nfcorpus | 0.5986 | 0.5926 | 0.2515 | 0.5119 |
-| scifact | 0.6827 | 0.6744 | 0.0427 | 0.5317 |
-| trec-covid | 0.7736 | 0.7695 | 0.3863 | 0.6967 |
-| webis-touche2020 | 0.2809 | 0.2896 | 0.1114 | 0.2291 |
+| nfcorpus | 0.5944 | 0.5933 | 0.2611 | 0.6089 |
+| scifact | 0.6450 | 0.6568 | 0.0436 | 0.7679 |
+| trec-covid | 0.7853 | 0.7783 | 0.4280 | 0.7581 |
+| webis-touche2020 | 0.2686 | 0.2992 | 0.0940 | 0.4610 |
 <!-- END_BEIR_RESULTS -->
