@@ -157,7 +157,9 @@ def _render_ndcg10_grid(
             if ds_scores:
                 try:
                     ds_best = max(
-                        v.get("ndcg") for v in ds_scores.values() if v and v.get("ndcg") is not None
+                        v.get("ndcg")
+                        for v in ds_scores.values()
+                        if v and v.get("ndcg") is not None
                     )
                 except ValueError:
                     ds_best = None
@@ -238,9 +240,7 @@ def _update_readme_results_table(
         all_datasets = _datasets_for_table(requested, ctx.out_root)
         rate_table = _render_rate_table(ctx.out_root, all_datasets)
         flagged_ds = (flagged or {}).get(ctx.label, set())
-        ndcg10_grid = _render_ndcg10_grid(
-            ctx.out_root, all_datasets, flagged_missing=flagged_ds
-        )
+        ndcg10_grid = _render_ndcg10_grid(ctx.out_root, all_datasets, flagged_missing=flagged_ds)
         heading = f"### {ctx.label}\n" if ctx.label else ""
         block = f"{heading}{rate_table}\n\n{ndcg10_grid}"
         model_notes = (notes or {}).get(ctx.label) if notes else None
@@ -408,7 +408,9 @@ def run_from_config(
                 missing_pair_queries = int(meta.get("missing_pairs_queries") or 0)
                 if missing_pairs:
                     top_pairs = meta.get("missing_pairs_top") or []
-                    top_str = ", ".join(f"{qid}({cnt})" for qid, cnt in top_pairs) if top_pairs else ""
+                    top_str = (
+                        ", ".join(f"{qid}({cnt})" for qid, cnt in top_pairs) if top_pairs else ""
+                    )
                     notes.append(
                         f"{d}: missing {missing_pairs} pair comparisons across {missing_pair_queries} queries"
                         + (f" (top: {top_str})" if top_str else "")
@@ -499,7 +501,10 @@ def run_from_config(
             finally:
                 clear_matrix_cache()
         return _ModelEvalResult(
-            failures=failed, skipped=skipped, notes=notes, missing_pair_datasets=flagged_missing_pairs
+            failures=failed,
+            skipped=skipped,
+            notes=notes,
+            missing_pair_datasets=flagged_missing_pairs,
         )
 
     def _run_all_models() -> Dict[str, _ModelEvalResult]:
