@@ -5,14 +5,18 @@ import math
 import random
 from typing import List
 
-from ireranker.oracles import Oracle, SamplingMatrixOracle
+from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
 
 from .ranker import SampleRanker
 from .registry import register_ranker
 
 
 @register_ranker(
-    "Mohajer (IR)", default_oracle_factory=lambda seed: SamplingMatrixOracle(seed=seed)
+    "Mohajer (IR)",
+    oracle_factories=[
+        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+    ],
 )
 class MohajerRanker(SampleRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):

@@ -2,13 +2,19 @@ from __future__ import annotations
 
 from typing import List
 
-from ireranker.oracles import Oracle
+from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
 
 from .ranker import CacheRanker
 from .registry import register_ranker
 
 
-@register_ranker("PRP Sort (Classic)")
+@register_ranker(
+    "PRP Sort (Classic)",
+    oracle_factories=[
+        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+    ],
+)
 class PRPSortingRanker(CacheRanker):
     """PRP-HeapSort with partial HeapSort (top-k stopping).
 

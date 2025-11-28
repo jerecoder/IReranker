@@ -19,6 +19,10 @@ class Ranker(ABC):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         self.oracle = oracle
         self._comparisons = 0
+        self.oracle_label = getattr(oracle, "name", None)
+        self.display_name = (
+            f"{self.name} [{self.oracle_label}]" if self.oracle_label else self.name
+        )
         self.set_seed(seed)
 
     def set_seed(self, seed: int | None) -> None:

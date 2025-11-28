@@ -14,7 +14,7 @@ from ireranker.config import EXTERNAL_DATA_DIR, PROJ_ROOT, REPORTS_DIR, logger
 from ireranker.data.loaders import _beir_supported_name, load_beir_dataset
 from ireranker.evaluation.beir import evaluate_rankers_beir
 from ireranker.oracles.oracle import clear_matrix_cache
-from ireranker.rankers import get_ranker
+from ireranker.rankers import build_rankers_for_eval
 
 _TABLE_START = "<!-- BEGIN_BEIR_RESULTS -->"
 _TABLE_END = "<!-- END_BEIR_RESULTS -->"
@@ -24,6 +24,13 @@ class _ModelContext(NamedTuple):
     label: str
     model_key: str
     out_root: Path
+
+
+class _ModelEvalResult(NamedTuple):
+    failures: List[str]
+    skipped: List[str]
+    notes: List[str]
+    missing_pair_datasets: set[str]
 
 
 def _model_slug(model: str) -> str:
@@ -67,6 +74,18 @@ def _format_sci(value: float | None) -> str:
     return f"{value:.3e}"
 
 
+def _bold(text: str) -> str:
+    return f"**{text}**"
+
+
+def _ranker_label(row: Dict[str, object]) -> str:
+    base = str(row.get("ranker") or "").strip()
+    oracle = str(row.get("oracle") or "").strip()
+    if oracle:
+        return f"{base} [{oracle}]"
+    return base
+
+
 def _datasets_for_table(requested: Sequence[str], out_root: Path) -> List[str]:
     names = {d.lower(): d for d in requested}
     if out_root.exists():
@@ -78,8 +97,8 @@ def _datasets_for_table(requested: Sequence[str], out_root: Path) -> List[str]:
 
 def _ndcg10_by_dataset(
     out_root: Path, datasets: Sequence[str]
-) -> tuple[Dict[str, Dict[str, float]], List[str]]:
-    scores: Dict[str, Dict[str, float]] = {}
+) -> tuple[Dict[str, Dict[str, Dict[str, float | int]]], List[str]]:
+    scores: Dict[str, Dict[str, Dict[str, float | int]]] = {}
     ranker_names: set[str] = set()
     for ds in datasets:
         path = out_root / ds / "summary.csv"
@@ -96,39 +115,66 @@ def _ndcg10_by_dataset(
                         continue
                     if k_val != 10:
                         continue
-                    ranker = row.get("ranker")
+                    ranker = _ranker_label(row)
                     if not ranker:
                         continue
                     try:
                         ndcg_val = float(row.get("NDCG", ""))
                     except (TypeError, ValueError):
                         continue
-                    scores[ds][ranker] = ndcg_val
+                    try:
+                        comps_val = int(row.get("Comparisons", 0))
+                    except (TypeError, ValueError):
+                        comps_val = 0
+                    scores[ds][ranker] = {"ndcg": ndcg_val, "comparisons": comps_val}
                     ranker_names.add(ranker)
         except Exception as e:  # pragma: no cover - defensive
             logger.warning(f"Could not parse {path}: {e}")
     return scores, sorted(ranker_names)
 
 
-def _render_ndcg10_grid(out_root: Path, datasets: Sequence[str]) -> str:
+def _render_ndcg10_grid(
+    out_root: Path, datasets: Sequence[str], *, flagged_missing: set[str] | None = None
+) -> str:
     score_map, rankers = _ndcg10_by_dataset(out_root, datasets)
     if not rankers:
         rankers = ["n/a"]
-    header = "| Dataset | " + " | ".join(rankers) + " |"
-    divider = "| --- | " + " | ".join("---" for _ in rankers) + " |"
-    lines = [header, divider]
+    headers = ["Ranker"]
     for ds in datasets:
-        row_scores = score_map.get(ds, {})
-        cells = []
-        for r in rankers:
-            val = row_scores.get(r)
-            cells.append(_format_mean(val) if val is not None else "n/a")
-        lines.append("| " + ds + " | " + " | ".join(cells) + " |")
+        label = f"{ds} (missing comparisons)" if flagged_missing and ds in flagged_missing else ds
+        headers.extend([f"{label} NDCG@10", f"{label} Comparisons"])
+    divider = "| " + " | ".join("---" for _ in headers) + " |"
+    lines = ["| " + " | ".join(headers) + " |", divider]
+
+    for r in rankers:
+        row_cells = [r]
+        for ds in datasets:
+            ds_scores = score_map.get(ds, {})
+            entry = ds_scores.get(r)
+            ndcg_val = entry.get("ndcg") if isinstance(entry, dict) else None
+            comps_val = entry.get("comparisons") if isinstance(entry, dict) else None
+            ds_best = None
+            if ds_scores:
+                try:
+                    ds_best = max(
+                        v.get("ndcg") for v in ds_scores.values() if v and v.get("ndcg") is not None
+                    )
+                except ValueError:
+                    ds_best = None
+            if ndcg_val is not None:
+                ndcg_cell = _format_mean(ndcg_val)
+                if ds_best is not None and ndcg_val == ds_best:
+                    ndcg_cell = _bold(ndcg_cell)
+            else:
+                ndcg_cell = "n/a"
+            comps_cell = str(int(comps_val)) if comps_val is not None else "n/a"
+            row_cells.extend([ndcg_cell, comps_cell])
+        lines.append("| " + " | ".join(row_cells) + " |")
     return "\n".join(lines)
 
 
-def _ndcg10_rate_by_ranker(out_root: Path, datasets: Sequence[str]) -> Dict[str, float]:
-    totals: Dict[str, float] = {}
+def _avg_comparisons_by_ranker(out_root: Path, datasets: Sequence[str]) -> Dict[str, float]:
+    totals: Dict[str, int] = {}
     counts: Dict[str, int] = {}
     for ds in datasets:
         path = out_root / ds / "summary.csv"
@@ -144,14 +190,14 @@ def _ndcg10_rate_by_ranker(out_root: Path, datasets: Sequence[str]) -> Dict[str,
                         continue
                     if k_val != 10:
                         continue
-                    ranker = row.get("ranker")
+                    ranker = _ranker_label(row)
                     if not ranker:
                         continue
                     try:
-                        rate = float(row.get("NDCG_per_comp", ""))
+                        comps = int(row.get("Comparisons", 0))
                     except (TypeError, ValueError):
-                        continue
-                    totals[ranker] = totals.get(ranker, 0.0) + rate
+                        comps = 0
+                    totals[ranker] = totals.get(ranker, 0) + comps
                     counts[ranker] = counts.get(ranker, 0) + 1
         except Exception as e:  # pragma: no cover - defensive
             logger.warning(f"Could not parse {path}: {e}")
@@ -164,26 +210,44 @@ def _ndcg10_rate_by_ranker(out_root: Path, datasets: Sequence[str]) -> Dict[str,
 
 
 def _render_rate_table(out_root: Path, datasets: Sequence[str]) -> str:
-    rates = _ndcg10_rate_by_ranker(out_root, datasets)
-    if not rates:
-        return "| Ranker | Avg NDCG@10/Comparisons |\n| --- | --- |\n| n/a | n/a |"
-    header = "| Ranker | Avg NDCG@10/Comparisons |"
+    avgs = _avg_comparisons_by_ranker(out_root, datasets)
+    if not avgs:
+        return "| Ranker | Avg Comparisons |\n| --- | --- |\n| n/a | n/a |"
+    header = "| Ranker | Avg Comparisons |"
     divider = "| --- | --- |"
-    body = ["| " + r + " | " + _format_sci(rate) + " |" for r, rate in sorted(rates.items())]
+    best_avg = min(avgs.values()) if avgs else None
+    body = []
+    for r, avg in sorted(avgs.items()):
+        val = _format_mean(avg, as_int=True)
+        if best_avg is not None and avg == best_avg:
+            val = _bold(val)
+        body.append("| " + r + " | " + val + " |")
     return "\n".join([header, divider, *body])
 
 
 def _update_readme_results_table(
-    models: Sequence[_ModelContext], requested: Sequence[str]
+    models: Sequence[_ModelContext],
+    requested: Sequence[str],
+    *,
+    notes: Optional[Dict[str, List[str]]] = None,
+    flagged: Optional[Dict[str, set[str]]] = None,
 ) -> None:
     readme_path = PROJ_ROOT / "README.md"
     blocks: list[str] = []
     for ctx in models:
         all_datasets = _datasets_for_table(requested, ctx.out_root)
         rate_table = _render_rate_table(ctx.out_root, all_datasets)
-        ndcg10_grid = _render_ndcg10_grid(ctx.out_root, all_datasets)
+        flagged_ds = (flagged or {}).get(ctx.label, set())
+        ndcg10_grid = _render_ndcg10_grid(
+            ctx.out_root, all_datasets, flagged_missing=flagged_ds
+        )
         heading = f"### {ctx.label}\n" if ctx.label else ""
-        blocks.append(f"{heading}{rate_table}\n\n{ndcg10_grid}")
+        block = f"{heading}{rate_table}\n\n{ndcg10_grid}"
+        model_notes = (notes or {}).get(ctx.label) if notes else None
+        if model_notes:
+            note_lines = "\n".join(f"- {n}" for n in model_notes)
+            block = f"{block}\n\nNotes:\n{note_lines}"
+        blocks.append(block)
     block = f"{_TABLE_START}\n" + "\n\n".join(blocks) + f"\n{_TABLE_END}"
     if readme_path.exists():
         text = readme_path.read_text(encoding="utf-8")
@@ -292,7 +356,7 @@ def run_from_config(
 
     seed = int(cfg.get("seed") or 123)
 
-    rs = [get_ranker(r, seed=seed) for r in eff_rankers]
+    rs = build_rankers_for_eval(eff_rankers, seed=seed)
 
     cfg_kvals = cfg.get("k_values") if isinstance(cfg.get("k_values"), list) else None
     k_values = list(cfg_kvals) if cfg_kvals else [1, 3, 5, 10, 100]
@@ -319,8 +383,11 @@ def run_from_config(
             "Profiling without max_queries override; consider a small limit to avoid heavy runs."
         )
 
-    def _run_eval(ctx: _ModelContext) -> List[str]:
+    def _run_eval(ctx: _ModelContext) -> _ModelEvalResult:
         failed: List[str] = []
+        skipped: List[str] = []
+        notes: List[str] = []
+        flagged_missing_pairs: set[str] = set()
         logger.info(
             f"Evaluating rerank matrices for model '{ctx.label}' " f"(output: {ctx.out_root})"
         )
@@ -336,6 +403,17 @@ def run_from_config(
                     max_queries=max_queries,
                     matrix_model=ctx.model_key,
                 )
+                meta = getattr(dataset, "metadata", {}) or {}
+                missing_pairs = int(meta.get("missing_pairs_total") or 0)
+                missing_pair_queries = int(meta.get("missing_pairs_queries") or 0)
+                if missing_pairs:
+                    top_pairs = meta.get("missing_pairs_top") or []
+                    top_str = ", ".join(f"{qid}({cnt})" for qid, cnt in top_pairs) if top_pairs else ""
+                    notes.append(
+                        f"{d}: missing {missing_pairs} pair comparisons across {missing_pair_queries} queries"
+                        + (f" (top: {top_str})" if top_str else "")
+                    )
+                    flagged_missing_pairs.add(d)
                 task_qids = [t.query_id for t in dataset.tasks]
                 for ranker in rs:
                     ranker.set_dataset(
@@ -358,6 +436,7 @@ def run_from_config(
                             logger.warning(f"Could not remove stale file {old}")
                 fieldnames = [
                     "ranker",
+                    "oracle",
                     "k",
                     "NDCG",
                     "MAP",
@@ -372,6 +451,28 @@ def run_from_config(
                     for row in rows:
                         writer.writerow({k: row.get(k) for k in fieldnames})
                 logger.success(f"Saved BEIR evaluation summary to {d_out / 'summary.csv'}")  # type: ignore
+            except FileNotFoundError as e:
+                from ireranker.config import EXTERNAL_DATA_DIR
+
+                zip_path = EXTERNAL_DATA_DIR / "beir" / f"{d}.zip"
+                logger.warning(
+                    f"Skipping dataset '{d}' for model '{ctx.label}' (missing rerank matrix). "
+                    f"Zip: {zip_path}. Error: {e}"
+                )
+                notes.append(f"{d}: skipped (missing rerank matrix)")
+                err_dir = ctx.out_root / d
+                err_dir.mkdir(parents=True, exist_ok=True)
+                summary_path = err_dir / "summary.csv"
+                error_path = err_dir / "ERROR.txt"
+                skip_path = err_dir / "SKIPPED.txt"
+                for path in (summary_path, error_path, skip_path):
+                    if path.exists():
+                        try:
+                            path.unlink()
+                        except OSError:
+                            logger.warning(f"Could not remove stale file {path}")
+                skip_path.write_text(f"Zip: {zip_path}\nReason: {e}\n", encoding="utf-8")
+                skipped.append(d)
             except Exception as e:
                 from ireranker.config import EXTERNAL_DATA_DIR
 
@@ -397,20 +498,22 @@ def run_from_config(
                 failed.append(d)
             finally:
                 clear_matrix_cache()
-        return failed
+        return _ModelEvalResult(
+            failures=failed, skipped=skipped, notes=notes, missing_pair_datasets=flagged_missing_pairs
+        )
 
-    def _run_all_models() -> Dict[str, List[str]]:
-        failures: Dict[str, List[str]] = {}
+    def _run_all_models() -> Dict[str, _ModelEvalResult]:
+        results: Dict[str, _ModelEvalResult] = {}
         for ctx in model_contexts:
-            failures[ctx.label] = _run_eval(ctx)
-        return failures
+            results[ctx.label] = _run_eval(ctx)
+        return results
 
-    failures: Dict[str, List[str]] = {}
+    results: Dict[str, _ModelEvalResult] = {}
     if profile_output:
         prof = cProfile.Profile()
         prof.enable()
         try:
-            failures = _run_all_models()
+            results = _run_all_models()
         finally:
             prof.disable()
             profile_output.parent.mkdir(parents=True, exist_ok=True)
@@ -430,22 +533,32 @@ def run_from_config(
                 logger.warning(f"Could not render profile summary: {e}")
             logger.info(f"Profile stats saved to {profile_output}")
     else:
-        failures = _run_all_models()
+        results = _run_all_models()
 
     if not skip_readme_update:
         try:
-            _update_readme_results_table(model_contexts, ds_names)
+            notes_by_model = {label: res.notes for label, res in results.items()}
+            flagged_by_model = {label: res.missing_pair_datasets for label, res in results.items()}
+            _update_readme_results_table(
+                model_contexts, ds_names, notes=notes_by_model, flagged=flagged_by_model
+            )
             logger.info("Updated README with BEIR results table.")
         except Exception as e:  # pragma: no cover - defensive
             logger.warning(f"Could not update README results table: {e}")
     else:
         logger.info("Skip README update requested; results left on disk.")
 
-    failed_summary = {label: ds for label, ds in failures.items() if ds}
+    failed_summary = {label: res.failures for label, res in results.items() if res.failures}
     if failed_summary:
         for label, ds in failed_summary.items():
             logger.warning(
                 f"Completed with failures for model '{label}' datasets: {', '.join(ds)}"
+            )
+    skipped_summary = {label: res.skipped for label, res in results.items() if res.skipped}
+    if skipped_summary:
+        for label, ds in skipped_summary.items():
+            logger.info(
+                f"Skipped datasets for model '{label}' (missing rerank matrix): {', '.join(ds)}"
             )
 
 

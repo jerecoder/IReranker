@@ -1,36 +1,43 @@
 from __future__ import annotations
 
-from typing import Callable, Dict, List, Type
+from typing import Callable, Dict, List, Sequence, Tuple, Type
 
 from ireranker.oracles import BidirectionalMatrixOracle, Oracle
 
 from .ranker import Ranker
 
 _REGISTRY: Dict[str, Type[Ranker]] = {}
-_ORACLE_FACTORIES: Dict[str, Callable[[int | None], Oracle]] = {}
+_ORACLE_FACTORIES: Dict[str, List[Tuple[str | None, Callable[[int | None], Oracle]]]] = {}
 
 
 def register_ranker(
-    name: str, *, default_oracle_factory: Callable[[int | None], Oracle] | None = None
+    name: str,
+    *,
+    oracle_factories: Sequence[Tuple[str | None, Callable[[int | None], Oracle]]] | None = None,
 ) -> Callable[[Type[Ranker]], Type[Ranker]]:
     def decorator(cls: Type[Ranker]) -> Type[Ranker]:
         key = name.lower()
         cls.name = key
         _REGISTRY[key] = cls
-        if default_oracle_factory is not None:
-            _ORACLE_FACTORIES[key] = default_oracle_factory
+        if oracle_factories:
+            _ORACLE_FACTORIES[key] = list(oracle_factories)
         return cls
 
     return decorator
 
 
-def default_oracle_for(name: str, *, seed: int | None = None) -> Oracle:
+def _factories_for(name: str) -> List[Tuple[str | None, Callable[[int | None], Oracle]]]:
     key = name.lower()
     if key not in _REGISTRY:
         raise KeyError(f"Unknown ranker: {name}. Available: {list_rankers()}")
+    if key in _ORACLE_FACTORIES:
+        return _ORACLE_FACTORIES[key]
+    return [(None, lambda seed: BidirectionalMatrixOracle())]
 
-    factory = _ORACLE_FACTORIES.get(key)
-    oracle = factory(seed) if factory is not None else BidirectionalMatrixOracle()
+
+def default_oracle_for(name: str, *, seed: int | None = None) -> Oracle:
+    label, factory = _factories_for(name)[0]
+    oracle = factory(seed)
     oracle.set_seed(seed)
     return oracle
 
@@ -45,3 +52,23 @@ def get_ranker(name: str, *, oracle: Oracle | None = None, **params) -> Ranker:
         raise KeyError(f"Unknown ranker: {name}. Available: {list_rankers()}")
     eff_oracle = oracle or default_oracle_for(key, seed=params.get("seed"))
     return _REGISTRY[key](oracle=eff_oracle, **params)
+
+
+def build_rankers_for_eval(names: Sequence[str], *, seed: int | None = None) -> List[Ranker]:
+    rankers: List[Ranker] = []
+    for name in names:
+        for label, factory in _factories_for(name):
+            oracle = factory(seed)
+            try:
+                oracle.set_seed(seed)
+            except AttributeError:
+                pass
+            r = get_ranker(name, oracle=oracle, seed=seed)
+            oracle_label = label or getattr(oracle, "name", None) or ""
+            display_name = r.name
+            if oracle_label:
+                display_name = f"{r.name} [{oracle_label}]"
+            r.display_name = display_name
+            r.oracle_label = oracle_label
+            rankers.append(r)
+    return rankers

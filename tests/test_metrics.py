@@ -32,6 +32,7 @@ def test_beir_metrics_on_minimal(dummy_oracle):
     for row in rows:
         assert row["ranker"] == "bm25"
         assert row["k"] in (1, 3, 5)
+        assert row["oracle"] == "DummyOracle"
         for key in ("NDCG", "MAP", "Recall", "Precision"):
             val = float(row[key])
             assert 0.0 <= val <= 1.0
@@ -73,3 +74,4 @@ def test_beir_eval_reseeds_rankers():
     rows2 = evaluate_rankers_beir([ranker], ds, [3], seed=123)
 
     assert rows1 == rows2
+    assert rows1[0]["oracle"] == "CoinFlipOracle"

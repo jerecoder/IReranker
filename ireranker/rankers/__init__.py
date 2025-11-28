@@ -7,6 +7,7 @@ from .prp_sorting_ranker import PRPSortingRanker as PRPSortingRanker
 from .quicksort_ranker import QuicksortTopKRanker as QuicksortTopKRanker
 from .ranker import CacheRanker, Ranker, SampleRanker  # noqa: F401
 from .registry import (  # noqa: F401
+    build_rankers_for_eval,
     default_oracle_for,
     get_ranker,
     list_rankers,

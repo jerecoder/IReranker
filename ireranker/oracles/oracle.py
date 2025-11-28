@@ -34,6 +34,7 @@ class Oracle(ABC):
     def __init__(self) -> None:
         self.current_task: Optional[RankingTask] = None
         self.seed: Optional[int] = None
+        self.name: str = self.__class__.__name__
 
     @abstractmethod
     def load_dataset(

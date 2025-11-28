@@ -4,7 +4,7 @@ import csv
 import json
 from pathlib import Path
 import shutil
-from typing import Dict, List, Optional
+from typing import Dict, List, NamedTuple, Optional
 import zipfile
 
 from ireranker.config import logger
@@ -13,6 +13,12 @@ from ireranker.types import RankingDataset, RankingTask
 
 # --- BEIR dataset loader utilities -------------------------------------------------------
 _BEIR_CFG_CACHE: Optional[Dict[str, object]] = None
+
+
+class MatrixLoadResult(NamedTuple):
+    candidates: Dict[str, List[str]]
+    pair_counts: Dict[str, int]
+    expected_pairs: Dict[str, int]
 
 
 def _load_beir_config() -> Dict[str, object]:
@@ -121,7 +127,7 @@ def _load_rerank_matrix(
     *,
     max_queries: Optional[int] = None,
     matrix_model: Optional[str] = None,
-) -> Optional[Dict[str, List[str]]]:
+) -> Optional[MatrixLoadResult]:
     """Load per-query candidate restrictions from a single canonical base path.
 
     Canonical base: EXTERNAL_DATA_DIR / "reranking-matrices"
@@ -134,28 +140,37 @@ def _load_rerank_matrix(
     try:
         matrix = load_matrix(dataset, split=split, matrix_model=matrix_model)
         acc: Dict[str, set] = {}
+        pair_counts: Dict[str, int] = {}
         for key in list(matrix.keys()):
             if isinstance(key, tuple) and len(key) == 3:
                 qid, a, b = key
                 if isinstance(qid, str) and isinstance(a, str) and isinstance(b, str):
                     acc.setdefault(qid, set()).update([a, b])
+                    pair_counts[qid] = pair_counts.get(qid, 0) + 1
         qid_order = sorted(acc.keys())
         if max_queries is not None:
             keep = set(qid_order[:max_queries])
             if keep:
                 matrix_keys = list(matrix.keys())
                 for k in matrix_keys:
-                    if k[0] not in keep:
+                    if isinstance(k, tuple) and len(k) == 3 and k[0] not in keep:
                         matrix.pop(k, None)
                 acc = {qid: acc[qid] for qid in qid_order if qid in keep}
+                pair_counts = {qid: pair_counts.get(qid, 0) for qid in qid_order if qid in keep}
                 logger.info(
                     "Filtered rerank matrix for %s/%s down to %d queries",
                     dataset,
                     split,
                     len(keep),
                 )
+        candidates = {qid: sorted(list(s)) for qid, s in acc.items()}
+        expected_pairs = {
+            qid: len(docs) * max(len(docs) - 1, 0) for qid, docs in candidates.items()
+        }
         logger.info(f"Loaded rerank matrix for {dataset}/{split} (queries: {len(acc)})")
-        return {qid: sorted(list(s)) for qid, s in acc.items()}
+        return MatrixLoadResult(
+            candidates=candidates, pair_counts=pair_counts, expected_pairs=expected_pairs
+        )
     except Exception as e:
         logger.warning(f"Failed to load rerank matrix for {dataset}/{split}: {e}")
         return None
@@ -235,14 +250,18 @@ def load_beir_dataset(
             f"Rerank matrix not found for {canonical}/{split}. Skipping dataset."
         )
 
-    q_ids = sorted(matrix.keys())
+    candidates = matrix.candidates
+    pair_counts = matrix.pair_counts
+    expected_pairs = matrix.expected_pairs
+
+    q_ids = sorted(candidates.keys())
     if max_queries is not None:
         q_ids = q_ids[:max_queries]
     logger.info(f"Using rerank matrix for {len(q_ids)} queries in {canonical}/{split}")
 
     qrels = _read_beir_qrels(Path(data_path), split)
 
-    matrix_qids = set(matrix.keys())
+    matrix_qids = set(candidates.keys())
     qrels_qids = set(qrels.keys())
     shared_qids = matrix_qids & qrels_qids
     matrix_only_qids = matrix_qids - qrels_qids
@@ -261,7 +280,7 @@ def load_beir_dataset(
     for qid in q_ids:
         rel_map: Dict[str, int] = qrels.get(qid, {})
 
-        matrix_docs = set(matrix.get(qid, []))
+        matrix_docs = set(candidates.get(qid, []))
         rel_docs = set(rel_map.keys())
 
         missing_qrels_docs = rel_docs - matrix_docs
@@ -293,4 +312,40 @@ def load_beir_dataset(
             top,
         )
 
-    return RankingDataset(tasks=tasks)
+    pair_gap_counts: list[tuple[str, int]] = []
+    total_pair_gaps = 0
+    for qid in q_ids:
+        expected = expected_pairs.get(qid, 0)
+        observed = pair_counts.get(qid, 0)
+        gap = max(expected - observed, 0)
+        if gap:
+            pair_gap_counts.append((qid, gap))
+            total_pair_gaps += gap
+
+    if pair_gap_counts:
+        pair_gap_counts.sort(key=lambda x: x[1], reverse=True)
+        top_pairs = ", ".join(f"{qid}({cnt})" for qid, cnt in pair_gap_counts[:5])
+        logger.warning(
+            "Found %d missing pairwise comparisons across %d queries in matrix for %s/%s (top: %s)",
+            total_pair_gaps,
+            len(pair_gap_counts),
+            canonical,
+            split,
+            top_pairs,
+        )
+
+    metadata = {
+        "dataset": canonical,
+        "split": split,
+        "matrix_model": matrix_model,
+        "missing_qrels_docs_total": total_qrels_docs_missing,
+        "missing_qrels_queries": len(doc_gap_counts),
+        "missing_qrels_top": doc_gap_counts[:5],
+        "missing_pairs_total": total_pair_gaps,
+        "missing_pairs_queries": len(pair_gap_counts),
+        "missing_pairs_top": pair_gap_counts[:5],
+        "pair_counts": {qid: pair_counts.get(qid, 0) for qid in q_ids},
+        "expected_pairs": {qid: expected_pairs.get(qid, 0) for qid in q_ids},
+    }
+
+    return RankingDataset(tasks=tasks, metadata=metadata)

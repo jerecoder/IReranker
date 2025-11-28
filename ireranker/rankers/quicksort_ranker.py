@@ -2,13 +2,19 @@ from __future__ import annotations
 
 from typing import List
 
-from ireranker.oracles import Oracle
+from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
 
 from .ranker import CacheRanker
 from .registry import register_ranker
 
 
-@register_ranker("Quick Sort (Classic)")
+@register_ranker(
+    "Quick Sort (Classic)",
+    oracle_factories=[
+        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+    ],
+)
 class QuicksortTopKRanker(CacheRanker):
     """PRP-QuickSort with Partial QuickSort (top-k stopping)."""
 

@@ -1,5 +1,10 @@
 from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
-from ireranker.rankers import default_oracle_for, get_ranker, list_rankers
+from ireranker.rankers import (
+    build_rankers_for_eval,
+    default_oracle_for,
+    get_ranker,
+    list_rankers,
+)
 import ireranker.rankers.mohajer_ranker  # noqa: F401 - ensure registration side effects
 import ireranker.rankers.quicksort_ranker  # noqa: F401 - ensure registration side effects
 import ireranker.rankers.sliding_window  # noqa: F401 - ensure registration side effects
@@ -43,3 +48,12 @@ def test_default_oracle_mapping():
 def test_get_ranker_uses_registered_default_oracle():
     ranker = get_ranker("mohajer (ir)", seed=7)
     assert isinstance(ranker.oracle, SamplingMatrixOracle)
+
+
+def test_build_rankers_for_eval_uses_eval_oracle_list():
+    rankers = build_rankers_for_eval(["mohajer (ir)"], seed=13)
+    assert len(rankers) == 2
+    labels = {r.oracle_label for r in rankers}
+    assert labels == {"sampling", "bidirectional"}
+    sampling_ranker = [r for r in rankers if r.oracle_label == "sampling"][0]
+    assert isinstance(sampling_ranker.oracle, SamplingMatrixOracle)

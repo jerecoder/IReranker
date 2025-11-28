@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import List, Optional
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -24,3 +24,4 @@ class RankingDataset:
     """A collection of tasks to evaluate a ranker."""
 
     tasks: List[RankingTask]
+    metadata: Dict[str, Any] = field(default_factory=dict)

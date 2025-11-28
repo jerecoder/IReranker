@@ -2,13 +2,19 @@ from __future__ import annotations
 
 from typing import List
 
-from ireranker.oracles import Oracle
+from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
 
 from .ranker import CacheRanker
 from .registry import register_ranker
 
 
-@register_ranker("Sliding Window PRP (Classic)")
+@register_ranker(
+    "Sliding Window PRP (Classic)",
+    oracle_factories=[
+        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+    ],
+)
 class SlidingWindowRanker(CacheRanker):
     """PRP-Sliding-K: sliding-window passes starting from the bottom of the list.
 

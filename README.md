@@ -128,6 +128,7 @@ Auto-updated after each BEIR evaluation:
 - Average NDCG@10 per comparison for each ranker (scientific notation; higher is better).
 - NDCG@10 per dataset/ranker grid. `n/a` when results are missing.
 - Tables are grouped by rerank matrix model (one section per model in `matrix_models` or auto-discovered models).
+- Results are split by ranker + oracle (see `oracle` in `summary.csv`; headers include the oracle label).
 
 
 ## BEIR results
@@ -141,32 +142,52 @@ Tables auto-updated after each BEIR evaluation.
 
 <!-- BEGIN_BEIR_RESULTS -->
 ### flan-t5-large
-| Ranker | Avg NDCG@10/Comparisons |
+| Ranker | Avg Comparisons |
 | --- | --- |
-| bm25 | 0.000e+00 |
-| mohajer (ir) | 3.085e-05 |
-| prp sort (classic) | 5.786e-06 |
-| quick sort (classic) | 4.661e-06 |
-| sliding window prp (classic) | 1.129e-05 |
+| bm25 [bidirectional] | **0** |
+| mohajer (ir) [bidirectional] | 68491 |
+| mohajer (ir) [sampling] | 65376 |
+| prp sort (classic) [bidirectional] | 293096 |
+| prp sort (classic) [sampling] | 394880 |
+| quick sort (classic) [bidirectional] | 699998 |
+| quick sort (classic) [sampling] | 442089 |
+| sliding window prp (classic) [bidirectional] | 139685 |
+| sliding window prp (classic) [sampling] | 220570 |
 
-| Dataset | bm25 | mohajer (ir) | prp sort (classic) | quick sort (classic) | sliding window prp (classic) |
-| --- | --- | --- | --- | --- | --- |
-| scifact | 0.6789 | 0.5323 | 0.6747 | 0.6008 | 0.6925 |
-| trec-covid | 0.5947 | 0.7427 | 0.7530 | 0.7661 | 0.7177 |
-| webis-touche2020 | 0.4422 | 0.2332 | 0.3321 | 0.2736 | 0.4473 |
+| Ranker | dbpedia-entity NDCG@10 | dbpedia-entity Comparisons | fiqa NDCG@10 | fiqa Comparisons | nfcorpus NDCG@10 | nfcorpus Comparisons | scifact NDCG@10 | scifact Comparisons | trec-covid NDCG@10 | trec-covid Comparisons | webis-touche2020 NDCG@10 | webis-touche2020 Comparisons |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bm25 [bidirectional] | 0.1037 | 0 | 0.2361 | 0 | 0.3982 | 0 | 0.6789 | 0 | 0.5947 | 0 | 0.4422 | 0 |
+| mohajer (ir) [bidirectional] | 0.2461 | 97263 | 0.2400 | 160717 | 0.4884 | 56994 | 0.5537 | 71993 | 0.7439 | 12032 | 0.2417 | 11949 |
+| mohajer (ir) [sampling] | 0.2503 | 94607 | 0.2452 | 150555 | 0.4860 | 55228 | 0.5323 | 68986 | 0.7427 | 11561 | 0.2332 | 11321 |
+| prp sort (classic) [bidirectional] | 0.1830 | 296216 | **0.3127** | 644742 | **0.4997** | 297916 | 0.6747 | 383026 | 0.7530 | 71932 | 0.3321 | 64744 |
+| prp sort (classic) [sampling] | 0.1887 | 345172 | 0.2771 | 997204 | 0.4852 | 367870 | 0.6299 | 490922 | 0.7631 | 86402 | 0.2773 | 81708 |
+| quick sort (classic) [bidirectional] | **0.3180** | 1621662 | 0.2684 | 1542130 | 0.4167 | 424322 | 0.6008 | 442690 | **0.7661** | 80198 | 0.2736 | 88986 |
+| quick sort (classic) [sampling] | 0.3042 | 1176752 | 0.2537 | 701522 | 0.4222 | 328186 | 0.5763 | 333424 | 0.7303 | 57708 | 0.2460 | 54940 |
+| sliding window prp (classic) [bidirectional] | 0.1185 | 117738 | 0.2945 | 307414 | 0.4212 | 158212 | **0.6925** | 177982 | 0.7177 | 44096 | **0.4473** | 32670 |
+| sliding window prp (classic) [sampling] | 0.1229 | 152024 | 0.3056 | 553216 | 0.4134 | 227802 | 0.6810 | 280716 | 0.7372 | 60228 | 0.4396 | 49436 |
 
 ### flan-t5-xl
-| Ranker | Avg NDCG@10/Comparisons |
+| Ranker | Avg Comparisons |
 | --- | --- |
-| bm25 | 0.000e+00 |
-| mohajer (ir) | 3.255e-05 |
-| prp sort (classic) | 5.585e-06 |
-| quick sort (classic) | 5.046e-06 |
-| sliding window prp (classic) | 9.717e-06 |
+| bm25 [bidirectional] | **0** |
+| mohajer (ir) [bidirectional] | 38182 |
+| mohajer (ir) [sampling] | 36764 |
+| prp sort (classic) [bidirectional] | 169888 |
+| prp sort (classic) [sampling] | 241248 |
+| quick sort (classic) [bidirectional] | 318460 |
+| quick sort (classic) [sampling] | 189291 |
+| sliding window prp (classic) [bidirectional] | 89108 |
+| sliding window prp (classic) [sampling] | 140215 |
 
-| Dataset | bm25 | mohajer (ir) | prp sort (classic) | quick sort (classic) | sliding window prp (classic) |
-| --- | --- | --- | --- | --- | --- |
-| scifact | 0.6789 | 0.5974 | 0.7057 | 0.6139 | 0.7131 |
-| trec-covid | 0.5947 | 0.7727 | 0.7825 | 0.7717 | 0.7482 |
-| webis-touche2020 | 0.4422 | 0.2510 | 0.2843 | 0.2581 | 0.4282 |
+| Ranker | dbpedia-entity NDCG@10 | dbpedia-entity Comparisons | fiqa NDCG@10 | fiqa Comparisons | nfcorpus NDCG@10 | nfcorpus Comparisons | scifact NDCG@10 | scifact Comparisons | trec-covid NDCG@10 | trec-covid Comparisons | webis-touche2020 NDCG@10 | webis-touche2020 Comparisons |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bm25 [bidirectional] | n/a | n/a | n/a | n/a | 0.3982 | 0 | 0.6789 | 0 | 0.5947 | 0 | **0.4422** | 0 |
+| mohajer (ir) [bidirectional] | n/a | n/a | n/a | n/a | 0.5161 | 57071 | 0.6201 | 72038 | 0.7514 | 11960 | 0.2721 | 11661 |
+| mohajer (ir) [sampling] | n/a | n/a | n/a | n/a | 0.5148 | 55065 | 0.5974 | 69122 | 0.7727 | 11567 | 0.2510 | 11303 |
+| prp sort (classic) [bidirectional] | n/a | n/a | n/a | n/a | **0.5185** | 236900 | 0.7057 | 294252 | **0.7825** | 74434 | 0.2843 | 73966 |
+| prp sort (classic) [sampling] | n/a | n/a | n/a | n/a | 0.5093 | 341342 | 0.6580 | 451204 | 0.7644 | 87290 | 0.2579 | 85156 |
+| quick sort (classic) [bidirectional] | n/a | n/a | n/a | n/a | 0.4570 | 524638 | 0.6139 | 605524 | 0.7717 | 74088 | 0.2581 | 69588 |
+| quick sort (classic) [sampling] | n/a | n/a | n/a | n/a | 0.4502 | 319154 | 0.6344 | 322394 | 0.7629 | 58346 | 0.2656 | 57270 |
+| sliding window prp (classic) [bidirectional] | n/a | n/a | n/a | n/a | 0.4300 | 123640 | **0.7131** | 135484 | 0.7482 | 51366 | 0.4282 | 45940 |
+| sliding window prp (classic) [sampling] | n/a | n/a | n/a | n/a | 0.4331 | 197184 | 0.7001 | 239078 | 0.7594 | 64578 | 0.3951 | 60020 |
 <!-- END_BEIR_RESULTS -->

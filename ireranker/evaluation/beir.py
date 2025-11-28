@@ -38,10 +38,11 @@ def ranker_results_to_beir(
     dataset_name = Path(tasks[0].dataset_path).name if tasks and tasks[0].dataset_path else ""
     bm25_runs = _load_bm25_run(dataset_name) if dataset_name else {}
 
+    ranker_label = getattr(ranker, "display_name", ranker.name)
     iterator = _progress(
         tasks,
         total=len(tasks),
-        desc=f"Ranking ({ranker.name})",
+        desc=f"Ranking ({ranker_label})",
         leave=False,
     )
     for task in iterator:
@@ -84,6 +85,9 @@ def evaluate_rankers_beir(
     for r in iter_rankers:
         r.set_seed(base_seed)
         r.reset_comparisons()
+        ranker_name = getattr(r, "display_name", r.name)
+        oracle_label = getattr(r, "oracle_label", getattr(r.oracle, "name", None))
+        ranker_base = getattr(r, "name", ranker_name)
         rng = random.Random(base_seed)
         res = ranker_results_to_beir(r, dataset, rng)
         ndcg, _map, recall, precision = EvaluateRetrieval.evaluate(qrels, res, k_values)
@@ -92,7 +96,8 @@ def evaluate_rankers_beir(
             ndcg_k = float(ndcg.get(f"NDCG@{k}", 0.0))
             rows.append(
                 {
-                    "ranker": r.name,
+                    "ranker": ranker_base,
+                    "oracle": oracle_label,
                     "k": int(k),
                     "NDCG": ndcg_k,
                     "MAP": float(_map.get(f"MAP@{k}", 0.0)),
