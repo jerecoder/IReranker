@@ -34,21 +34,24 @@ def _ensure_beir_artifacts_available() -> None:
         )
 
 
-def _load_expected_metrics(path: Path) -> Dict[str, Dict[int, Dict[str, float | int]]]:
+def _load_expected_metrics(path: Path) -> Dict[str, Dict[str, Dict[int, Dict[str, float | int]]]]:
     if not path.exists():
         pytest.skip(f"Benchmark summary not found at {path}")
-    metrics: Dict[str, Dict[int, Dict[str, float | int]]] = {}
+    metrics: Dict[str, Dict[str, Dict[int, Dict[str, float | int]]]] = {}
     with path.open("r", encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
+            model = row["model"]
             ranker = row["ranker"]
             k = int(row["k"])
-            metrics.setdefault(ranker, {})[k] = {"NDCG": float(row["NDCG"])}
+            metrics.setdefault(model, {}).setdefault(ranker, {})[k] = {
+                "NDCG": float(row["NDCG"])
+            }
     return metrics
 
 
 @pytest.fixture(scope="session")
-def expected_webis_results() -> Dict[str, Dict[int, Dict[str, float | int]]]:
+def expected_webis_results() -> Dict[str, Dict[str, Dict[int, Dict[str, float | int]]]]:
     _ensure_beir_artifacts_available()
     return _load_expected_metrics(EXPECTED_RESULTS_PATH)
 
@@ -72,8 +75,11 @@ def webis_touche_oracle() -> BidirectionalMatrixOracle:
 
 
 @pytest.fixture(scope="session")
-def expected_k_values(expected_webis_results: Mapping[str, Mapping[int, Mapping[str, float | int]]]) -> list[int]:
+def expected_k_values(
+    expected_webis_results: Mapping[str, Mapping[str, Mapping[int, Mapping[str, float | int]]]]
+) -> list[int]:
     ks: set[int] = set()
-    for by_k in expected_webis_results.values():
-        ks.update(by_k.keys())
+    for by_model in expected_webis_results.values():
+        for by_k in by_model.values():
+            ks.update(by_k.keys())
     return sorted(ks)

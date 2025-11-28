@@ -7,9 +7,9 @@ from ireranker.oracles import Oracle
 from .ranker import CacheRanker
 from .registry import register_ranker
 
-@register_ranker("nothing")
-class NothingRanker(CacheRanker):
 
+@register_ranker("BM25")
+class NothingRanker(CacheRanker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         super().__init__(oracle, seed)
 

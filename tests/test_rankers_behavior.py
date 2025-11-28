@@ -26,5 +26,5 @@ def test_rankers_follow_oracle_pref_order():
         candidate_ids=[f"d{n}" for n in range(len(scores))],
     )
 
-    mohajer = get_ranker("mohajer", oracle=ScoreOracle(scores))
+    mohajer = get_ranker("mohajer (ir)", oracle=ScoreOracle(scores))
     assert mohajer.rank(task) == expected

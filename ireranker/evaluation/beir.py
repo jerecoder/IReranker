@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from functools import lru_cache
+from pathlib import Path
 import random
 from typing import Dict, Iterable, List
 
@@ -9,14 +11,10 @@ from tqdm import tqdm
 from ireranker.rankers.ranker import Ranker
 from ireranker.types import RankingDataset, RankingTask
 
-from pyserini.search.lucene import LuceneSearcher
-import json
-from functools import lru_cache
-from pathlib import Path
-
 
 def _progress(iterable: Iterable, **kwargs) -> Iterable:
     return tqdm(iterable, **kwargs)
+
 
 def dataset_to_beir_qrels(dataset: RankingDataset) -> Dict[str, Dict[str, int]]:
     qrels: Dict[str, Dict[str, int]] = {}
@@ -37,9 +35,7 @@ def ranker_results_to_beir(
 ) -> Dict[str, Dict[str, float]]:
     results: Dict[str, Dict[str, float]] = {}
     tasks = dataset.tasks
-    dataset_name = (
-        Path(tasks[0].dataset_path).name if tasks and tasks[0].dataset_path else ""
-    )
+    dataset_name = Path(tasks[0].dataset_path).name if tasks and tasks[0].dataset_path else ""
     bm25_runs = _load_bm25_run(dataset_name) if dataset_name else {}
 
     iterator = _progress(
@@ -56,7 +52,7 @@ def ranker_results_to_beir(
             dataset_path=task.dataset_path,
         )
 
-        shuffled_task.candidate_ids = _bm25_order_candidates(shuffled_task, bm25_runs)
+        shuffled_task.candidate_ids = _bm25_order_candidates(shuffled_task, bm25_runs)[:100]
         # rng.shuffle(shuffled_task.candidate_ids)
 
         indices = ranker.rank(shuffled_task)
@@ -110,8 +106,10 @@ def evaluate_rankers_beir(
             )
     return rows
 
+
 # ======= BM25 HELPERS ========
 _BM25_RUN_DIR = Path(__file__).resolve().parents[2] / "data" / "external" / "beir" / "bm25-runs"
+
 
 @lru_cache(maxsize=8)
 def _load_bm25_run(dataset: str) -> Dict[str, List[str]]:

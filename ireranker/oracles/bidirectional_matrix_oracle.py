@@ -22,6 +22,7 @@ class BidirectionalMatrixOracle(MatrixOracle):
         forward_entry = matrix.get(forward_key)
         reverse_entry = matrix.get(reverse_key)
         if forward_entry is None or reverse_entry is None:
+            print("Missing entries for:", forward_key, reverse_key)
             return False
 
         forward_pref = self._entry_preference(forward_entry)

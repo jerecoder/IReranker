@@ -129,36 +129,44 @@ Auto-updated after each BEIR evaluation:
 - NDCG@10 per dataset/ranker grid. `n/a` when results are missing.
 - Tables are grouped by rerank matrix model (one section per model in `matrix_models` or auto-discovered models).
 
+
+## BEIR results
+
+Tables auto-updated after each BEIR evaluation.
+
+
+## BEIR results
+
+Tables auto-updated after each BEIR evaluation.
+
 <!-- BEGIN_BEIR_RESULTS -->
 ### flan-t5-large
 | Ranker | Avg NDCG@10/Comparisons |
 | --- | --- |
-| mohajer (ir) | 7.060e-06 |
-| nothing | 0.000e+00 |
-| quick sort (classic) | 1.854e-06 |
-| random | 0.000e+00 |
-| sliding window prp (classic) | 1.148e-05 |
+| bm25 | 0.000e+00 |
+| mohajer (ir) | 3.085e-05 |
+| prp sort (classic) | 5.786e-06 |
+| quick sort (classic) | 4.661e-06 |
+| sliding window prp (classic) | 1.129e-05 |
 
-| Dataset | mohajer (ir) | nothing | quick sort (classic) | random | sliding window prp (classic) |
+| Dataset | bm25 | mohajer (ir) | prp sort (classic) | quick sort (classic) | sliding window prp (classic) |
 | --- | --- | --- | --- | --- | --- |
-| nfcorpus | 0.6808 | 0.3982 | 0.4267 | 0.3702 | 0.4212 |
-| scifact | 0.5580 | 0.6789 | 0.5680 | 0.0402 | 0.6925 |
-| trec-covid | 0.2455 | 0.5947 | 0.5385 | 0.3045 | 0.7177 |
-| webis-touche2020 | 0.1020 | 0.4422 | 0.2311 | 0.1609 | 0.4473 |
+| scifact | 0.6789 | 0.5323 | 0.6747 | 0.6008 | 0.6925 |
+| trec-covid | 0.5947 | 0.7427 | 0.7530 | 0.7661 | 0.7177 |
+| webis-touche2020 | 0.4422 | 0.2332 | 0.3321 | 0.2736 | 0.4473 |
 
 ### flan-t5-xl
 | Ranker | Avg NDCG@10/Comparisons |
 | --- | --- |
-| mohajer (ir) | 7.529e-06 |
-| nothing | 0.000e+00 |
-| quick sort (classic) | 2.081e-06 |
-| random | 0.000e+00 |
-| sliding window prp (classic) | 1.062e-05 |
+| bm25 | 0.000e+00 |
+| mohajer (ir) | 3.255e-05 |
+| prp sort (classic) | 5.585e-06 |
+| quick sort (classic) | 5.046e-06 |
+| sliding window prp (classic) | 9.717e-06 |
 
-| Dataset | mohajer (ir) | nothing | quick sort (classic) | random | sliding window prp (classic) |
+| Dataset | bm25 | mohajer (ir) | prp sort (classic) | quick sort (classic) | sliding window prp (classic) |
 | --- | --- | --- | --- | --- | --- |
-| nfcorpus | 0.6993 | 0.3982 | 0.4544 | 0.3702 | 0.4300 |
-| scifact | 0.6064 | 0.6789 | 0.6251 | 0.0402 | 0.7131 |
-| trec-covid | 0.2455 | 0.5947 | 0.5418 | 0.3045 | 0.7482 |
-| webis-touche2020 | 0.1125 | 0.4422 | 0.2628 | 0.1609 | 0.4282 |
+| scifact | 0.6789 | 0.5974 | 0.7057 | 0.6139 | 0.7131 |
+| trec-covid | 0.5947 | 0.7727 | 0.7825 | 0.7717 | 0.7482 |
+| webis-touche2020 | 0.4422 | 0.2510 | 0.2843 | 0.2581 | 0.4282 |
 <!-- END_BEIR_RESULTS -->

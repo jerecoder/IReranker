@@ -2,16 +2,13 @@ from __future__ import annotations
 
 from typing import List
 
-from ireranker.oracles import Oracle, SamplingMatrixOracle
+from ireranker.oracles import Oracle
 
 from .ranker import CacheRanker
 from .registry import register_ranker
 
 
-@register_ranker(
-    "Quick Sort (Classic)",
-    default_oracle_factory=lambda seed: SamplingMatrixOracle(seed=seed),
-)
+@register_ranker("Quick Sort (Classic)")
 class QuicksortTopKRanker(CacheRanker):
     """PRP-QuickSort with Partial QuickSort (top-k stopping)."""
 
@@ -37,25 +34,26 @@ class QuicksortTopKRanker(CacheRanker):
     def _effective_k(self, n: int) -> int:
         k = self.top_k
         if k is None or k <= 0 or k >= n:
+            # For k <= 0 or k >= n, behave like full quicksort.
             return n
         return k
 
-    def _better(self, a: int, b: int) -> bool:
-        """Return True if a should be ranked before b."""
-        return self.lt(b, a)
-
     def _partition(self, order: List[int], lo: int, hi: int) -> int:
-        """Partition using the middle element as pivot."""
+        """Partition using the middle element as pivot (descending order: best first)."""
         mid = (lo + hi) // 2
         pivot_id = order[mid]
+        # Move pivot to the end
         order[mid], order[hi] = order[hi], order[mid]
 
         store = lo
         for j in range(lo, hi):
-            if self._better(order[j], pivot_id):
+            # Put items better than the pivot on the left:
+            # ComparableDoc version would be: if order[j] > pivot
+            if self.gt(order[j], pivot_id):
                 order[store], order[j] = order[j], order[store]
                 store += 1
 
+        # Place pivot after all "better-than-pivot" items
         order[store], order[hi] = order[hi], order[store]
         return store
 
@@ -70,16 +68,14 @@ class QuicksortTopKRanker(CacheRanker):
 
         stack: list[tuple[int, int]] = [(lo, hi)]
         while stack:
-            l, h = stack.pop()
-            if l >= h or l >= k:
+            left, h = stack.pop()
+            if left >= h or left >= k:
                 continue
 
-            p = self._partition(order, l, h)
+            p = self._partition(order, left, h)
 
-            stack.append((l, p - 1))
+            # Always process the left side (it may contain top-k items)
+            stack.append((left, p - 1))
+            # Only process the right side if the pivot lies inside the top-k prefix
             if p < k - 1:
                 stack.append((p + 1, h))
-
-
-# Legacy class alias for backward compatibility (does not register an alias name)
-QuickSortRanker = QuicksortTopKRanker

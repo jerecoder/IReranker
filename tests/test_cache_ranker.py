@@ -16,7 +16,7 @@ class RecordingOracle(Oracle):
         self.dataset_loads: list[tuple[str, str]] = []
 
     def load_dataset(
-        self, dataset: str, *, split: str = "test", query_ids=None
+        self, dataset: str, *, split: str = "test", query_ids=None, matrix_model=None
     ) -> None:  # noqa: ANN001 - test helper
         self.dataset_loads.append((dataset, split))
 
@@ -66,7 +66,7 @@ def test_cache_ranker_uses_cached_comparisons(
     ranker.rank(two_item_task)
 
     assert oracle.calls == [("q0", 0, 1)]
-    assert ranker.comparisons == 1
+    assert ranker.comparisons == 2
 
 
 def test_cache_survives_repeat_invocations_of_same_task(
@@ -78,7 +78,7 @@ def test_cache_survives_repeat_invocations_of_same_task(
     ranker.rank(two_item_task)
 
     assert oracle.calls == [("q0", 0, 1)]
-    assert ranker.comparisons == 1
+    assert ranker.comparisons == 2
 
 
 def test_cache_ranker_resets_between_different_tasks(
@@ -91,7 +91,7 @@ def test_cache_ranker_resets_between_different_tasks(
     ranker.rank(second_task)
 
     assert oracle.calls == [("q0", 0, 1), ("q0", 0, 1)]
-    assert ranker.comparisons == 2
+    assert ranker.comparisons == 4
 
 
 def test_cache_ranker_reset_drops_cache_state(
@@ -104,7 +104,7 @@ def test_cache_ranker_reset_drops_cache_state(
     ranker.rank(two_item_task)
 
     assert oracle.calls == [("q0", 0, 1), ("q0", 0, 1)]
-    assert ranker.comparisons == 1
+    assert ranker.comparisons == 2
 
 
 def test_cache_ranker_clears_cache_on_dataset_change(
@@ -117,5 +117,5 @@ def test_cache_ranker_clears_cache_on_dataset_change(
     ranker.rank(two_item_task)
 
     assert oracle.calls == [("q0", 0, 1), ("q0", 0, 1)]
-    assert ranker.comparisons == 2
+    assert ranker.comparisons == 4
     assert oracle.dataset_loads == [("other", "validation")]

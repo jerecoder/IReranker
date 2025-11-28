@@ -1,5 +1,11 @@
-ranker,k,NDCG
-mohajer,10,0.28270
-quicky,10,0.27259
-random,10,0.11138
-sliding,10,0.22912
+model,ranker,k,NDCG
+flan-t5-large,bm25,10,0.44219
+flan-t5-large,mohajer (ir),10,0.23322
+flan-t5-large,prp sort (classic),10,0.33209
+flan-t5-large,quick sort (classic),10,0.27356
+flan-t5-large,sliding window prp (classic),10,0.4473
+flan-t5-xl,bm25,10,0.44219
+flan-t5-xl,mohajer (ir),10,0.25096
+flan-t5-xl,prp sort (classic),10,0.28425
+flan-t5-xl,quick sort (classic),10,0.25808
+flan-t5-xl,sliding window prp (classic),10,0.4282

@@ -56,7 +56,12 @@ class Ranker(ABC):
 
     @abstractmethod
     def lt(self, i: int, j: int) -> bool:
-        """Return True when item i should be ranked after item j."""
+        """Return True when item i is less than item j"""
+        raise NotImplementedError
+
+    @abstractmethod
+    def gt(self, i: int, j: int) -> bool:
+        """Return True when item j is less than item i"""
         raise NotImplementedError
 
     def reset_comparisons(self) -> None:
@@ -110,13 +115,17 @@ class CacheRanker(Ranker):
             self._cache_signature = signature
 
     def lt(self, i: int, j: int) -> bool:
-        """Return True when item i should be ranked after item j, caching the result."""
+        """Return True when item i is less than item j"""
         self._ensure_cache_for_task()
         key = (i, j)
         if key not in self._comparison_cache:
-            self._comparisons += 1
+            self._comparisons += 2
             self._comparison_cache[key] = self.oracle.sample_lt(i, j)
         return self._comparison_cache[key]
+
+    def gt(self, i: int, j: int) -> bool:
+        """Return True when item j is less than item i"""
+        return self.lt(j, i)
 
 
 class SampleRanker(Ranker):
@@ -126,6 +135,8 @@ class SampleRanker(Ranker):
         super().__init__(oracle, seed)
 
     def lt(self, i: int, j: int) -> bool:
-        """Return True when item i should be ranked after item j."""
         self._comparisons += 1
         return self.oracle.sample_lt(i, j)
+
+    def gt(self, i: int, j: int) -> bool:
+        return self.lt(j, i)

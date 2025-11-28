@@ -205,7 +205,7 @@ def load_beir_dataset(
     - max_queries: optional limit of queries for a quick run (applied before filtering by matrix).
     """
     # max_queries = None  # force full BEIR dataset; disable query pruning
-    
+
     canonical = _beir_supported_name(dataset)
     if canonical is None:
         raise ValueError(f"Dataset '{dataset}' not supported via BEIR loader yet.")
@@ -242,12 +242,36 @@ def load_beir_dataset(
 
     qrels = _read_beir_qrels(Path(data_path), split)
 
+    matrix_qids = set(matrix.keys())
+    qrels_qids = set(qrels.keys())
+    shared_qids = matrix_qids & qrels_qids
+    matrix_only_qids = matrix_qids - qrels_qids
+    qrels_only_qids = qrels_qids - matrix_qids
+
+    logger.info(
+        f"Query coverage for {canonical}/{split} -> "
+        f"matrix: {len(matrix_qids)}, qrels: {len(qrels_qids)}, "
+        f"shared: {len(shared_qids)}, matrix-only: {len(matrix_only_qids)}, "
+        f"qrels-only: {len(qrels_only_qids)}"
+    )
+
+    doc_gap_counts: list[tuple[str, int]] = []
+    total_qrels_docs_missing = 0
+
     for qid in q_ids:
         rel_map: Dict[str, int] = qrels.get(qid, {})
 
-        # cand_ids: List[str] = matrix[qid]
-        cand_ids: List[str] = sorted(set(matrix.get(qid, [])) | set(rel_map.keys()))
+        matrix_docs = set(matrix.get(qid, []))
+        rel_docs = set(rel_map.keys())
 
+        missing_qrels_docs = rel_docs - matrix_docs
+        if missing_qrels_docs:
+            count = len(missing_qrels_docs)
+            total_qrels_docs_missing += count
+            doc_gap_counts.append((qid, count))
+
+        cand_ids_set = matrix_docs | rel_docs
+        cand_ids = sorted(cand_ids_set)
         y_true = [float(rel_map.get(doc_id, 0)) for doc_id in cand_ids]
 
         tasks.append(
@@ -257,6 +281,16 @@ def load_beir_dataset(
                 y_true=y_true,
                 dataset_path=str(data_path),
             )
+        )
+
+    if doc_gap_counts:
+        doc_gap_counts.sort(key=lambda x: x[1], reverse=True)
+        top = ", ".join(f"{qid}({cnt})" for qid, cnt in doc_gap_counts[:5])
+        logger.warning(
+            "Found %d qrels docs missing from matrix candidates across %d queries (top: %s)",
+            total_qrels_docs_missing,
+            len(doc_gap_counts),
+            top,
         )
 
     return RankingDataset(tasks=tasks)

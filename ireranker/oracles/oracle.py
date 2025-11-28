@@ -7,7 +7,25 @@ from pathlib import Path
 import pickle
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
 
+from ireranker.config import logger
 from ireranker.types import RankingTask
+
+_SCORE_WARNINGS = 0
+_SCORE_WARNINGS_LIMIT = 20
+
+
+def _log_score_warning(msg: str) -> None:
+    """Log score parsing anomalies with a soft cap to avoid log spam."""
+    global _SCORE_WARNINGS
+    try:
+        if _SCORE_WARNINGS < _SCORE_WARNINGS_LIMIT:
+            logger.warning(msg)
+        elif _SCORE_WARNINGS == _SCORE_WARNINGS_LIMIT:
+            logger.warning("Suppressing further score parsing warnings.")
+    except Exception:
+        pass
+    finally:
+        _SCORE_WARNINGS += 1
 
 
 class Oracle(ABC):
@@ -89,6 +107,7 @@ class MatrixOracle(Oracle):
     ) -> Tuple[Optional[float], Optional[float]]:
         raw_scores = entry.get("scores")
         pairs: List[Tuple[str, float]] = []
+
         if isinstance(raw_scores, Mapping):
             pairs = [(str(k), raw_scores[k]) for k in raw_scores]
         elif isinstance(raw_scores, (list, tuple)):
@@ -100,12 +119,28 @@ class MatrixOracle(Oracle):
                     and isinstance(item[1], Real)
                 ):
                     pairs.append((item[0], float(item[1])))
+                else:
+                    _log_score_warning(
+                        f"Unexpected score tuple format: {item!r} (type {type(item)})"
+                    )
+        else:
+            _log_score_warning(f"Unexpected 'scores' type in matrix entry: {type(raw_scores)}")
+
         scores: dict[str, float] = {}
         for label, value in pairs:
             if isinstance(value, Real):
                 scores[label.strip().upper()] = float(value)
+            else:
+                _log_score_warning(
+                    f"Non-numeric score for label {label!r}: {value!r} (type {type(value)})"
+                )
+
         score_a = scores.get("A")
         score_b = scores.get("B")
+        if score_a is None or score_b is None:
+            _log_score_warning(
+                f"Missing A/B scores in matrix entry; keys present: {sorted(scores.keys())}"
+            )
         return score_a, score_b
 
     def _load_matrix(

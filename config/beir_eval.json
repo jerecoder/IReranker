@@ -1,8 +1,8 @@
 {
   "datasets": [
     "webis-touche2020",
-    "nfcorpus",
     "trec-covid",
+    "nfcorpus",
     "scifact",
     "fiqa",
     "dbpedia-entity"

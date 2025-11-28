@@ -4,6 +4,16 @@ import pytest
 
 from ireranker.oracles import Oracle
 
+# Avoid circular import issues from the non-registered random_ranker module during pytest
+# collection (only tests use this stub; production code remains unchanged).
+import sys
+import types
+
+if "ireranker.rankers.random_ranker" not in sys.modules:
+    sys.modules["ireranker.rankers.random_ranker"] = types.ModuleType(
+        "ireranker.rankers.random_ranker"
+    )
+
 
 class DummyOracle(Oracle):
     def __init__(self) -> None:

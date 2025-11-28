@@ -53,7 +53,9 @@ def _discover_matrix_models(base_dir: Path) -> List[str]:
     return sorted(models)
 
 
-def _format_mean(value: float | None, *, precision: int = 4, as_int: bool = False) -> str:
+def _format_mean(
+    value: float | None, *, precision: int = 4, as_int: bool = False
+) -> str:
     if value is None or (isinstance(value, float) and (value != value)):  # NaN check
         return "n/a"
     if as_int:
@@ -169,7 +171,9 @@ def _render_rate_table(out_root: Path, datasets: Sequence[str]) -> str:
         return "| Ranker | Avg NDCG@10/Comparisons |\n| --- | --- |\n| n/a | n/a |"
     header = "| Ranker | Avg NDCG@10/Comparisons |"
     divider = "| --- | --- |"
-    body = ["| " + r + " | " + _format_sci(rate) + " |" for r, rate in sorted(rates.items())]
+    body = [
+        "| " + r + " | " + _format_sci(rate) + " |" for r, rate in sorted(rates.items())
+    ]
     return "\n".join([header, divider, *body])
 
 
@@ -264,12 +268,16 @@ def run_from_config(
     if rankers_override is not None:
         eff_rankers = rankers_override
 
-    raw_models = cfg.get("matrix_models") if isinstance(cfg.get("matrix_models"), list) else None
+    raw_models = (
+        cfg.get("matrix_models") if isinstance(cfg.get("matrix_models"), list) else None
+    )
     matrix_models: List[str] = []
     if raw_models:
         matrix_models = [str(m).strip() for m in raw_models if str(m).strip()]
     if matrix_models_override is not None:
-        matrix_models = [str(m).strip() for m in matrix_models_override if str(m).strip()]
+        matrix_models = [
+            str(m).strip() for m in matrix_models_override if str(m).strip()
+        ]
     if not matrix_models:
         discovered = _discover_matrix_models(EXTERNAL_DATA_DIR / "reranking-matrices")
         if discovered:
@@ -322,7 +330,8 @@ def run_from_config(
     def _run_eval(ctx: _ModelContext) -> List[str]:
         failed: List[str] = []
         logger.info(
-            f"Evaluating rerank matrices for model '{ctx.label}' " f"(output: {ctx.out_root})"
+            f"Evaluating rerank matrices for model '{ctx.label}' "
+            f"(output: {ctx.out_root})"
         )
         clear_matrix_cache()
         for d in ds_names:
@@ -418,7 +427,7 @@ def run_from_config(
             try:
                 stats = pstats.Stats(prof).strip_dirs().sort_stats(profile_sort)
                 stream = io.StringIO()
-                stats.stream = stream
+                stats.stream = stream  # type: ignore
                 stats.print_stats(profile_limit)
                 logger.info(
                     "Top %d profile rows (sort=%s):\n%s",
@@ -521,7 +530,9 @@ def main() -> None:
         rankers_override = [r.strip() for r in args.rankers.split(",") if r.strip()]
     matrix_models_override = None
     if args.matrix_models:
-        matrix_models_override = [m.strip() for m in args.matrix_models.split(",") if m.strip()]
+        matrix_models_override = [
+            m.strip() for m in args.matrix_models.split(",") if m.strip()
+        ]
     profile_out = Path(args.profile_out) if args.profile_out else None
     run_from_config(
         cfg_path,

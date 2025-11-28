@@ -1,22 +1,28 @@
 from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
 from ireranker.rankers import default_oracle_for, get_ranker, list_rankers
-import ireranker.rankers.random_ranker  # noqa: F401 - ensure registration side effects
 import ireranker.rankers.mohajer_ranker  # noqa: F401 - ensure registration side effects
 import ireranker.rankers.quicksort_ranker  # noqa: F401 - ensure registration side effects
+import ireranker.rankers.sliding_window  # noqa: F401 - ensure registration side effects
+import ireranker.rankers.prp_sorting_ranker  # noqa: F401 - ensure registration side effects
+import ireranker.rankers.nothing_ranker  # noqa: F401 - ensure registration side effects
 from ireranker.types import RankingDataset, RankingTask
 
 
 def test_registry_lists_baselines():
-    names = list_rankers()
-    assert "random" in names
-    assert "mohajer" in names
-    assert "sliding" in names
-    assert "quicky" in names
+    names = set(list_rankers())
+    expected = {
+        "bm25",
+        "mohajer (ir)",
+        "prp sort (classic)",
+        "quick sort (classic)",
+        "sliding window prp (classic)",
+    }
+    assert expected.issubset(names)
 
 
 def test_get_ranker_seed_determinism(dummy_oracle_factory):
-    r1 = get_ranker("random", seed=42, oracle=dummy_oracle_factory())
-    r2 = get_ranker("random", seed=42, oracle=dummy_oracle_factory())
+    r1 = get_ranker("mohajer (ir)", seed=42, oracle=dummy_oracle_factory())
+    r2 = get_ranker("mohajer (ir)", seed=42, oracle=dummy_oracle_factory())
     t = RankingTask(
         query_id="q0", candidate_ids=[f"d{i}" for i in range(10)], y_true=None
     )
@@ -25,15 +31,15 @@ def test_get_ranker_seed_determinism(dummy_oracle_factory):
 
 
 def test_default_oracle_mapping():
-    oracle = default_oracle_for("mohajer", seed=11)
+    oracle = default_oracle_for("mohajer (ir)", seed=11)
     assert isinstance(oracle, SamplingMatrixOracle)
     assert oracle.seed == 11
 
-    fallback = default_oracle_for("random", seed=5)
+    fallback = default_oracle_for("bm25", seed=5)
     assert isinstance(fallback, BidirectionalMatrixOracle)
     assert fallback.seed == 5
 
 
 def test_get_ranker_uses_registered_default_oracle():
-    ranker = get_ranker("mohajer", seed=7)
+    ranker = get_ranker("mohajer (ir)", seed=7)
     assert isinstance(ranker.oracle, SamplingMatrixOracle)
