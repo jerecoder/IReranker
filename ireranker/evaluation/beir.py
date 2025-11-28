@@ -92,6 +92,7 @@ def evaluate_rankers_beir(
         res = ranker_results_to_beir(r, dataset, rng)
         ndcg, _map, recall, precision = EvaluateRetrieval.evaluate(qrels, res, k_values)
         total_comparisons = int(r.comparisons)
+        total_cache_hits = int(getattr(r, "cache_hits", 0))
         for k in k_values:
             ndcg_k = float(ndcg.get(f"NDCG@{k}", 0.0))
             rows.append(
@@ -104,6 +105,7 @@ def evaluate_rankers_beir(
                     "Recall": float(recall.get(f"Recall@{k}", 0.0)),
                     "Precision": float(precision.get(f"P@{k}", 0.0)),
                     "Comparisons": total_comparisons,
+                    "CacheHits": total_cache_hits,
                     "NDCG_per_comp": (
                         float(ndcg_k / total_comparisons) if total_comparisons else 0.0
                     ),

@@ -9,7 +9,7 @@ class BidirectionalMatrixOracle(MatrixOracle):
     """Oracle backed by rerank matrices that store (qid, doc_a, doc_b) and its reverse."""
 
     def __init__(self, base_dir=None):
-        super().__init__(base_dir=base_dir)
+        super().__init__(base_dir=base_dir, cache_comparisons=True)
         self._missing_logs = 0
 
     def sample_lt(self, i: int, j: int) -> bool:
@@ -29,7 +29,7 @@ class BidirectionalMatrixOracle(MatrixOracle):
         reverse_entry = matrix.get(reverse_key)
         if forward_entry is None or reverse_entry is None:
             if self._missing_logs < 5:
-                logger.warning("Missing entries for: %s %s", forward_key, reverse_key)
+                logger.warning(f"Missing entries for: {forward_key} {reverse_key}")
                 if self._missing_logs == 4:
                     logger.warning("Suppressing further missing-entry warnings.")
             self._missing_logs += 1

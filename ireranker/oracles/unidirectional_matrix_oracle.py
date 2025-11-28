@@ -12,6 +12,9 @@ class UnidirectionalMatrixOracle(MatrixOracle):
     (qid, doc_i, doc_j) direction.
     """
 
+    def __init__(self, base_dir=None):
+        super().__init__(base_dir=base_dir, cache_comparisons=True)
+
     def sample_lt(self, i: int, j: int) -> bool:
         matrix = self._ensure_matrix_loaded()
 

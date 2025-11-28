@@ -169,7 +169,9 @@ def _load_rerank_matrix(
         }
         logger.info(f"Loaded rerank matrix for {dataset}/{split} (queries: {len(acc)})")
         return MatrixLoadResult(
-            candidates=candidates, pair_counts=pair_counts, expected_pairs=expected_pairs
+            candidates=candidates,
+            pair_counts=pair_counts,
+            expected_pairs=expected_pairs,
         )
     except Exception as e:
         logger.warning(f"Failed to load rerank matrix for {dataset}/{split}: {e}")
@@ -274,23 +276,10 @@ def load_beir_dataset(
         f"qrels-only: {len(qrels_only_qids)}"
     )
 
-    doc_gap_counts: list[tuple[str, int]] = []
-    total_qrels_docs_missing = 0
-
     for qid in q_ids:
         rel_map: Dict[str, int] = qrels.get(qid, {})
 
-        matrix_docs = set(candidates.get(qid, []))
-        rel_docs = set(rel_map.keys())
-
-        missing_qrels_docs = rel_docs - matrix_docs
-        if missing_qrels_docs:
-            count = len(missing_qrels_docs)
-            total_qrels_docs_missing += count
-            doc_gap_counts.append((qid, count))
-
-        cand_ids_set = matrix_docs | rel_docs
-        cand_ids = sorted(cand_ids_set)
+        cand_ids = sorted(set(candidates.get(qid, [])))
         y_true = [float(rel_map.get(doc_id, 0)) for doc_id in cand_ids]
 
         tasks.append(
@@ -300,16 +289,6 @@ def load_beir_dataset(
                 y_true=y_true,
                 dataset_path=str(data_path),
             )
-        )
-
-    if doc_gap_counts:
-        doc_gap_counts.sort(key=lambda x: x[1], reverse=True)
-        top = ", ".join(f"{qid}({cnt})" for qid, cnt in doc_gap_counts[:5])
-        logger.warning(
-            "Found %d qrels docs missing from matrix candidates across %d queries (top: %s)",
-            total_qrels_docs_missing,
-            len(doc_gap_counts),
-            top,
         )
 
     pair_gap_counts: list[tuple[str, int]] = []
@@ -322,25 +301,10 @@ def load_beir_dataset(
             pair_gap_counts.append((qid, gap))
             total_pair_gaps += gap
 
-    if pair_gap_counts:
-        pair_gap_counts.sort(key=lambda x: x[1], reverse=True)
-        top_pairs = ", ".join(f"{qid}({cnt})" for qid, cnt in pair_gap_counts[:5])
-        logger.warning(
-            "Found %d missing pairwise comparisons across %d queries in matrix for %s/%s (top: %s)",
-            total_pair_gaps,
-            len(pair_gap_counts),
-            canonical,
-            split,
-            top_pairs,
-        )
-
     metadata = {
         "dataset": canonical,
         "split": split,
         "matrix_model": matrix_model,
-        "missing_qrels_docs_total": total_qrels_docs_missing,
-        "missing_qrels_queries": len(doc_gap_counts),
-        "missing_qrels_top": doc_gap_counts[:5],
         "missing_pairs_total": total_pair_gaps,
         "missing_pairs_queries": len(pair_gap_counts),
         "missing_pairs_top": pair_gap_counts[:5],

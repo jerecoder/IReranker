@@ -4,11 +4,11 @@ from typing import List
 
 from ireranker.oracles import Oracle
 
-from .ranker import CacheRanker
+from .ranker import Ranker
 
 
 # @register_ranker("bubbly")
-class BubbleRanker(CacheRanker):
+class BubbleRanker(Ranker):
     """Performs Bubble Sort based on the comparison matrices."""
 
     def __init__(self, oracle: Oracle, seed: int | None = None):

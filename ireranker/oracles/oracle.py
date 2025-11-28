@@ -35,6 +35,11 @@ class Oracle(ABC):
         self.current_task: Optional[RankingTask] = None
         self.seed: Optional[int] = None
         self.name: str = self.__class__.__name__
+        self._comparisons: int = 0
+        self._cache_hits: int = 0
+        self._cache_enabled: bool = False
+        self._comparison_cache: dict[tuple[int, int], bool] = {}
+        self._cache_signature: tuple[str, tuple[str, ...]] | None = None
 
     @abstractmethod
     def load_dataset(
@@ -50,6 +55,9 @@ class Oracle(ABC):
     def set_task(self, task: RankingTask) -> None:
         """Set the current ranking task for comparison queries."""
         self.current_task = task
+        if self._cache_signature != (task.query_id, tuple(task.candidate_ids)):
+            self._comparison_cache.clear()
+            self._cache_signature = (task.query_id, tuple(task.candidate_ids))
 
     @abstractmethod
     def sample_lt(self, i: int, j: int) -> bool:
@@ -59,6 +67,48 @@ class Oracle(ABC):
         """Set a deterministic seed for any stochastic behavior."""
         self.seed = seed
 
+    def enable_cache(self, enabled: bool = True) -> None:
+        self._cache_enabled = enabled
+        if not enabled:
+            self._comparison_cache.clear()
+            self._cache_signature = None
+
+    def reset_comparisons(self) -> None:
+        self._comparisons = 0
+        self._cache_hits = 0
+        if self._cache_enabled:
+            self._comparison_cache.clear()
+            self._cache_signature = None
+
+    def lt(self, i: int, j: int) -> bool:
+        """Compare two candidate indices using optional caching/counting."""
+        if self.current_task is None:
+            return False
+
+        if self._cache_enabled:
+            sig = (self.current_task.query_id, tuple(self.current_task.candidate_ids))
+            if self._cache_signature != sig:
+                self._comparison_cache.clear()
+                self._cache_signature = sig
+            key = (i, j)
+            if key not in self._comparison_cache:
+                self._comparison_cache[key] = self.sample_lt(i, j)
+            else:
+                self._cache_hits += 1
+            self._comparisons += 2
+            return self._comparison_cache[key]
+
+        self._comparisons += 1
+        return self.sample_lt(i, j)
+
+    @property
+    def comparisons(self) -> int:
+        return self._comparisons
+
+    @property
+    def cache_hits(self) -> int:
+        return self._cache_hits
+
 
 MatrixKey = Tuple[str, str, str]
 
@@ -66,11 +116,12 @@ MatrixKey = Tuple[str, str, str]
 class MatrixOracle(Oracle):
     """Oracle backed by rerank matrices that store (qid, doc_a, doc_b) and its reverse."""
 
-    def __init__(self, base_dir: Optional[Path] = None):
+    def __init__(self, base_dir: Optional[Path] = None, cache_comparisons: bool = True):
         super().__init__()
         self._base_dir = Path(base_dir) if base_dir else None
         self._matrix: Optional[Dict[MatrixKey, Mapping[str, Any]]] = None
         self._dataset: Optional[str] = None
+        self.enable_cache(cache_comparisons)
 
     def load_dataset(
         self,

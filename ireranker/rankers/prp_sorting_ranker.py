@@ -4,7 +4,7 @@ from typing import List
 
 from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
 
-from .ranker import CacheRanker
+from .ranker import Ranker
 from .registry import register_ranker
 
 
@@ -15,7 +15,7 @@ from .registry import register_ranker
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
     ],
 )
-class PRPSortingRanker(CacheRanker):
+class PRPSortingRanker(Ranker):
     """PRP-HeapSort with partial HeapSort (top-k stopping).
 
     This is a faithful translation of the `heapSort` / `heapify` logic

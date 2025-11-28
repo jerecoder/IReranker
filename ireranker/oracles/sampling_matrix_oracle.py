@@ -9,7 +9,7 @@ class SamplingMatrixOracle(MatrixOracle):
     """Oracle that samples direction when both forward/reverse preferences exist."""
 
     def __init__(self, base_dir=None, seed: int | None = None):
-        super().__init__(base_dir=base_dir)
+        super().__init__(base_dir=base_dir, cache_comparisons=False)
         self._rng = random.Random(seed)
 
     def set_seed(self, seed: int | None) -> None:

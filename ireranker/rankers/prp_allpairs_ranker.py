@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from typing import List
 
-from .ranker import CacheRanker
+from .ranker import Ranker
 
 
 # @register_ranker("PRP-Allpair (Win-Ratio)")
-class PRPAllpairRanker(CacheRanker):
+class PRPAllpairRanker(Ranker):
     """
     Paper-aligned PRP-Allpair (Qin et al. 2024).
 

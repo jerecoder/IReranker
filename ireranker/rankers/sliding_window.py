@@ -4,7 +4,7 @@ from typing import List
 
 from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
 
-from .ranker import CacheRanker
+from .ranker import Ranker
 from .registry import register_ranker
 
 
@@ -15,7 +15,7 @@ from .registry import register_ranker
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
     ],
 )
-class SlidingWindowRanker(CacheRanker):
+class SlidingWindowRanker(Ranker):
     """PRP-Sliding-K: sliding-window passes starting from the bottom of the list.
 
     One pass is a single bottom-up sweep over adjacent pairs. We perform a

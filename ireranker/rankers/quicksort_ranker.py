@@ -4,7 +4,7 @@ from typing import List
 
 from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
 
-from .ranker import CacheRanker
+from .ranker import Ranker
 from .registry import register_ranker
 
 
@@ -15,7 +15,7 @@ from .registry import register_ranker
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
     ],
 )
-class QuicksortTopKRanker(CacheRanker):
+class QuicksortTopKRanker(Ranker):
     """PRP-QuickSort with Partial QuickSort (top-k stopping)."""
 
     def __init__(

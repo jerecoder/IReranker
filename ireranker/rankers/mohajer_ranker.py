@@ -7,7 +7,7 @@ from typing import List
 
 from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
 
-from .ranker import SampleRanker
+from .ranker import Ranker
 from .registry import register_ranker
 
 
@@ -18,7 +18,7 @@ from .registry import register_ranker
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
     ],
 )
-class MohajerRanker(SampleRanker):
+class MohajerRanker(Ranker):
     def __init__(self, oracle: Oracle, seed: int | None = None):
         self.k = 10
         self.m = 1.0
@@ -57,6 +57,10 @@ class MohajerRanker(SampleRanker):
         # group size Q = ceil(n / K)
         Q = (self.n + K - 1) // K
 
+        # Mohajer benefits from randomized initial ordering; shuffle once per run.
+        shuffled_indices = list(range(self.n))
+        self._rng.shuffle(shuffled_indices)
+
         groups: list[list[int]] = []
         champions: list[int | None] = []
 
@@ -64,7 +68,7 @@ class MohajerRanker(SampleRanker):
         for g in range(K):
             start = g * Q
             end = min((g + 1) * Q, self.n)
-            group_indices = list(range(start, end))
+            group_indices = shuffled_indices[start:end]
             groups.append(group_indices)
 
             if group_indices:
@@ -110,7 +114,9 @@ class MohajerRanker(SampleRanker):
                 champ_to_group[new_champ] = champ_og_group
                 heapq.heappush(winner_heap, _HeapItem(self, new_champ))
 
-        return ranking + [idx for idx in list(range(self.n)) if idx not in ranking]
+        ranked_set = set(ranking)
+        leftovers = [idx for idx in shuffled_indices if idx not in ranked_set]
+        return ranking + leftovers
 
     def _better(self, i: int, j: int) -> bool:
         full = math.floor(self.m)

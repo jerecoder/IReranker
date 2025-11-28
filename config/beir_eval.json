@@ -2,7 +2,6 @@
   "datasets": [
     "webis-touche2020",
     "trec-covid",
-    "nfcorpus",
     "scifact",
     "fiqa",
     "dbpedia-entity"
