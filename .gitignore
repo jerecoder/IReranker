@@ -1,5 +1,11 @@
-# Data
-/data/
+# Data (keep BM25 run files under version control)
+/data/*
+!/data/external/
+/data/external/*
+!/data/external/beir/
+/data/external/beir/*
+!/data/external/beir/bm25-runs/
+!/data/external/beir/bm25-runs/**
 
 # Reports (generated)
 /reports/beir-metrics/
