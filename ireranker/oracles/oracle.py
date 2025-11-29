@@ -5,7 +5,7 @@ from functools import lru_cache
 from numbers import Real
 from pathlib import Path
 import pickle
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Tuple
 
 from ireranker.config import logger
 from ireranker.types import RankingTask
@@ -169,6 +169,38 @@ class MatrixOracle(Oracle):
         if score_a is None or score_b is None or score_a == score_b:
             return None
         return "A" if score_a > score_b else "B"
+
+    def _pair_preferences(
+        self,
+        i: int,
+        j: int,
+        *,
+        on_missing: Callable[[MatrixKey, MatrixKey], None] | None = None,
+    ) -> tuple[Optional[str], Optional[str]]:
+        """
+        Return preferences for (qid, doc_i, doc_j) and its reverse, or (None, None).
+
+        Optional on_missing callback is invoked when either matrix entry is absent.
+        """
+        if self.current_task is None:
+            return None, None
+
+        matrix = self._ensure_matrix_loaded()
+        qid = self.current_task.query_id
+        doc_a = self.current_task.candidate_ids[i]
+        doc_b = self.current_task.candidate_ids[j]
+
+        forward_key = (qid, doc_a, doc_b)
+        reverse_key = (qid, doc_b, doc_a)
+
+        forward_entry = matrix.get(forward_key)
+        reverse_entry = matrix.get(reverse_key)
+        if forward_entry is None or reverse_entry is None:
+            if on_missing is not None:
+                on_missing(forward_key, reverse_key)
+            return None, None
+
+        return self._entry_preference(forward_entry), self._entry_preference(reverse_entry)
 
     @staticmethod
     def _extract_scores(

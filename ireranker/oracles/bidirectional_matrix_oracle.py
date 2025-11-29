@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from ireranker.config import logger
 
-from .oracle import MatrixOracle
+from .oracle import MatrixKey, MatrixOracle
 
 
 class BidirectionalMatrixOracle(MatrixOracle):
@@ -12,31 +12,17 @@ class BidirectionalMatrixOracle(MatrixOracle):
         super().__init__(base_dir=base_dir, cache_comparisons=True)
         self._missing_logs = 0
 
+    def _log_missing_entries(self, forward_key: MatrixKey, reverse_key: MatrixKey) -> None:
+        if self._missing_logs < 5:
+            logger.warning(f"Missing entries for: {forward_key} {reverse_key}")
+            if self._missing_logs == 4:
+                logger.warning("Suppressing further missing-entry warnings.")
+        self._missing_logs += 1
+
     def sample_lt(self, i: int, j: int) -> bool:
-        matrix = self._ensure_matrix_loaded()
-
-        if self.current_task is None:
-            return False
-
-        qid = self.current_task.query_id
-        doc_a = self.current_task.candidate_ids[i]
-        doc_b = self.current_task.candidate_ids[j]
-
-        forward_key = (qid, doc_a, doc_b)
-        reverse_key = (qid, doc_b, doc_a)
-
-        forward_entry = matrix.get(forward_key)
-        reverse_entry = matrix.get(reverse_key)
-        if forward_entry is None or reverse_entry is None:
-            if self._missing_logs < 5:
-                logger.warning(f"Missing entries for: {forward_key} {reverse_key}")
-                if self._missing_logs == 4:
-                    logger.warning("Suppressing further missing-entry warnings.")
-            self._missing_logs += 1
-            return False
-
-        forward_pref = self._entry_preference(forward_entry)
-        reverse_pref = self._entry_preference(reverse_entry)
+        forward_pref, reverse_pref = self._pair_preferences(
+            i, j, on_missing=self._log_missing_entries
+        )
         if forward_pref is None or reverse_pref is None:
             return False
 

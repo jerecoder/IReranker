@@ -124,16 +124,6 @@ Per dataset: CSV `summary.csv` with one row per ranker & k
 
 ## BEIR results
 
-Auto-updated after each BEIR evaluation:
-- Average NDCG@10 per comparison for each ranker (scientific notation; higher is better).
-- Single per-model table: NDCG@10 per dataset, a rightmost average column (excluding datasets flagged for missing comparisons), plus trailing columns for average #inference calls and average cache hits per ranker. `n/a` when results are missing.
-- Tables are grouped by rerank matrix model (one section per model in `matrix_models` or auto-discovered models).
-- Results are split by ranker + oracle (see `oracle` in `summary.csv`; headers include the oracle label).
-- Dataset headers turn red (and include "missing comparisons") when the rerank matrix is missing at least one pairwise comparison for that dataset.
-
-
-## BEIR results
-
 Tables auto-updated after each BEIR evaluation.
 
 <!-- BEGIN_BEIR_RESULTS -->
