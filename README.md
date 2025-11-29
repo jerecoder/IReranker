@@ -45,8 +45,9 @@ RAG reranking with IR.
   - `make create_environment` (creates `IReranker` env with Python 3.10)
   - `conda activate IReranker`
 
-Useful commands inside the `IReranker` env:
-- Install project dependencies for development (lint/tests): `make requirements` (installs `.[dev]`)
+ Useful commands inside the `IReranker` env:
+- Install light dev deps for lint/tests: `make requirements` or `make requirements-test` (installs `.[tests,lint]`)
+- Install full stack (tests/lint/notebooks + BEIR extras): `make requirements-dev` (installs `.[dev,beir]`)
 - Lint/format: `make lint` / `make format`
 - Tests: `make test`
 - BEIR evaluation (uses configs): `make beir-eval`

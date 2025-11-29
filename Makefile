@@ -11,10 +11,15 @@ PYTHON_INTERPRETER ?= python
 #################################################################################
 
 
-## Install Python dependencies
-.PHONY: requirements
-requirements:
-	pip install -e ".[dev]"
+## Install Python dependencies (defaults to tests+lint)
+.PHONY: requirements requirements-test requirements-dev
+requirements: requirements-test
+
+requirements-test:
+	pip install -e ".[tests,lint]"
+
+requirements-dev:
+	pip install -e ".[dev,beir]"
 	
 
 

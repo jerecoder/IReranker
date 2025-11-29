@@ -22,8 +22,6 @@ dependencies = [
     "python-dotenv",
     "tqdm",
     "typer",
-    "beir",
-    "pyserini",
 ]
 requires-python = "~=3.10.0"
 
@@ -31,13 +29,17 @@ requires-python = "~=3.10.0"
 
 
 [project.optional-dependencies]
+tests = ["pytest"]
+lint = ["ruff==0.6.4"]
+beir = ["beir", "pyserini"]
+notebooks = ["ipython", "jupyterlab", "matplotlib", "notebook"]
 dev = [
+    "pytest",
+    "ruff==0.6.4",
     "ipython",
     "jupyterlab",
     "matplotlib",
     "notebook",
-    "pytest",
-    "ruff==0.6.4",
 ]
 
 [tool.ruff]
