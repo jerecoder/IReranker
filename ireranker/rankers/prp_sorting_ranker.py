@@ -9,10 +9,10 @@ from .registry import register_ranker
 
 
 @register_ranker(
-    "PRP Sort (Classic)",
+    "PRP Sort (classic)",
     oracle_factories=[
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
     ],
 )
 class PRPSortingRanker(Ranker):

@@ -36,6 +36,7 @@ class Oracle(ABC):
         self.seed: Optional[int] = None
         self.name: str = self.__class__.__name__
         self._comparisons: int = 0
+        self._comparison_calls: int = 0
         self._cache_hits: int = 0
         self._cache_enabled: bool = False
         self._comparison_cache: dict[tuple[int, int], bool] = {}
@@ -52,12 +53,22 @@ class Oracle(ABC):
     ) -> None:
         """Load comparison data for the given dataset, replacing any previous state."""
 
+    def _task_signature(self, task: RankingTask) -> tuple[str, tuple[str, ...]]:
+        """Signature used to invalidate the cache when switching tasks."""
+        return (task.query_id, tuple(task.candidate_ids))
+
+    def _clear_cache(self) -> None:
+        """Drop cached comparisons and any stored signature."""
+        self._comparison_cache.clear()
+        self._cache_signature = None
+
     def set_task(self, task: RankingTask) -> None:
         """Set the current ranking task for comparison queries."""
         self.current_task = task
-        if self._cache_signature != (task.query_id, tuple(task.candidate_ids)):
-            self._comparison_cache.clear()
-            self._cache_signature = (task.query_id, tuple(task.candidate_ids))
+        sig = self._task_signature(task)
+        if self._cache_signature != sig:
+            self._clear_cache()
+            self._cache_signature = sig
 
     @abstractmethod
     def sample_lt(self, i: int, j: int) -> bool:
@@ -69,33 +80,33 @@ class Oracle(ABC):
 
     def enable_cache(self, enabled: bool = True) -> None:
         self._cache_enabled = enabled
-        if not enabled:
-            self._comparison_cache.clear()
-            self._cache_signature = None
+        self._clear_cache()
 
     def reset_comparisons(self) -> None:
         self._comparisons = 0
+        self._comparison_calls = 0
         self._cache_hits = 0
-        if self._cache_enabled:
-            self._comparison_cache.clear()
-            self._cache_signature = None
+        self._clear_cache()
 
     def lt(self, i: int, j: int) -> bool:
         """Compare two candidate indices using optional caching/counting."""
         if self.current_task is None:
             return False
 
+        self._comparison_calls += 1
+        sig = self._task_signature(self.current_task)
+        if self._cache_signature != sig:
+            self._clear_cache()
+            self._cache_signature = sig
+
         if self._cache_enabled:
-            sig = (self.current_task.query_id, tuple(self.current_task.candidate_ids))
-            if self._cache_signature != sig:
-                self._comparison_cache.clear()
-                self._cache_signature = sig
             key = (i, j)
-            if key not in self._comparison_cache:
-                self._comparison_cache[key] = self.sample_lt(i, j)
-            else:
+            cached = key in self._comparison_cache
+            if cached:
                 self._cache_hits += 1
-            self._comparisons += 2
+            else:
+                self._comparison_cache[key] = self.sample_lt(i, j)
+                self._comparisons += 2
             return self._comparison_cache[key]
 
         self._comparisons += 1
@@ -104,6 +115,10 @@ class Oracle(ABC):
     @property
     def comparisons(self) -> int:
         return self._comparisons
+
+    @property
+    def comparison_calls(self) -> int:
+        return self._comparison_calls
 
     @property
     def cache_hits(self) -> int:
@@ -131,6 +146,8 @@ class MatrixOracle(Oracle):
         query_ids: Optional[Iterable[str]] = None,
         matrix_model: Optional[str] = None,
     ) -> None:
+        self._clear_cache()
+        self.current_task = None
         self._matrix = self._load_matrix(dataset, split, matrix_model=matrix_model)
         if query_ids is not None:
             allowed = {str(qid) for qid in query_ids}

@@ -1,11 +1,19 @@
-model,ranker,k,NDCG
-flan-t5-large,bm25,10,0.47694
-flan-t5-large,mohajer (ir),10,0.23382
-flan-t5-large,prp sort (classic),10,0.30135
-flan-t5-large,quick sort (classic),10,0.26565
-flan-t5-large,sliding window prp (classic),10,0.40524
-flan-t5-xl,bm25,10,0.47694
-flan-t5-xl,mohajer (ir),10,0.27138
-flan-t5-xl,prp sort (classic),10,0.29331
-flan-t5-xl,quick sort (classic),10,0.2846
-flan-t5-xl,sliding window prp (classic),10,0.36686
+model,ranker,oracle,k,NDCG
+flan-t5-large,bm25,bidirectional,10,0.44219
+flan-t5-large,mohajer (ir),sampling,10,0.23422
+flan-t5-large,mohajer (ir),bidirectional,10,0.21811
+flan-t5-large,prp sort (classic),sampling,10,0.28271
+flan-t5-large,prp sort (classic),bidirectional,10,0.33209
+flan-t5-large,quick sort (classic),bidirectional,10,0.27356
+flan-t5-large,quick sort (classic),sampling,10,0.246
+flan-t5-large,sliding window prp (classic),bidirectional,10,0.4473
+flan-t5-large,sliding window prp (classic),sampling,10,0.37838
+flan-t5-xl,bm25,bidirectional,10,0.44219
+flan-t5-xl,mohajer (ir),sampling,10,0.26023
+flan-t5-xl,mohajer (ir),bidirectional,10,0.25284
+flan-t5-xl,prp sort (classic),sampling,10,0.27455
+flan-t5-xl,prp sort (classic),bidirectional,10,0.28425
+flan-t5-xl,quick sort (classic),bidirectional,10,0.25808
+flan-t5-xl,quick sort (classic),sampling,10,0.26557
+flan-t5-xl,sliding window prp (classic),bidirectional,10,0.4282
+flan-t5-xl,sliding window prp (classic),sampling,10,0.34124

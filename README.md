@@ -140,28 +140,28 @@ Tables auto-updated after each BEIR evaluation.
 ### flan-t5-large
 | Ranker | dbpedia-entity | fiqa | scifact | trec-covid | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bm25 [bidirectional] | 0.0910 | 0.3816 | 0.7302 | 0.6026 | 0.4769 | 0.4565 | **0** | **0** |
-| mohajer (ir) [bidirectional] | 0.5494 | 0.4268 | 0.6003 | 0.7625 | 0.2338 | 0.5146 | 142824 | 14986 |
-| mohajer (ir) [sampling] | 0.5428 | 0.4293 | 0.6173 | 0.7525 | 0.2515 | 0.5187 | 67405 | **0** |
-| prp sort (classic) [bidirectional] | 0.5426 | 0.5199 | 0.7267 | 0.7667 | 0.3560 | 0.5824 | 351974 | 8001 |
-| prp sort (classic) [sampling] | 0.5537 | 0.4643 | 0.6490 | 0.7527 | 0.3014 | 0.5442 | 245000 | **0** |
-| quick sort (classic) [bidirectional] | **0.5755** | 0.4495 | 0.6469 | 0.7784 | 0.2937 | 0.5488 | 591455 | **0** |
-| quick sort (classic) [sampling] | 0.5437 | 0.4289 | 0.6204 | 0.7438 | 0.2656 | 0.5205 | 159784 | **0** |
-| sliding window prp (classic) [bidirectional] | 0.3779 | 0.4817 | **0.7455** | 0.7311 | **0.4805** | 0.5633 | 525359 | 172463 |
-| sliding window prp (classic) [sampling] | 0.5363 | **0.5258** | 0.6971 | **0.7863** | 0.4052 | **0.5901** | 286243 | **0** |
+| bm25 [bidirectional] | 0.1037 | 0.2361 | 0.6789 | 0.5947 | 0.4422 | 0.4111 | **0** | **0** |
+| mohajer (ir) [bidirectional] | 0.2439 | 0.2509 | 0.5578 | 0.7506 | 0.2181 | 0.4043 | 112227 | 15277 |
+| mohajer (ir) [sampling] | 0.2456 | 0.2545 | 0.5738 | 0.7406 | 0.2342 | 0.4097 | 67795 | **0** |
+| prp sort (classic) [bidirectional] | 0.1830 | 0.3127 | 0.6747 | 0.7530 | 0.3321 | 0.4511 | 292132 | 6198 |
+| prp sort (classic) [sampling] | 0.1843 | 0.2786 | 0.6027 | 0.7391 | 0.2827 | 0.4175 | 210427 | **0** |
+| quick sort (classic) [bidirectional] | **0.3180** | 0.2684 | 0.6008 | 0.7661 | 0.2736 | 0.4454 | 755133 | **0** |
+| quick sort (classic) [sampling] | 0.3042 | 0.2537 | 0.5763 | 0.7303 | 0.2460 | 0.4221 | 232435 | **0** |
+| sliding window prp (classic) [bidirectional] | 0.1185 | 0.2945 | **0.6925** | 0.7177 | **0.4473** | **0.4541** | 135980 | 162085 |
+| sliding window prp (classic) [sampling] | 0.1213 | **0.3182** | 0.6473 | **0.7727** | 0.3784 | 0.4476 | 284704 | **0** |
 
 ### flan-t5-xl
 | Ranker | dbpedia-entity | fiqa | scifact | trec-covid | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bm25 [bidirectional] | n/a | n/a | 0.7302 | 0.6026 | **0.4769** | 0.6033 | **0** | **0** |
-| mohajer (ir) [bidirectional] | n/a | n/a | 0.6695 | 0.7843 | 0.2714 | 0.5751 | 64961 | 6757 |
-| mohajer (ir) [sampling] | n/a | n/a | 0.6653 | 0.7702 | 0.2784 | 0.5713 | 30968 | **0** |
-| prp sort (classic) [bidirectional] | n/a | n/a | 0.7607 | **0.7959** | 0.3057 | 0.6208 | 153899 | 3174 |
-| prp sort (classic) [sampling] | n/a | n/a | 0.7134 | 0.7836 | 0.2933 | 0.5968 | 109496 | **0** |
-| quick sort (classic) [bidirectional] | n/a | n/a | 0.6615 | 0.7845 | 0.2788 | 0.5749 | 249733 | **0** |
-| quick sort (classic) [sampling] | n/a | n/a | 0.6833 | 0.7763 | 0.2846 | 0.5814 | 73002 | **0** |
-| sliding window prp (classic) [bidirectional] | n/a | n/a | **0.7679** | 0.7581 | 0.4610 | **0.6624** | 219095 | 70749 |
-| sliding window prp (classic) [sampling] | n/a | n/a | 0.7487 | 0.7881 | 0.3669 | 0.6345 | 131557 | **0** |
+| bm25 [bidirectional] | n/a | n/a | 0.6789 | 0.5947 | **0.4422** | 0.5719 | **0** | **0** |
+| mohajer (ir) [bidirectional] | n/a | n/a | 0.6216 | 0.7696 | 0.2528 | 0.5480 | 51447 | 6757 |
+| mohajer (ir) [sampling] | n/a | n/a | 0.6183 | 0.7576 | 0.2602 | 0.5454 | 30968 | **0** |
+| prp sort (classic) [bidirectional] | n/a | n/a | 0.7057 | **0.7825** | 0.2843 | 0.5908 | 147551 | 3174 |
+| prp sort (classic) [sampling] | n/a | n/a | 0.6622 | 0.7710 | 0.2746 | 0.5693 | 109496 | **0** |
+| quick sort (classic) [bidirectional] | n/a | n/a | 0.6139 | 0.7717 | 0.2581 | 0.5479 | 249733 | **0** |
+| quick sort (classic) [sampling] | n/a | n/a | 0.6344 | 0.7629 | 0.2656 | 0.5543 | 73002 | **0** |
+| sliding window prp (classic) [bidirectional] | n/a | n/a | **0.7131** | 0.7482 | 0.4282 | **0.6298** | 77597 | 70749 |
+| sliding window prp (classic) [sampling] | n/a | n/a | 0.6953 | 0.7750 | 0.3412 | 0.6039 | 131557 | **0** |
 
 Notes:
 - fiqa: skipped (missing rerank matrix)

@@ -279,7 +279,10 @@ def load_beir_dataset(
     for qid in q_ids:
         rel_map: Dict[str, int] = qrels.get(qid, {})
 
-        cand_ids = sorted(set(candidates.get(qid, [])))
+        matrix_docs = set(candidates.get(qid, []))
+        rel_docs = set(rel_map.keys())
+        # Include qrels-only docs so metrics reflect any missing comparisons.
+        cand_ids = sorted(matrix_docs | rel_docs)
         y_true = [float(rel_map.get(doc_id, 0)) for doc_id in cand_ids]
 
         tasks.append(
@@ -301,6 +304,18 @@ def load_beir_dataset(
             pair_gap_counts.append((qid, gap))
             total_pair_gaps += gap
 
+    doc_gap_counts: list[tuple[str, int]] = []
+    total_qrels_docs_missing = 0
+    for qid in q_ids:
+        rel_map = qrels.get(qid, {})
+        rel_docs = set(rel_map.keys())
+        matrix_docs = set(candidates.get(qid, []))
+        missing_qrels_docs = rel_docs - matrix_docs
+        if missing_qrels_docs:
+            count = len(missing_qrels_docs)
+            total_qrels_docs_missing += count
+            doc_gap_counts.append((qid, count))
+
     metadata = {
         "dataset": canonical,
         "split": split,
@@ -310,6 +325,9 @@ def load_beir_dataset(
         "missing_pairs_top": pair_gap_counts[:5],
         "pair_counts": {qid: pair_counts.get(qid, 0) for qid in q_ids},
         "expected_pairs": {qid: expected_pairs.get(qid, 0) for qid in q_ids},
+        "missing_qrels_docs_total": total_qrels_docs_missing,
+        "missing_qrels_docs_queries": len(doc_gap_counts),
+        "missing_qrels_docs_top": sorted(doc_gap_counts, key=lambda x: x[1], reverse=True)[:5],
     }
 
     return RankingDataset(tasks=tasks, metadata=metadata)
