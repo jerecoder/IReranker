@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import random
 import math
+import random
 
 from .oracle import MatrixOracle
 
@@ -27,9 +27,7 @@ class SamplingMatrixOracle(MatrixOracle):
         if o1 == o2:
             return o1 == -1
         one_more = int(self._rng.random() < (self.E_s - math.floor(self.E_s)))
-        return (
-            self._rng.choice([o1, o2]) + one_more * (self._rng.choice([o1, o2]))
-        ) > 0
+        return (self._rng.choice([o1, o2]) + one_more * (self._rng.choice([o1, o2]))) > 0
 
 
 class WeirdSamplingMatrixOracle(MatrixOracle):
