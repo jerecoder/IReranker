@@ -140,6 +140,8 @@ Tables auto-updated after each BEIR evaluation.
 | quick sort (classic) [sampling] | 0.3042 | 0.2537 | 0.5763 | 0.7303 | 0.2460 | 0.4221 | 232435 | **0** |
 | sliding window prp (classic) [bidirectional] | 0.1185 | 0.2945 | **0.6925** | 0.7177 | **0.4473** | **0.4541** | 135980 | 162085 |
 | sliding window prp (classic) [sampling] | 0.1213 | **0.3182** | 0.6473 | **0.7727** | 0.3784 | 0.4476 | 284704 | **0** |
+| bubble sort (classic) [bidirectional] | n/a | n/a | **0.6925** | 0.7177 | **0.4473** | **0.6192** | **95248** | 145286 |
+| bubble sort (classic) [sampling] | n/a | n/a | 0.6667 | **0.7559** | 0.4140 | 0.6122 | 520963 | **0** |
 
 ### flan-t5-xl
 | Ranker | dbpedia-entity | fiqa | scifact | trec-covid | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
@@ -153,8 +155,7 @@ Tables auto-updated after each BEIR evaluation.
 | quick sort (classic) [sampling] | n/a | n/a | 0.6344 | 0.7629 | 0.2656 | 0.5543 | 73002 | **0** |
 | sliding window prp (classic) [bidirectional] | n/a | n/a | **0.7131** | 0.7482 | 0.4282 | **0.6298** | 77597 | 70749 |
 | sliding window prp (classic) [sampling] | n/a | n/a | 0.6953 | 0.7750 | 0.3412 | 0.6039 | 131557 | **0** |
+| bubble sort (classic) [bidirectional] | n/a | n/a | **0.7131** | 0.7482 | **0.4282** | **0.6298** | **87338** | 94329 |
+| bubble sort (classic) [sampling] | n/a | n/a | 0.7057 | **0.7751** | 0.3621 | 0.6143 | 524645 | **0** |
 
-Notes:
-- fiqa: skipped (missing rerank matrix)
-- dbpedia-entity: skipped (missing rerank matrix)
 <!-- END_BEIR_RESULTS -->
