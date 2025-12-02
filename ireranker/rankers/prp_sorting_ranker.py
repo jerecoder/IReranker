@@ -2,7 +2,13 @@ from __future__ import annotations
 
 from typing import List
 
-from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
+from ireranker.oracles import (
+    BidirectionalMatrixOracle,
+    CachedSamplingMatrixOracle,
+    Oracle,
+    SamplingMatrixOracle,
+    WeirdSamplingMatrixOracle,
+)
 
 from .ranker import Ranker
 from .registry import register_ranker
@@ -11,8 +17,13 @@ from .registry import register_ranker
 @register_ranker(
     "PRP Sort (classic)",
     oracle_factories=[
-        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        (
+            "weird $(1.5)$",
+            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
+        ),
     ],
 )
 class PRPSortingRanker(Ranker):

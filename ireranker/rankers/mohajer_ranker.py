@@ -5,7 +5,13 @@ import math
 import random
 from typing import List
 
-from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
+from ireranker.oracles import (
+    BidirectionalMatrixOracle,
+    CachedSamplingMatrixOracle,
+    Oracle,
+    SamplingMatrixOracle,
+    WeirdSamplingMatrixOracle,
+)
 
 from .ranker import Ranker
 from .registry import register_ranker
@@ -15,7 +21,12 @@ from .registry import register_ranker
     "Mohajer (IR)",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+        (
+            "weird $(1.5)$",
+            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
+        ),
     ],
 )
 class MohajerRanker(Ranker):

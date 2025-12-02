@@ -1,4 +1,8 @@
-from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
+from ireranker.oracles import (
+    BidirectionalMatrixOracle,
+    SamplingMatrixOracle,
+    WeirdSamplingMatrixOracle,
+)
 from ireranker.rankers import (
     build_rankers_for_eval,
     default_oracle_for,
@@ -50,10 +54,9 @@ def test_get_ranker_uses_registered_default_oracle():
     assert isinstance(ranker.oracle, SamplingMatrixOracle)
 
 
-def test_build_rankers_for_eval_uses_eval_oracle_list():
-    rankers = build_rankers_for_eval(["mohajer (ir)"], seed=13)
-    assert len(rankers) == 2
-    labels = {r.oracle_label for r in rankers}
-    assert labels == {"sampling", "bidirectional"}
-    sampling_ranker = [r for r in rankers if r.oracle_label == "sampling"][0]
-    assert isinstance(sampling_ranker.oracle, SamplingMatrixOracle)
+def test_all_rankers_expose_sampling_and_weird_oracles():
+    for name in list_rankers():
+        if name == "bm25":
+            continue
+        labels = {r.oracle_label for r in build_rankers_for_eval([name], seed=0)}
+        assert {"sampling", "weird $(1.5)$"} <= labels

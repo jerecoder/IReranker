@@ -1,5 +1,16 @@
 from .bidirectional_matrix_oracle import BidirectionalMatrixOracle
 from .oracle import MatrixKey, Oracle
-from .sampling_matrix_oracles import SamplingMatrixOracle
+from .sampling_matrix_oracles import (
+    CachedSamplingMatrixOracle,
+    SamplingMatrixOracle,
+    WeirdSamplingMatrixOracle,
+)
 
-__all__ = ["Oracle", "MatrixKey", "BidirectionalMatrixOracle", "SamplingMatrixOracle"]
+__all__ = [
+    "Oracle",
+    "MatrixKey",
+    "BidirectionalMatrixOracle",
+    "SamplingMatrixOracle",
+    "CachedSamplingMatrixOracle",
+    "WeirdSamplingMatrixOracle",
+]
