@@ -2,7 +2,13 @@ from __future__ import annotations
 
 from typing import List
 
-from ireranker.oracles import BidirectionalMatrixOracle, Oracle, SamplingMatrixOracle
+from ireranker.oracles import (
+    BidirectionalMatrixOracle,
+    CachedSamplingMatrixOracle,
+    Oracle,
+    SamplingMatrixOracle,
+    WeirdSamplingMatrixOracle,
+)
 
 from .bubble_ranker import BubbleRanker
 from .mohajer_ranker import MohajerRanker
@@ -13,7 +19,12 @@ from .registry import register_ranker
     "Mohajer + Bubble",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+        (
+            "weird $(1.5)$",
+            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
+        ),
     ],
 )
 class MohajerBubbleRanker(BubbleRanker):
@@ -30,8 +41,9 @@ class MohajerBubbleRanker(BubbleRanker):
         # Default to top_k=10 for Mohajer+Bubble (since we only care about top-10 this may need to change for other evaluations)
         if top_k is None:
             top_k = 10
+        self.k_mult = 3
         super().__init__(oracle, seed, num_child=num_child, top_k=top_k)
-        self._mohajer = MohajerRanker(oracle=oracle, seed=seed)
+        self._mohajer = MohajerRanker(oracle=oracle, seed=seed, top_k=top_k * self.k_mult)
 
     def set_seed(self, seed: int | None) -> None:
         super().set_seed(seed)
@@ -47,7 +59,7 @@ class MohajerBubbleRanker(BubbleRanker):
 
         # Only refine the prefix where we expect the true top-k to live (top_k).
         k = self._effective_k(n)
-        prefix_size = min(n, k * 2)
+        prefix_size = min(n, k * self.k_mult)
         prefix = mohajer_order[:prefix_size]
         suffix = mohajer_order[prefix_size:]
 

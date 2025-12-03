@@ -30,8 +30,8 @@ from .registry import register_ranker
     ],
 )
 class MohajerRanker(Ranker):
-    def __init__(self, oracle: Oracle, seed: int | None = None):
-        self.k = 10
+    def __init__(self, oracle: Oracle, seed: int | None = None, top_k: int = 10):
+        self.k = top_k
         self.m = 1.0
         super().__init__(oracle, seed)
 
