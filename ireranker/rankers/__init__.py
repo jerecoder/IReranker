@@ -1,5 +1,6 @@
 # Ensure built-in rankers are registered on import
 from .bubble_ranker import BubbleRanker as BubbleRanker
+from .mohajer_bubble_ranker import MohajerBubbleRanker as MohajerBubbleRanker
 from .mohajer_ranker import MohajerRanker as MohajerRanker
 from .nothing_ranker import NothingRanker as NothingRanker
 from .prp_allpairs_ranker import PRPAllpairRanker as PRPAllpairRanker
