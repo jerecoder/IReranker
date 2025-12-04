@@ -61,6 +61,14 @@ class MohajerRanker(Ranker):
 
         return order[0]
 
+    def _get_indices(self):
+        indices = []
+        for r in range(self.k):
+            for idx in [alpha * self.k + r for alpha in range(self.n // self.k)]:
+                if idx < self.n:
+                    indices.append(idx)
+        return indices
+
     def _rank(self) -> List[int]:
         # number of groups / desired top-K
         K = min(self.k, self.n)
@@ -69,9 +77,7 @@ class MohajerRanker(Ranker):
         Q = (self.n + K - 1) // K
 
         # Mohajer benefits from randomized initial ordering; shuffle once per run.
-        shuffled_indices = list(range(self.n))
-        self._rng.shuffle(shuffled_indices)
-
+        indices = self._get_indices()
         groups: list[list[int]] = []
         champions: list[int | None] = []
 
@@ -79,7 +85,7 @@ class MohajerRanker(Ranker):
         for g in range(K):
             start = g * Q
             end = min((g + 1) * Q, self.n)
-            group_indices = shuffled_indices[start:end]
+            group_indices = indices[start:end]
             groups.append(group_indices)
 
             if group_indices:
@@ -126,7 +132,7 @@ class MohajerRanker(Ranker):
                 heapq.heappush(winner_heap, _HeapItem(self, new_champ))
 
         ranked_set = set(ranking)
-        leftovers = [idx for idx in shuffled_indices if idx not in ranked_set]
+        leftovers = [idx for idx in indices if idx not in ranked_set]
         return ranking + leftovers
 
     def _better(self, i: int, j: int) -> bool:
