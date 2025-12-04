@@ -8,8 +8,7 @@
 !/data/external/beir/bm25-runs/**
 
 # Reports (generated)
-/reports/beir-metrics/
-/reports/figures/*.png
+# (keep reports under version control)
 
 # Mac OS-specific storage files
 .DS_Store

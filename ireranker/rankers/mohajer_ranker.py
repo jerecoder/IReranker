@@ -64,7 +64,7 @@ class MohajerRanker(Ranker):
     def _get_indices(self):
         indices = []
         for r in range(self.k):
-            for idx in [alpha * self.k + r for alpha in range(self.n // self.k)]:
+            for idx in [alpha * self.k + r for alpha in range(self.n // self.k + 1)]:
                 if idx < self.n:
                     indices.append(idx)
         return indices
