@@ -110,10 +110,7 @@ class MohajerRanker(Ranker):
         # 3) repeatedly pop best champion, then refill from its home group using SELECT
         ranking: list[int] = []
 
-        for _ in range(K):
-            if not winner_heap:
-                break
-
+        while winner_heap and len(ranking) < K:
             best_item = heapq.heappop(winner_heap)
             best_item_idx = best_item.idx
             ranking.append(best_item_idx)
@@ -131,9 +128,14 @@ class MohajerRanker(Ranker):
                 champ_to_group[new_champ] = champ_og_group
                 heapq.heappush(winner_heap, _HeapItem(self, new_champ))
 
+        # Heap still encodes priorities among the remaining group champions; emit them
+        # (in heap array order) ahead of the untouched leftovers without extra oracle calls.
+        heap_tail = [item.idx for item in winner_heap]
+
         ranked_set = set(ranking)
+        ranked_set.update(heap_tail)
         leftovers = [idx for idx in indices if idx not in ranked_set]
-        return ranking + leftovers
+        return ranking + heap_tail + leftovers
 
     def _better(self, i: int, j: int) -> bool:
         full = math.floor(self.m)

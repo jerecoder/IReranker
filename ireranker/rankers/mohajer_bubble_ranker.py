@@ -41,9 +41,11 @@ class MohajerBubbleRanker(BubbleRanker):
         # Default to top_k=10 for Mohajer+Bubble (since we only care about top-10 this may need to change for other evaluations)
         if top_k is None:
             top_k = 10
-        self.k_mult = 3
+        self.k_mult = 2
         super().__init__(oracle, seed, num_child=num_child, top_k=top_k)
-        self._mohajer = MohajerRanker(oracle=oracle, seed=seed, top_k=top_k * self.k_mult)
+        # Keep Mohajer focused on top_k comparisons; we will later reuse its heap
+        # ordering to extend the prefix without further oracle calls.
+        self._mohajer = MohajerRanker(oracle=oracle, seed=seed, top_k=top_k)
 
     def set_seed(self, seed: int | None) -> None:
         super().set_seed(seed)
@@ -92,7 +94,10 @@ class MohajerBubbleRanker(BubbleRanker):
                 best_offset = self._best_in_window(ranking, start_ind, end_ind)
                 if best_offset != 0:
                     best_idx = start_ind + best_offset
-                    ranking[start_ind], ranking[best_idx] = ranking[best_idx], ranking[start_ind]
+                    ranking[start_ind], ranking[best_idx] = (
+                        ranking[best_idx],
+                        ranking[start_ind],
+                    )
                     if not is_change:
                         is_change = True
                         if (

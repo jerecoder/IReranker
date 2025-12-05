@@ -139,11 +139,11 @@ Tables auto-updated after each BEIR evaluation.
 | mohajer (ir) [bidirectional] | 0.2391 | 0.2587 | 0.5385 | 0.7574 | 0.2641 | 0.4116 | 113824 | 14300 |
 | mohajer (ir) [cached-sampling] | 0.2396 | 0.2492 | 0.5799 | 0.7611 | 0.2335 | 0.4127 | 108393 | 13245 |
 | mohajer (ir) [sampling] | 0.2412 | 0.2485 | 0.5754 | 0.7611 | 0.2445 | 0.4141 | 67660 | **0** |
-| mohajer (ir) [weird $(1.5)$] | 0.2419 | 0.2520 | 0.5648 | **0.7693** | 0.2558 | 0.4168 | 69352 | **0** |
-| mohajer + bubble [bidirectional] | 0.2233 | 0.2426 | 0.5349 | 0.7384 | 0.2004 | 0.3879 | 210008 | 34755 |
-| mohajer + bubble [cached-sampling] | 0.2243 | 0.2636 | 0.5787 | 0.7384 | 0.2367 | 0.4083 | 203921 | 61743 |
-| mohajer + bubble [sampling] | 0.2368 | 0.2757 | 0.6103 | 0.7681 | 0.2757 | 0.4333 | 166940 | **0** |
-| mohajer + bubble [weird $(1.5)$] | 0.2271 | 0.2491 | 0.5556 | 0.7575 | 0.2366 | 0.4052 | 155686 | **0** |
+| mohajer (ir) [weird $(1.5)$] | 0.2419 | 0.2520 | 0.5648 | 0.7693 | 0.2558 | 0.4168 | 69352 | **0** |
+| mohajer + bubble [bidirectional] | 0.2411 | 0.2623 | 0.5487 | 0.7556 | 0.2665 | 0.4149 | 120218 | 22681 |
+| mohajer + bubble [cached-sampling] | 0.2442 | 0.2683 | 0.5694 | 0.7437 | 0.2390 | 0.4129 | 122975 | 36135 |
+| mohajer + bubble [sampling] | 0.2457 | 0.2619 | 0.5880 | **0.7708** | 0.2570 | 0.4247 | 99555 | **0** |
+| mohajer + bubble [weird $(1.5)$] | 0.2453 | 0.2770 | 0.5746 | 0.7674 | 0.2522 | 0.4233 | 90619 | **0** |
 | prp sort (classic) [bidirectional] | 0.1830 | 0.3127 | 0.6747 | 0.7530 | 0.3321 | 0.4511 | 292132 | 6198 |
 | prp sort (classic) [cached-sampling] | 0.1879 | 0.2827 | 0.6233 | 0.7589 | 0.2949 | 0.4295 | 400552 | 11179 |
 | prp sort (classic) [sampling] | 0.1884 | 0.2770 | 0.6174 | 0.7497 | 0.2993 | 0.4263 | 210097 | **0** |
@@ -169,10 +169,10 @@ Tables auto-updated after each BEIR evaluation.
 | mohajer (ir) [cached-sampling] | n/a | n/a | 0.6181 | 0.7659 | 0.2756 | 0.5532 | 51028 | 5282 |
 | mohajer (ir) [sampling] | n/a | n/a | 0.6276 | 0.7761 | 0.2720 | 0.5586 | 30891 | **0** |
 | mohajer (ir) [weird $(1.5)$] | n/a | n/a | 0.6227 | 0.7708 | 0.2735 | 0.5556 | 31599 | **0** |
-| mohajer + bubble [bidirectional] | n/a | n/a | 0.5956 | 0.7651 | 0.2624 | 0.5410 | 95351 | 14258 |
-| mohajer + bubble [cached-sampling] | n/a | n/a | 0.6279 | 0.7813 | 0.2673 | 0.5589 | 93191 | 28441 |
-| mohajer + bubble [sampling] | n/a | n/a | 0.6394 | **0.7831** | 0.2748 | 0.5658 | 76897 | **0** |
-| mohajer + bubble [weird $(1.5)$] | n/a | n/a | 0.6362 | 0.7650 | 0.2837 | 0.5617 | 70846 | **0** |
+| mohajer + bubble [bidirectional] | n/a | n/a | 0.6188 | 0.7598 | 0.2571 | 0.5452 | 57175 | 9527 |
+| mohajer + bubble [cached-sampling] | n/a | n/a | 0.6107 | 0.7663 | 0.2772 | 0.5514 | 57912 | 16439 |
+| mohajer + bubble [sampling] | n/a | n/a | 0.6354 | **0.7855** | 0.2794 | 0.5668 | 46831 | **0** |
+| mohajer + bubble [weird $(1.5)$] | n/a | n/a | 0.6411 | 0.7776 | 0.2653 | 0.5613 | 42171 | **0** |
 | prp sort (classic) [bidirectional] | n/a | n/a | 0.7057 | 0.7825 | 0.2843 | 0.5908 | 147551 | 3174 |
 | prp sort (classic) [cached-sampling] | n/a | n/a | 0.6627 | 0.7822 | 0.2732 | 0.5727 | 207726 | 6170 |
 | prp sort (classic) [sampling] | n/a | n/a | 0.6598 | 0.7644 | 0.2824 | 0.5689 | 109384 | **0** |
