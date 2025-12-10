@@ -186,8 +186,40 @@ Tables auto-updated after each BEIR evaluation.
 | sliding window prp (classic) [sampling] | n/a | n/a | 0.6861 | 0.7791 | 0.3486 | 0.6046 | 131557 | **0** |
 | sliding window prp (classic) [weird $(1.5)$] | n/a | n/a | 0.6942 | 0.7638 | 0.3898 | 0.6159 | 131557 | **0** |
 
-Notes:
-- fiqa: skipped (missing rerank matrix)
-- dbpedia-entity: skipped (missing rerank matrix)
-<!-- END_BEIR_RESULTS -->
+## Limit Comparisons Experiment
 
+### trec-covid
+| Ranker | 100 | 500 | 1000 | 5000 | 10000 | 12000 | 15000 | 20000 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Bubble Sort (Classic) [Bidirectional] | 0.5947 | 0.5956 | 0.5964 | 0.6018 | 0.6163 | 0.6169 | 0.6214 | 0.6314 |
+| Bubble Sort (Classic) [Sampling] | 0.5959 | 0.5971 | 0.5970 | 0.5965 | 0.5957 | 0.5978 | 0.6010 | 0.6072 |
+| Mohajer (IR) [Bidirectional] | 0.4898 | 0.4960 | 0.4983 | 0.5647 | 0.6216 | 0.6548 | 0.6757 | 0.7574 |
+| Mohajer (IR) [Sampling] | 0.4955 | 0.4940 | 0.5012 | 0.5919 | 0.7201 | 0.7611 | 0.7611 | 0.7611 |
+| Mohajer + Bubble [Bidirectional] | 0.4898 | 0.4960 | 0.4975 | 0.5620 | 0.6145 | 0.6515 | 0.6701 | 0.7435 |
+| Mohajer + Bubble [Sampling] | 0.4955 | 0.4937 | 0.5010 | 0.5688 | 0.6555 | 0.6667 | 0.7297 | 0.7708 |
+| Quick Sort (Classic) [Bidirectional] | 0.5930 | 0.5930 | 0.5956 | 0.6028 | 0.6209 | 0.6255 | 0.6294 | 0.6353 |
+| Quick Sort (Classic) [Sampling] | 0.5947 | 0.5916 | 0.5985 | 0.6172 | 0.6336 | 0.6565 | 0.6725 | 0.6921 |
+
+### dbpedia-entity
+| Ranker | 100 | 500 | 1000 | 5000 | 10000 | 12000 | 15000 | 20000 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Bubble Sort (Classic) [Bidirectional] | 0.1037 | 0.1037 | 0.1037 | 0.1037 | 0.1041 | 0.1041 | 0.1045 | 0.1052 |
+| Bubble Sort (Classic) [Sampling] | 0.1037 | 0.1037 | 0.1037 | 0.1037 | 0.1037 | 0.1037 | 0.1037 | 0.1037 |
+| Mohajer (IR) [Bidirectional] | 0.1163 | 0.1163 | 0.1163 | 0.1191 | 0.1206 | 0.1220 | 0.1237 | 0.1262 |
+| Mohajer (IR) [Sampling] | 0.1166 | 0.1165 | 0.1163 | 0.1181 | 0.1211 | 0.1217 | 0.1239 | 0.1337 |
+| Mohajer + Bubble [Bidirectional] | 0.1163 | 0.1163 | 0.1164 | 0.1192 | 0.1200 | 0.1212 | 0.1234 | 0.1253 |
+| Mohajer + Bubble [Sampling] | 0.1166 | 0.1167 | 0.1161 | 0.1177 | 0.1212 | 0.1221 | 0.1232 | 0.1263 |
+| Quick Sort (Classic) [Bidirectional] | 0.1039 | 0.1037 | 0.1037 | 0.1037 | 0.1035 | 0.1035 | 0.1038 | 0.1044 |
+| Quick Sort (Classic) [Sampling] | 0.1036 | 0.1036 | 0.1036 | 0.1037 | 0.1041 | 0.1052 | 0.1055 | 0.1082 |
+
+### fiqa
+| Ranker | 100 | 500 | 1000 | 5000 | 10000 | 12000 | 15000 | 20000 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Bubble Sort (Classic) [Bidirectional] | 0.2361 | 0.2361 | 0.2361 | 0.2362 | 0.2374 | 0.2383 | 0.2383 | 0.2396 |
+| Bubble Sort (Classic) [Sampling] | 0.2363 | 0.2361 | 0.2361 | 0.2361 | 0.2360 | 0.2360 | 0.2360 | 0.2360 |
+| Mohajer (IR) [Bidirectional] | 0.1531 | 0.1535 | 0.1535 | 0.1564 | 0.1588 | 0.1598 | 0.1609 | 0.1613 |
+| Mohajer (IR) [Sampling] | 0.1531 | 0.1531 | 0.1532 | 0.1568 | 0.1598 | 0.1582 | 0.1609 | 0.1639 |
+| Mohajer + Bubble [Bidirectional] | 0.1531 | 0.1535 | 0.1535 | 0.1564 | 0.1594 | 0.1605 | 0.1616 | 0.1630 |
+| Mohajer + Bubble [Sampling] | 0.1531 | 0.1531 | 0.1531 | 0.1560 | 0.1585 | 0.1605 | 0.1614 | 0.1607 |
+| Quick Sort (Classic) [Bidirectional] | 0.2366 | 0.2366 | 0.2366 | 0.2360 | 0.2358 | 0.2358 | 0.2358 | 0.2358 |
+| Quick Sort (Classic) [Sampling] | 0.2361 | 0.2357 | 0.2359 | 0.2361 | 0.2380 | 0.2397 | 0.2389 | 0.2399 |

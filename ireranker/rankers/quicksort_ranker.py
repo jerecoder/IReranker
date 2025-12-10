@@ -4,6 +4,7 @@ from typing import List
 
 from ireranker.oracles import (
     BidirectionalMatrixOracle,
+    BudgetExceeded,
     CachedSamplingMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
@@ -45,7 +46,10 @@ class QuicksortTopKRanker(Ranker):
             return order
 
         k = self._effective_k(n)
-        self._partial_quicksort(order, 0, n - 1, k)
+        try:
+            self._partial_quicksort(order, 0, n - 1, k)
+        except BudgetExceeded:
+            return order
         return order
 
     def _effective_k(self, n: int) -> int:

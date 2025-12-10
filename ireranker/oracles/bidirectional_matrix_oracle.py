@@ -8,8 +8,10 @@ from .oracle import MatrixKey, MatrixOracle
 class BidirectionalMatrixOracle(MatrixOracle):
     """Oracle backed by rerank matrices that store (qid, doc_a, doc_b) and its reverse."""
 
-    def __init__(self, base_dir=None):
-        super().__init__(base_dir=base_dir, cache_comparisons=True)
+    def __init__(self, base_dir=None, comparison_limit: int | None = None):
+        super().__init__(
+            base_dir=base_dir, cache_comparisons=True, comparison_limit=comparison_limit
+        )
         self._missing_logs = 0
 
     def _log_missing_entries(self, forward_key: MatrixKey, reverse_key: MatrixKey) -> None:

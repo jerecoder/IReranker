@@ -15,8 +15,13 @@ class SamplingMatrixOracle(MatrixOracle):
         seed: int | None = None,
         *,
         cache_comparisons: bool = False,
+        comparison_limit: int | None = None,
     ):
-        super().__init__(base_dir=base_dir, cache_comparisons=cache_comparisons)
+        super().__init__(
+            base_dir=base_dir,
+            cache_comparisons=cache_comparisons,
+            comparison_limit=comparison_limit,
+        )
         self._rng = random.Random(seed)
         self.E_s = 1.0
 
@@ -39,8 +44,15 @@ class SamplingMatrixOracle(MatrixOracle):
 class CachedSamplingMatrixOracle(SamplingMatrixOracle):
     """Sampling oracle that reuses sampled outcomes via comparison caching."""
 
-    def __init__(self, base_dir=None, seed: int | None = None):
-        super().__init__(base_dir=base_dir, seed=seed, cache_comparisons=True)
+    def __init__(
+        self, base_dir=None, seed: int | None = None, comparison_limit: int | None = None
+    ):
+        super().__init__(
+            base_dir=base_dir,
+            seed=seed,
+            cache_comparisons=True,
+            comparison_limit=comparison_limit,
+        )
 
 
 class WeirdSamplingMatrixOracle(MatrixOracle):
@@ -51,8 +63,11 @@ class WeirdSamplingMatrixOracle(MatrixOracle):
         base_dir=None,
         seed: int | None = None,
         expected_samples: float = 1.0,
+        comparison_limit: int | None = None,
     ):
-        super().__init__(base_dir=base_dir, cache_comparisons=False)
+        super().__init__(
+            base_dir=base_dir, cache_comparisons=False, comparison_limit=comparison_limit
+        )
         self._rng = random.Random(seed)
         self.expected_samples = max(expected_samples, 0.0)
 

@@ -4,6 +4,7 @@ from typing import List
 
 from ireranker.oracles import (
     BidirectionalMatrixOracle,
+    BudgetExceeded,
     CachedSamplingMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
@@ -65,7 +66,11 @@ class MohajerBubbleRanker(BubbleRanker):
         prefix = mohajer_order[:prefix_size]
         suffix = mohajer_order[prefix_size:]
 
-        self._bubble_refine(prefix)
+        try:
+            self._bubble_refine(prefix)
+        except BudgetExceeded:
+            pass
+
         return prefix + suffix
 
     def _bubble_refine(self, ranking: List[int]) -> None:

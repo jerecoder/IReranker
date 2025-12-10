@@ -1,5 +1,5 @@
 from .bidirectional_matrix_oracle import BidirectionalMatrixOracle
-from .oracle import MatrixKey, Oracle
+from .oracle import BudgetExceeded, MatrixKey, Oracle
 from .sampling_matrix_oracles import (
     CachedSamplingMatrixOracle,
     SamplingMatrixOracle,
@@ -8,6 +8,7 @@ from .sampling_matrix_oracles import (
 
 __all__ = [
     "Oracle",
+    "BudgetExceeded",
     "MatrixKey",
     "BidirectionalMatrixOracle",
     "SamplingMatrixOracle",

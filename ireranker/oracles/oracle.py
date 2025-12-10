@@ -28,10 +28,14 @@ def _log_score_warning(msg: str) -> None:
         _SCORE_WARNINGS += 1
 
 
+class BudgetExceeded(Exception):
+    """Raised when the oracle's comparison limit is exceeded."""
+
+
 class Oracle(ABC):
     """Abstract oracle that answers pairwise comparison queries."""
 
-    def __init__(self) -> None:
+    def __init__(self, comparison_limit: int | None = None) -> None:
         self.current_task: Optional[RankingTask] = None
         self.seed: Optional[int] = None
         self.name: str = self.__class__.__name__
@@ -41,6 +45,7 @@ class Oracle(ABC):
         self._cache_enabled: bool = False
         self._comparison_cache: dict[tuple[int, int], bool] = {}
         self._cache_signature: tuple[str, tuple[str, ...]] | None = None
+        self.comparison_limit = comparison_limit
 
     @abstractmethod
     def load_dataset(
@@ -93,6 +98,9 @@ class Oracle(ABC):
         if self.current_task is None:
             return False
 
+        if self.comparison_limit is not None and self._comparisons >= self.comparison_limit:
+            raise BudgetExceeded(f"Comparison limit of {self.comparison_limit} exceeded.")
+
         self._comparison_calls += 1
         sig = self._task_signature(self.current_task)
         if self._cache_signature != sig:
@@ -131,8 +139,13 @@ MatrixKey = Tuple[str, str, str]
 class MatrixOracle(Oracle):
     """Oracle backed by rerank matrices that store (qid, doc_a, doc_b) and its reverse."""
 
-    def __init__(self, base_dir: Optional[Path] = None, cache_comparisons: bool = True):
-        super().__init__()
+    def __init__(
+        self,
+        base_dir: Optional[Path] = None,
+        cache_comparisons: bool = True,
+        comparison_limit: int | None = None,
+    ):
+        super().__init__(comparison_limit=comparison_limit)
         self._base_dir = Path(base_dir) if base_dir else None
         self._matrix: Optional[Dict[MatrixKey, Mapping[str, Any]]] = None
         self._dataset: Optional[str] = None

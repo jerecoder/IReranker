@@ -4,6 +4,7 @@ from typing import List
 
 from ireranker.oracles import (
     BidirectionalMatrixOracle,
+    BudgetExceeded,
     CachedSamplingMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
@@ -68,40 +69,43 @@ class BubbleRanker(Ranker):
         k = self._effective_k(n)
         last_start = len(ranking) - window
 
-        for i in range(k):
-            start_ind = last_start
-            end_ind = last_start + window
-            is_change = False
-            while True:
-                if start_ind < i:
-                    start_ind = i
-                if end_ind > len(ranking):
-                    end_ind = len(ranking)
-                if end_ind <= start_ind:
-                    end_ind = start_ind + 1
+        try:
+            for i in range(k):
+                start_ind = last_start
+                end_ind = last_start + window
+                is_change = False
+                while True:
+                    if start_ind < i:
+                        start_ind = i
+                    if end_ind > len(ranking):
+                        end_ind = len(ranking)
+                    if end_ind <= start_ind:
+                        end_ind = start_ind + 1
 
-                best_offset = self._best_in_window(ranking, start_ind, end_ind)
-                if best_offset != 0:
-                    best_idx = start_ind + best_offset
-                    ranking[start_ind], ranking[best_idx] = (
-                        ranking[best_idx],
-                        ranking[start_ind],
-                    )
+                    best_offset = self._best_in_window(ranking, start_ind, end_ind)
+                    if best_offset != 0:
+                        best_idx = start_ind + best_offset
+                        ranking[start_ind], ranking[best_idx] = (
+                            ranking[best_idx],
+                            ranking[start_ind],
+                        )
+                        if not is_change:
+                            is_change = True
+                            if (
+                                last_start != len(ranking) - window
+                                and best_offset == len(ranking[start_ind:end_ind]) - 1
+                            ):
+                                last_start += len(ranking[start_ind:end_ind]) - 1
+
+                    if start_ind == i:
+                        break
+
                     if not is_change:
-                        is_change = True
-                        if (
-                            last_start != len(ranking) - window
-                            and best_offset == len(ranking[start_ind:end_ind]) - 1
-                        ):
-                            last_start += len(ranking[start_ind:end_ind]) - 1
+                        last_start -= self.num_child
 
-                if start_ind == i:
-                    break
-
-                if not is_change:
-                    last_start -= self.num_child
-
-                start_ind -= self.num_child
-                end_ind -= self.num_child
+                    start_ind -= self.num_child
+                    end_ind -= self.num_child
+        except BudgetExceeded:
+            return ranking
 
         return ranking
