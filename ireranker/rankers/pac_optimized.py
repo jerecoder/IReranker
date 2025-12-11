@@ -127,6 +127,10 @@ class PACOptimizedRanker(Ranker):
             return result + remaining
 
         except BudgetExceeded:
+            if "result" in locals():
+                # If we have selected a top-k set (even if refinement failed), return it
+                remaining = [i for i in range(n) if i not in result]
+                return result + remaining
             return list(range(n))
 
     def _best_in_window(self, order: List[int], start: int, end: int) -> int:

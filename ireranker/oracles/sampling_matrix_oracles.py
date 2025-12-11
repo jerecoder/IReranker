@@ -16,11 +16,13 @@ class SamplingMatrixOracle(MatrixOracle):
         *,
         cache_comparisons: bool = False,
         comparison_limit: int | None = None,
+        comparison_limit_per_task: bool = False,
     ):
         super().__init__(
             base_dir=base_dir,
             cache_comparisons=cache_comparisons,
             comparison_limit=comparison_limit,
+            comparison_limit_per_task=comparison_limit_per_task,
         )
         self._rng = random.Random(seed)
         self.E_s = 1.0
@@ -45,13 +47,18 @@ class CachedSamplingMatrixOracle(SamplingMatrixOracle):
     """Sampling oracle that reuses sampled outcomes via comparison caching."""
 
     def __init__(
-        self, base_dir=None, seed: int | None = None, comparison_limit: int | None = None
+        self,
+        base_dir=None,
+        seed: int | None = None,
+        comparison_limit: int | None = None,
+        comparison_limit_per_task: bool = False,
     ):
         super().__init__(
             base_dir=base_dir,
             seed=seed,
             cache_comparisons=True,
             comparison_limit=comparison_limit,
+            comparison_limit_per_task=comparison_limit_per_task,
         )
 
 

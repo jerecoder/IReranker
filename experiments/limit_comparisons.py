@@ -9,7 +9,7 @@ from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
 
 def run_experiment():
     datasets = ["trec-covid", "dbpedia-entity", "fiqa"]
-    budgets = [100, 500, 1000, 5000, 10000, 12000, 15000, 20000]
+    budgets = [50, 100, 150, 200, 250, 300, 500]
     seeds = [42]
     matrix_model = "flan-t5-large"
     k_values = [10]
@@ -17,7 +17,7 @@ def run_experiment():
     results = []
     output_path = Path("reports/limit_comparisons_experiment.csv")
 
-    ranker_names = ["Mohajer (IR)", "Bubble Sort (Classic)", "Quick Sort (Classic)", "Mohajer + Bubble"]
+    ranker_names = ["Mohajer (IR)", "Bubble Sort (Classic)", "Quick Sort (Classic)", "Mohajer + Bubble", "PAC + Bubble"]
     
     # Check if results exist to avoid re-running
     if output_path.exists():
@@ -49,7 +49,7 @@ def run_experiment():
                     # 1. Bidirectional Oracle
                     for budget in budgets:
                         print(f"  {ranker_name}, Bidirectional Oracle, Budget: {budget}")
-                        oracle = BidirectionalMatrixOracle(comparison_limit=budget)
+                        oracle = BidirectionalMatrixOracle(comparison_limit=budget, comparison_limit_per_task=True)
                         ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
                         ranker.set_dataset(
                             dataset_name,
@@ -71,7 +71,7 @@ def run_experiment():
                     # 2. Sampling Oracle
                     for budget in budgets:
                         print(f"  {ranker_name}, Sampling Oracle, Budget: {budget}")
-                        oracle = SamplingMatrixOracle(seed=seed, comparison_limit=budget)
+                        oracle = SamplingMatrixOracle(seed=seed, comparison_limit=budget, comparison_limit_per_task=True)
                         ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
                         ranker.set_dataset(
                             dataset_name,
@@ -134,14 +134,37 @@ def run_experiment():
             new_section.append(divider_row)
             
             # Data Rows
+            # Data Rows
+            # Find max per column (excluding 'Ranker')
+            max_per_col = {}
+            for col in columns:
+                if col == "Ranker":
+                    continue
+                # pivot_df[col] might handle types weirdly if mixed. 
+                # Values are floats.
+                max_per_col[col] = pivot_df[col].max()
+
             for _, row in pivot_df.iterrows():
                 # Format floats to 4 decimal places if possible
                 formatted_values = []
-                for val in row.values:
+                for val, col_name in zip(row.values, columns):
+                    if col_name == "Ranker":
+                         formatted_values.append(str(val))
+                         continue
+
+                    is_max = False
                     if isinstance(val, (float, np.floating)):
-                        formatted_values.append(f"{val:.4f}")
+                         if np.isclose(val, max_per_col[col_name]):
+                             is_max = True
+                         str_val = f"{val:.4f}"
                     else:
-                        formatted_values.append(str(val))
+                         if val == max_per_col[col_name]:
+                             is_max = True
+                         str_val = str(val)
+                    
+                    if is_max:
+                        str_val = f"**{str_val}**"
+                    formatted_values.append(str_val)
                 row_str = "| " + " | ".join(formatted_values) + " |"
                 new_section.append(row_str)
         

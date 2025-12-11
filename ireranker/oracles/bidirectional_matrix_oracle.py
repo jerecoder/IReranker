@@ -8,9 +8,17 @@ from .oracle import MatrixKey, MatrixOracle
 class BidirectionalMatrixOracle(MatrixOracle):
     """Oracle backed by rerank matrices that store (qid, doc_a, doc_b) and its reverse."""
 
-    def __init__(self, base_dir=None, comparison_limit: int | None = None):
+    def __init__(
+        self,
+        base_dir=None,
+        comparison_limit: int | None = None,
+        comparison_limit_per_task: bool = False,
+    ):
         super().__init__(
-            base_dir=base_dir, cache_comparisons=True, comparison_limit=comparison_limit
+            base_dir=base_dir,
+            cache_comparisons=True,
+            comparison_limit=comparison_limit,
+            comparison_limit_per_task=comparison_limit_per_task,
         )
         self._missing_logs = 0
 

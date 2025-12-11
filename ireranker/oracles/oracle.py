@@ -35,7 +35,11 @@ class BudgetExceeded(Exception):
 class Oracle(ABC):
     """Abstract oracle that answers pairwise comparison queries."""
 
-    def __init__(self, comparison_limit: int | None = None) -> None:
+    def __init__(
+        self,
+        comparison_limit: int | None = None,
+        comparison_limit_per_task: bool = False,
+    ) -> None:
         self.current_task: Optional[RankingTask] = None
         self.seed: Optional[int] = None
         self.name: str = self.__class__.__name__
@@ -46,6 +50,8 @@ class Oracle(ABC):
         self._comparison_cache: dict[tuple[int, int], bool] = {}
         self._cache_signature: tuple[str, tuple[str, ...]] | None = None
         self.comparison_limit = comparison_limit
+        self.comparison_limit_per_task = comparison_limit_per_task
+        self._task_comparisons = 0
 
     @abstractmethod
     def load_dataset(
@@ -69,7 +75,10 @@ class Oracle(ABC):
 
     def set_task(self, task: RankingTask) -> None:
         """Set the current ranking task for comparison queries."""
+        if self.current_task is task:
+            return
         self.current_task = task
+        self._task_comparisons = 0
         sig = self._task_signature(task)
         if self._cache_signature != sig:
             self._clear_cache()
@@ -98,8 +107,12 @@ class Oracle(ABC):
         if self.current_task is None:
             return False
 
-        if self.comparison_limit is not None and self._comparisons >= self.comparison_limit:
-            raise BudgetExceeded(f"Comparison limit of {self.comparison_limit} exceeded.")
+        if self.comparison_limit is not None:
+            current_comparisons = (
+                self._task_comparisons if self.comparison_limit_per_task else self._comparisons
+            )
+            if current_comparisons >= self.comparison_limit:
+                raise BudgetExceeded(f"Comparison limit of {self.comparison_limit} exceeded.")
 
         self._comparison_calls += 1
         sig = self._task_signature(self.current_task)
@@ -115,9 +128,11 @@ class Oracle(ABC):
             else:
                 self._comparison_cache[key] = self.sample_lt(i, j)
                 self._comparisons += 2
+                self._task_comparisons += 2
             return self._comparison_cache[key]
 
         self._comparisons += 1
+        self._task_comparisons += 1
         return self.sample_lt(i, j)
 
     @property
@@ -144,8 +159,12 @@ class MatrixOracle(Oracle):
         base_dir: Optional[Path] = None,
         cache_comparisons: bool = True,
         comparison_limit: int | None = None,
+        comparison_limit_per_task: bool = False,
     ):
-        super().__init__(comparison_limit=comparison_limit)
+        super().__init__(
+            comparison_limit=comparison_limit,
+            comparison_limit_per_task=comparison_limit_per_task,
+        )
         self._base_dir = Path(base_dir) if base_dir else None
         self._matrix: Optional[Dict[MatrixKey, Mapping[str, Any]]] = None
         self._dataset: Optional[str] = None

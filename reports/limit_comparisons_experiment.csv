@@ -1,193 +1,211 @@
 Ranker,Dataset,Comparisons,NDCG@10,Budget
-Mohajer (IR) [Bidirectional],trec-covid,100,0.48983,100
-Mohajer (IR) [Bidirectional],trec-covid,500,0.49601,500
-Mohajer (IR) [Bidirectional],trec-covid,1000,0.49832,1000
-Mohajer (IR) [Bidirectional],trec-covid,5000,0.56469,5000
-Mohajer (IR) [Bidirectional],trec-covid,10000,0.62155,10000
-Mohajer (IR) [Bidirectional],trec-covid,12000,0.65477,12000
-Mohajer (IR) [Bidirectional],trec-covid,15000,0.67572,15000
-Mohajer (IR) [Bidirectional],trec-covid,19882,0.75741,20000
-Mohajer (IR) [Sampling],trec-covid,100,0.49551,100
-Mohajer (IR) [Sampling],trec-covid,500,0.49402,500
-Mohajer (IR) [Sampling],trec-covid,1000,0.50124,1000
-Mohajer (IR) [Sampling],trec-covid,5000,0.59193,5000
-Mohajer (IR) [Sampling],trec-covid,10000,0.72007,10000
-Mohajer (IR) [Sampling],trec-covid,11637,0.76106,12000
-Mohajer (IR) [Sampling],trec-covid,11637,0.76106,15000
-Mohajer (IR) [Sampling],trec-covid,11637,0.76106,20000
-Bubble Sort (Classic) [Bidirectional],trec-covid,100,0.59469,100
-Bubble Sort (Classic) [Bidirectional],trec-covid,500,0.59557,500
-Bubble Sort (Classic) [Bidirectional],trec-covid,1000,0.59639,1000
-Bubble Sort (Classic) [Bidirectional],trec-covid,5000,0.60183,5000
-Bubble Sort (Classic) [Bidirectional],trec-covid,10000,0.61626,10000
-Bubble Sort (Classic) [Bidirectional],trec-covid,12000,0.61689,12000
-Bubble Sort (Classic) [Bidirectional],trec-covid,15000,0.62143,15000
-Bubble Sort (Classic) [Bidirectional],trec-covid,20000,0.63141,20000
-Bubble Sort (Classic) [Sampling],trec-covid,100,0.59595,100
-Bubble Sort (Classic) [Sampling],trec-covid,500,0.59709,500
-Bubble Sort (Classic) [Sampling],trec-covid,1000,0.59704,1000
-Bubble Sort (Classic) [Sampling],trec-covid,5000,0.59648,5000
-Bubble Sort (Classic) [Sampling],trec-covid,10000,0.59569,10000
-Bubble Sort (Classic) [Sampling],trec-covid,12000,0.59775,12000
-Bubble Sort (Classic) [Sampling],trec-covid,15000,0.60097,15000
-Bubble Sort (Classic) [Sampling],trec-covid,20000,0.6072,20000
-Quick Sort (Classic) [Bidirectional],trec-covid,100,0.59302,100
-Quick Sort (Classic) [Bidirectional],trec-covid,500,0.59302,500
-Quick Sort (Classic) [Bidirectional],trec-covid,1000,0.59558,1000
-Quick Sort (Classic) [Bidirectional],trec-covid,5000,0.6028,5000
-Quick Sort (Classic) [Bidirectional],trec-covid,10000,0.62094,10000
-Quick Sort (Classic) [Bidirectional],trec-covid,12000,0.62551,12000
-Quick Sort (Classic) [Bidirectional],trec-covid,15000,0.62938,15000
-Quick Sort (Classic) [Bidirectional],trec-covid,20000,0.63534,20000
-Quick Sort (Classic) [Sampling],trec-covid,100,0.59469,100
-Quick Sort (Classic) [Sampling],trec-covid,500,0.59158,500
-Quick Sort (Classic) [Sampling],trec-covid,1000,0.59853,1000
-Quick Sort (Classic) [Sampling],trec-covid,5000,0.6172,5000
-Quick Sort (Classic) [Sampling],trec-covid,10000,0.63362,10000
-Quick Sort (Classic) [Sampling],trec-covid,12000,0.65653,12000
-Quick Sort (Classic) [Sampling],trec-covid,15000,0.67254,15000
-Quick Sort (Classic) [Sampling],trec-covid,20000,0.69212,20000
-Mohajer + Bubble [Bidirectional],trec-covid,100,0.48983,100
-Mohajer + Bubble [Bidirectional],trec-covid,500,0.49601,500
-Mohajer + Bubble [Bidirectional],trec-covid,1000,0.49745,1000
-Mohajer + Bubble [Bidirectional],trec-covid,5000,0.56197,5000
-Mohajer + Bubble [Bidirectional],trec-covid,10000,0.61452,10000
-Mohajer + Bubble [Bidirectional],trec-covid,12000,0.65148,12000
-Mohajer + Bubble [Bidirectional],trec-covid,15000,0.6701,15000
-Mohajer + Bubble [Bidirectional],trec-covid,20000,0.74351,20000
-Mohajer + Bubble [Sampling],trec-covid,100,0.49551,100
-Mohajer + Bubble [Sampling],trec-covid,500,0.49368,500
-Mohajer + Bubble [Sampling],trec-covid,1000,0.50097,1000
-Mohajer + Bubble [Sampling],trec-covid,5000,0.56876,5000
-Mohajer + Bubble [Sampling],trec-covid,10000,0.65552,10000
-Mohajer + Bubble [Sampling],trec-covid,12000,0.66669,12000
-Mohajer + Bubble [Sampling],trec-covid,15000,0.72968,15000
-Mohajer + Bubble [Sampling],trec-covid,17666,0.7708,20000
-Mohajer (IR) [Bidirectional],dbpedia-entity,100,0.11627,100
-Mohajer (IR) [Bidirectional],dbpedia-entity,500,0.11633,500
-Mohajer (IR) [Bidirectional],dbpedia-entity,1000,0.11626,1000
-Mohajer (IR) [Bidirectional],dbpedia-entity,5000,0.11905,5000
-Mohajer (IR) [Bidirectional],dbpedia-entity,10000,0.12057,10000
-Mohajer (IR) [Bidirectional],dbpedia-entity,12000,0.12196,12000
-Mohajer (IR) [Bidirectional],dbpedia-entity,15000,0.12373,15000
-Mohajer (IR) [Bidirectional],dbpedia-entity,20000,0.12622,20000
-Mohajer (IR) [Sampling],dbpedia-entity,100,0.11659,100
-Mohajer (IR) [Sampling],dbpedia-entity,500,0.11649,500
-Mohajer (IR) [Sampling],dbpedia-entity,1000,0.11635,1000
-Mohajer (IR) [Sampling],dbpedia-entity,5000,0.1181,5000
-Mohajer (IR) [Sampling],dbpedia-entity,10000,0.12115,10000
-Mohajer (IR) [Sampling],dbpedia-entity,12000,0.12168,12000
-Mohajer (IR) [Sampling],dbpedia-entity,15000,0.12386,15000
-Mohajer (IR) [Sampling],dbpedia-entity,20000,0.13372,20000
-Bubble Sort (Classic) [Bidirectional],dbpedia-entity,100,0.10372,100
-Bubble Sort (Classic) [Bidirectional],dbpedia-entity,500,0.10372,500
-Bubble Sort (Classic) [Bidirectional],dbpedia-entity,1000,0.10372,1000
-Bubble Sort (Classic) [Bidirectional],dbpedia-entity,5000,0.10369,5000
-Bubble Sort (Classic) [Bidirectional],dbpedia-entity,10000,0.10413,10000
-Bubble Sort (Classic) [Bidirectional],dbpedia-entity,12000,0.1041,12000
-Bubble Sort (Classic) [Bidirectional],dbpedia-entity,15000,0.10454,15000
-Bubble Sort (Classic) [Bidirectional],dbpedia-entity,20000,0.10525,20000
-Bubble Sort (Classic) [Sampling],dbpedia-entity,100,0.10371,100
-Bubble Sort (Classic) [Sampling],dbpedia-entity,500,0.10371,500
-Bubble Sort (Classic) [Sampling],dbpedia-entity,1000,0.10371,1000
-Bubble Sort (Classic) [Sampling],dbpedia-entity,5000,0.10371,5000
-Bubble Sort (Classic) [Sampling],dbpedia-entity,10000,0.10371,10000
-Bubble Sort (Classic) [Sampling],dbpedia-entity,12000,0.10371,12000
-Bubble Sort (Classic) [Sampling],dbpedia-entity,15000,0.10374,15000
-Bubble Sort (Classic) [Sampling],dbpedia-entity,20000,0.10374,20000
-Quick Sort (Classic) [Bidirectional],dbpedia-entity,100,0.10388,100
-Quick Sort (Classic) [Bidirectional],dbpedia-entity,500,0.1037,500
-Quick Sort (Classic) [Bidirectional],dbpedia-entity,1000,0.1037,1000
-Quick Sort (Classic) [Bidirectional],dbpedia-entity,5000,0.1037,5000
-Quick Sort (Classic) [Bidirectional],dbpedia-entity,10000,0.1035,10000
-Quick Sort (Classic) [Bidirectional],dbpedia-entity,12000,0.1035,12000
-Quick Sort (Classic) [Bidirectional],dbpedia-entity,15000,0.10379,15000
-Quick Sort (Classic) [Bidirectional],dbpedia-entity,20000,0.10443,20000
-Quick Sort (Classic) [Sampling],dbpedia-entity,100,0.10356,100
-Quick Sort (Classic) [Sampling],dbpedia-entity,500,0.10356,500
-Quick Sort (Classic) [Sampling],dbpedia-entity,1000,0.10356,1000
-Quick Sort (Classic) [Sampling],dbpedia-entity,5000,0.10367,5000
-Quick Sort (Classic) [Sampling],dbpedia-entity,10000,0.10413,10000
-Quick Sort (Classic) [Sampling],dbpedia-entity,12000,0.10516,12000
-Quick Sort (Classic) [Sampling],dbpedia-entity,15000,0.10546,15000
-Quick Sort (Classic) [Sampling],dbpedia-entity,20000,0.10822,20000
-Mohajer + Bubble [Bidirectional],dbpedia-entity,100,0.11627,100
-Mohajer + Bubble [Bidirectional],dbpedia-entity,500,0.11633,500
-Mohajer + Bubble [Bidirectional],dbpedia-entity,1000,0.11637,1000
-Mohajer + Bubble [Bidirectional],dbpedia-entity,5000,0.11917,5000
-Mohajer + Bubble [Bidirectional],dbpedia-entity,10000,0.11995,10000
-Mohajer + Bubble [Bidirectional],dbpedia-entity,12000,0.12116,12000
-Mohajer + Bubble [Bidirectional],dbpedia-entity,15000,0.12335,15000
-Mohajer + Bubble [Bidirectional],dbpedia-entity,20000,0.12534,20000
-Mohajer + Bubble [Sampling],dbpedia-entity,100,0.11659,100
-Mohajer + Bubble [Sampling],dbpedia-entity,500,0.11665,500
-Mohajer + Bubble [Sampling],dbpedia-entity,1000,0.11611,1000
-Mohajer + Bubble [Sampling],dbpedia-entity,5000,0.11768,5000
-Mohajer + Bubble [Sampling],dbpedia-entity,10000,0.12122,10000
-Mohajer + Bubble [Sampling],dbpedia-entity,12000,0.12205,12000
-Mohajer + Bubble [Sampling],dbpedia-entity,15000,0.12319,15000
-Mohajer + Bubble [Sampling],dbpedia-entity,20000,0.12634,20000
-Mohajer (IR) [Bidirectional],fiqa,100,0.15312,100
-Mohajer (IR) [Bidirectional],fiqa,500,0.15353,500
-Mohajer (IR) [Bidirectional],fiqa,1000,0.15348,1000
-Mohajer (IR) [Bidirectional],fiqa,5000,0.15639,5000
-Mohajer (IR) [Bidirectional],fiqa,10000,0.15878,10000
-Mohajer (IR) [Bidirectional],fiqa,12000,0.15979,12000
-Mohajer (IR) [Bidirectional],fiqa,15000,0.16086,15000
-Mohajer (IR) [Bidirectional],fiqa,20000,0.16133,20000
-Mohajer (IR) [Sampling],fiqa,100,0.15312,100
-Mohajer (IR) [Sampling],fiqa,500,0.15312,500
-Mohajer (IR) [Sampling],fiqa,1000,0.15318,1000
-Mohajer (IR) [Sampling],fiqa,5000,0.15679,5000
-Mohajer (IR) [Sampling],fiqa,10000,0.15982,10000
-Mohajer (IR) [Sampling],fiqa,12000,0.15819,12000
-Mohajer (IR) [Sampling],fiqa,15000,0.16089,15000
-Mohajer (IR) [Sampling],fiqa,20000,0.16387,20000
-Bubble Sort (Classic) [Bidirectional],fiqa,100,0.23607,100
-Bubble Sort (Classic) [Bidirectional],fiqa,500,0.23613,500
-Bubble Sort (Classic) [Bidirectional],fiqa,1000,0.23613,1000
-Bubble Sort (Classic) [Bidirectional],fiqa,5000,0.23616,5000
-Bubble Sort (Classic) [Bidirectional],fiqa,10000,0.23742,10000
-Bubble Sort (Classic) [Bidirectional],fiqa,12000,0.2383,12000
-Bubble Sort (Classic) [Bidirectional],fiqa,15000,0.23833,15000
-Bubble Sort (Classic) [Bidirectional],fiqa,20000,0.23959,20000
-Bubble Sort (Classic) [Sampling],fiqa,100,0.23626,100
-Bubble Sort (Classic) [Sampling],fiqa,500,0.23607,500
-Bubble Sort (Classic) [Sampling],fiqa,1000,0.23607,1000
-Bubble Sort (Classic) [Sampling],fiqa,5000,0.23607,5000
-Bubble Sort (Classic) [Sampling],fiqa,10000,0.23604,10000
-Bubble Sort (Classic) [Sampling],fiqa,12000,0.23604,12000
-Bubble Sort (Classic) [Sampling],fiqa,15000,0.23604,15000
-Bubble Sort (Classic) [Sampling],fiqa,20000,0.23604,20000
-Quick Sort (Classic) [Bidirectional],fiqa,100,0.23661,100
-Quick Sort (Classic) [Bidirectional],fiqa,500,0.23661,500
-Quick Sort (Classic) [Bidirectional],fiqa,1000,0.23661,1000
-Quick Sort (Classic) [Bidirectional],fiqa,5000,0.23597,5000
-Quick Sort (Classic) [Bidirectional],fiqa,10000,0.23579,10000
-Quick Sort (Classic) [Bidirectional],fiqa,12000,0.23579,12000
-Quick Sort (Classic) [Bidirectional],fiqa,15000,0.23579,15000
-Quick Sort (Classic) [Bidirectional],fiqa,20000,0.23579,20000
-Quick Sort (Classic) [Sampling],fiqa,100,0.23613,100
-Quick Sort (Classic) [Sampling],fiqa,500,0.23566,500
-Quick Sort (Classic) [Sampling],fiqa,1000,0.23594,1000
-Quick Sort (Classic) [Sampling],fiqa,5000,0.23607,5000
-Quick Sort (Classic) [Sampling],fiqa,10000,0.23803,10000
-Quick Sort (Classic) [Sampling],fiqa,12000,0.23973,12000
-Quick Sort (Classic) [Sampling],fiqa,15000,0.23885,15000
-Quick Sort (Classic) [Sampling],fiqa,20000,0.2399,20000
-Mohajer + Bubble [Bidirectional],fiqa,100,0.15312,100
-Mohajer + Bubble [Bidirectional],fiqa,500,0.15353,500
-Mohajer + Bubble [Bidirectional],fiqa,1000,0.15353,1000
-Mohajer + Bubble [Bidirectional],fiqa,5000,0.15639,5000
-Mohajer + Bubble [Bidirectional],fiqa,10000,0.15936,10000
-Mohajer + Bubble [Bidirectional],fiqa,12000,0.16049,12000
-Mohajer + Bubble [Bidirectional],fiqa,15000,0.16162,15000
-Mohajer + Bubble [Bidirectional],fiqa,20000,0.16303,20000
-Mohajer + Bubble [Sampling],fiqa,100,0.15312,100
-Mohajer + Bubble [Sampling],fiqa,500,0.15312,500
-Mohajer + Bubble [Sampling],fiqa,1000,0.15312,1000
-Mohajer + Bubble [Sampling],fiqa,5000,0.15599,5000
-Mohajer + Bubble [Sampling],fiqa,10000,0.15853,10000
-Mohajer + Bubble [Sampling],fiqa,12000,0.16053,12000
-Mohajer + Bubble [Sampling],fiqa,15000,0.16136,15000
-Mohajer + Bubble [Sampling],fiqa,20000,0.16069,20000
+Mohajer (IR) [Bidirectional],trec-covid,2500,0.48983,50
+Mohajer (IR) [Bidirectional],trec-covid,5000,0.48983,100
+Mohajer (IR) [Bidirectional],trec-covid,7500,0.48983,150
+Mohajer (IR) [Bidirectional],trec-covid,10000,0.73588,200
+Mohajer (IR) [Bidirectional],trec-covid,12500,0.72847,250
+Mohajer (IR) [Bidirectional],trec-covid,15000,0.73333,300
+Mohajer (IR) [Bidirectional],trec-covid,19882,0.75741,500
+Mohajer (IR) [Sampling],trec-covid,2500,0.48983,50
+Mohajer (IR) [Sampling],trec-covid,5000,0.72968,100
+Mohajer (IR) [Sampling],trec-covid,7500,0.7503,150
+Mohajer (IR) [Sampling],trec-covid,10000,0.73284,200
+Mohajer (IR) [Sampling],trec-covid,11637,0.76106,250
+Mohajer (IR) [Sampling],trec-covid,11637,0.76106,300
+Mohajer (IR) [Sampling],trec-covid,11637,0.76106,500
+Bubble Sort (Classic) [Bidirectional],trec-covid,2500,0.59469,50
+Bubble Sort (Classic) [Bidirectional],trec-covid,5000,0.59469,100
+Bubble Sort (Classic) [Bidirectional],trec-covid,7500,0.59469,150
+Bubble Sort (Classic) [Bidirectional],trec-covid,10000,0.63795,200
+Bubble Sort (Classic) [Bidirectional],trec-covid,12500,0.63795,250
+Bubble Sort (Classic) [Bidirectional],trec-covid,15000,0.6411,300
+Bubble Sort (Classic) [Bidirectional],trec-covid,24866,0.6806,500
+Bubble Sort (Classic) [Sampling],trec-covid,2500,0.59469,50
+Bubble Sort (Classic) [Sampling],trec-covid,5000,0.63501,100
+Bubble Sort (Classic) [Sampling],trec-covid,7500,0.64544,150
+Bubble Sort (Classic) [Sampling],trec-covid,10000,0.67675,200
+Bubble Sort (Classic) [Sampling],trec-covid,12500,0.66676,250
+Bubble Sort (Classic) [Sampling],trec-covid,15000,0.7054,300
+Bubble Sort (Classic) [Sampling],trec-covid,25000,0.72033,500
+Quick Sort (Classic) [Bidirectional],trec-covid,2500,0.64708,50
+Quick Sort (Classic) [Bidirectional],trec-covid,5000,0.66016,100
+Quick Sort (Classic) [Bidirectional],trec-covid,7500,0.67051,150
+Quick Sort (Classic) [Bidirectional],trec-covid,10000,0.67519,200
+Quick Sort (Classic) [Bidirectional],trec-covid,12500,0.67222,250
+Quick Sort (Classic) [Bidirectional],trec-covid,15000,0.67443,300
+Quick Sort (Classic) [Bidirectional],trec-covid,25000,0.6897,500
+Quick Sort (Classic) [Sampling],trec-covid,2500,0.63378,50
+Quick Sort (Classic) [Sampling],trec-covid,5000,0.6466,100
+Quick Sort (Classic) [Sampling],trec-covid,7500,0.64459,150
+Quick Sort (Classic) [Sampling],trec-covid,10000,0.65747,200
+Quick Sort (Classic) [Sampling],trec-covid,12500,0.66486,250
+Quick Sort (Classic) [Sampling],trec-covid,15000,0.67908,300
+Quick Sort (Classic) [Sampling],trec-covid,25000,0.71669,500
+Mohajer + Bubble [Bidirectional],trec-covid,2500,0.48983,50
+Mohajer + Bubble [Bidirectional],trec-covid,5000,0.48983,100
+Mohajer + Bubble [Bidirectional],trec-covid,7500,0.48983,150
+Mohajer + Bubble [Bidirectional],trec-covid,10000,0.73588,200
+Mohajer + Bubble [Bidirectional],trec-covid,12500,0.72847,250
+Mohajer + Bubble [Bidirectional],trec-covid,15000,0.73333,300
+Mohajer + Bubble [Bidirectional],trec-covid,21046,0.75556,500
+Mohajer + Bubble [Sampling],trec-covid,2500,0.48983,50
+Mohajer + Bubble [Sampling],trec-covid,5000,0.72968,100
+Mohajer + Bubble [Sampling],trec-covid,7500,0.7503,150
+Mohajer + Bubble [Sampling],trec-covid,10000,0.73284,200
+Mohajer + Bubble [Sampling],trec-covid,12500,0.7577,250
+Mohajer + Bubble [Sampling],trec-covid,14971,0.76329,300
+Mohajer + Bubble [Sampling],trec-covid,17666,0.7708,500
+PAC + Bubble [Bidirectional],trec-covid,2500,0.59469,50
+PAC + Bubble [Bidirectional],trec-covid,5000,0.59469,100
+PAC + Bubble [Bidirectional],trec-covid,7500,0.59469,150
+PAC + Bubble [Bidirectional],trec-covid,10000,0.59469,200
+PAC + Bubble [Bidirectional],trec-covid,12500,0.59469,250
+PAC + Bubble [Bidirectional],trec-covid,15000,0.65203,300
+PAC + Bubble [Bidirectional],trec-covid,16402,0.67287,500
+PAC + Bubble [Sampling],trec-covid,2500,0.59469,50
+PAC + Bubble [Sampling],trec-covid,5000,0.59469,100
+PAC + Bubble [Sampling],trec-covid,7500,0.67857,150
+PAC + Bubble [Sampling],trec-covid,9243,0.7002,200
+PAC + Bubble [Sampling],trec-covid,9243,0.7002,250
+PAC + Bubble [Sampling],trec-covid,9243,0.7002,300
+PAC + Bubble [Sampling],trec-covid,9243,0.7002,500
+Mohajer (IR) [Bidirectional],dbpedia-entity,20000,0.11565,50
+Mohajer (IR) [Bidirectional],dbpedia-entity,40000,0.11567,100
+Mohajer (IR) [Bidirectional],dbpedia-entity,59958,0.11567,150
+Mohajer (IR) [Bidirectional],dbpedia-entity,79908,0.20966,200
+Mohajer (IR) [Bidirectional],dbpedia-entity,99858,0.21982,250
+Mohajer (IR) [Bidirectional],dbpedia-entity,119808,0.23334,300
+Mohajer (IR) [Bidirectional],dbpedia-entity,149676,0.2391,500
+Mohajer (IR) [Sampling],dbpedia-entity,20000,0.11519,50
+Mohajer (IR) [Sampling],dbpedia-entity,39977,0.2173,100
+Mohajer (IR) [Sampling],dbpedia-entity,59927,0.23266,150
+Mohajer (IR) [Sampling],dbpedia-entity,79876,0.23715,200
+Mohajer (IR) [Sampling],dbpedia-entity,94595,0.24307,250
+Mohajer (IR) [Sampling],dbpedia-entity,94786,0.24124,300
+Mohajer (IR) [Sampling],dbpedia-entity,94786,0.24124,500
+Bubble Sort (Classic) [Bidirectional],dbpedia-entity,19994,0.10372,50
+Bubble Sort (Classic) [Bidirectional],dbpedia-entity,39944,0.10372,100
+Bubble Sort (Classic) [Bidirectional],dbpedia-entity,59894,0.10372,150
+Bubble Sort (Classic) [Bidirectional],dbpedia-entity,79826,0.11338,200
+Bubble Sort (Classic) [Bidirectional],dbpedia-entity,96342,0.11384,250
+Bubble Sort (Classic) [Bidirectional],dbpedia-entity,105878,0.11574,300
+Bubble Sort (Classic) [Bidirectional],dbpedia-entity,116698,0.11783,500
+Bubble Sort (Classic) [Sampling],dbpedia-entity,19981,0.10372,50
+Bubble Sort (Classic) [Sampling],dbpedia-entity,39926,0.11477,100
+Bubble Sort (Classic) [Sampling],dbpedia-entity,59646,0.11441,150
+Bubble Sort (Classic) [Sampling],dbpedia-entity,79186,0.11721,200
+Bubble Sort (Classic) [Sampling],dbpedia-entity,98796,0.11842,250
+Bubble Sort (Classic) [Sampling],dbpedia-entity,117998,0.11902,300
+Bubble Sort (Classic) [Sampling],dbpedia-entity,192061,0.12108,500
+Quick Sort (Classic) [Bidirectional],dbpedia-entity,20000,0.13024,50
+Quick Sort (Classic) [Bidirectional],dbpedia-entity,40000,0.14923,100
+Quick Sort (Classic) [Bidirectional],dbpedia-entity,60000,0.16629,150
+Quick Sort (Classic) [Bidirectional],dbpedia-entity,80000,0.18771,200
+Quick Sort (Classic) [Bidirectional],dbpedia-entity,100000,0.19716,250
+Quick Sort (Classic) [Bidirectional],dbpedia-entity,120000,0.20221,300
+Quick Sort (Classic) [Bidirectional],dbpedia-entity,199872,0.21471,500
+Quick Sort (Classic) [Sampling],dbpedia-entity,20000,0.12401,50
+Quick Sort (Classic) [Sampling],dbpedia-entity,40000,0.1447,100
+Quick Sort (Classic) [Sampling],dbpedia-entity,60000,0.15137,150
+Quick Sort (Classic) [Sampling],dbpedia-entity,79986,0.16061,200
+Quick Sort (Classic) [Sampling],dbpedia-entity,99909,0.15628,250
+Quick Sort (Classic) [Sampling],dbpedia-entity,119869,0.15765,300
+Quick Sort (Classic) [Sampling],dbpedia-entity,199684,0.17176,500
+Mohajer + Bubble [Bidirectional],dbpedia-entity,20000,0.11565,50
+Mohajer + Bubble [Bidirectional],dbpedia-entity,40000,0.11567,100
+Mohajer + Bubble [Bidirectional],dbpedia-entity,59972,0.11567,150
+Mohajer + Bubble [Bidirectional],dbpedia-entity,79922,0.20966,200
+Mohajer + Bubble [Bidirectional],dbpedia-entity,99872,0.21982,250
+Mohajer + Bubble [Bidirectional],dbpedia-entity,119822,0.23334,300
+Mohajer + Bubble [Bidirectional],dbpedia-entity,157510,0.24112,500
+Mohajer + Bubble [Sampling],dbpedia-entity,20000,0.11519,50
+Mohajer + Bubble [Sampling],dbpedia-entity,39996,0.2173,100
+Mohajer + Bubble [Sampling],dbpedia-entity,59946,0.23266,150
+Mohajer + Bubble [Sampling],dbpedia-entity,79896,0.23743,200
+Mohajer + Bubble [Sampling],dbpedia-entity,99836,0.24453,250
+Mohajer + Bubble [Sampling],dbpedia-entity,116283,0.24557,300
+Mohajer + Bubble [Sampling],dbpedia-entity,125553,0.24573,500
+PAC + Bubble [Bidirectional],dbpedia-entity,20000,0.10372,50
+PAC + Bubble [Bidirectional],dbpedia-entity,40000,0.10372,100
+PAC + Bubble [Bidirectional],dbpedia-entity,60000,0.10372,150
+PAC + Bubble [Bidirectional],dbpedia-entity,80000,0.10372,200
+PAC + Bubble [Bidirectional],dbpedia-entity,99962,0.10372,250
+PAC + Bubble [Bidirectional],dbpedia-entity,119912,0.12424,300
+PAC + Bubble [Bidirectional],dbpedia-entity,128898,0.14947,500
+PAC + Bubble [Sampling],dbpedia-entity,20000,0.10372,50
+PAC + Bubble [Sampling],dbpedia-entity,40000,0.10372,100
+PAC + Bubble [Sampling],dbpedia-entity,59959,0.12076,150
+PAC + Bubble [Sampling],dbpedia-entity,71742,0.15304,200
+PAC + Bubble [Sampling],dbpedia-entity,71742,0.15304,250
+PAC + Bubble [Sampling],dbpedia-entity,71742,0.15304,300
+PAC + Bubble [Sampling],dbpedia-entity,71742,0.15304,500
+Mohajer (IR) [Bidirectional],fiqa,32400,0.15312,50
+Mohajer (IR) [Bidirectional],fiqa,64800,0.15312,100
+Mohajer (IR) [Bidirectional],fiqa,97200,0.15312,150
+Mohajer (IR) [Bidirectional],fiqa,129600,0.25146,200
+Mohajer (IR) [Bidirectional],fiqa,162000,0.2594,250
+Mohajer (IR) [Bidirectional],fiqa,194400,0.25313,300
+Mohajer (IR) [Bidirectional],fiqa,259202,0.25874,500
+Mohajer (IR) [Sampling],fiqa,32400,0.15312,50
+Mohajer (IR) [Sampling],fiqa,64800,0.20851,100
+Mohajer (IR) [Sampling],fiqa,97200,0.23896,150
+Mohajer (IR) [Sampling],fiqa,129600,0.25017,200
+Mohajer (IR) [Sampling],fiqa,150955,0.24845,250
+Mohajer (IR) [Sampling],fiqa,150955,0.24845,300
+Mohajer (IR) [Sampling],fiqa,150955,0.24845,500
+Bubble Sort (Classic) [Bidirectional],fiqa,32400,0.23607,50
+Bubble Sort (Classic) [Bidirectional],fiqa,64800,0.23607,100
+Bubble Sort (Classic) [Bidirectional],fiqa,97200,0.23607,150
+Bubble Sort (Classic) [Bidirectional],fiqa,129600,0.28021,200
+Bubble Sort (Classic) [Bidirectional],fiqa,161918,0.28034,250
+Bubble Sort (Classic) [Bidirectional],fiqa,192888,0.28263,300
+Bubble Sort (Classic) [Bidirectional],fiqa,276192,0.29203,500
+Bubble Sort (Classic) [Sampling],fiqa,32400,0.23607,50
+Bubble Sort (Classic) [Sampling],fiqa,64800,0.29123,100
+Bubble Sort (Classic) [Sampling],fiqa,97200,0.27948,150
+Bubble Sort (Classic) [Sampling],fiqa,129600,0.28915,200
+Bubble Sort (Classic) [Sampling],fiqa,162000,0.29557,250
+Bubble Sort (Classic) [Sampling],fiqa,194400,0.30348,300
+Bubble Sort (Classic) [Sampling],fiqa,324000,0.31161,500
+Quick Sort (Classic) [Bidirectional],fiqa,32400,0.26351,50
+Quick Sort (Classic) [Bidirectional],fiqa,64800,0.26628,100
+Quick Sort (Classic) [Bidirectional],fiqa,97200,0.26652,150
+Quick Sort (Classic) [Bidirectional],fiqa,129600,0.2647,200
+Quick Sort (Classic) [Bidirectional],fiqa,162000,0.2657,250
+Quick Sort (Classic) [Bidirectional],fiqa,194400,0.26813,300
+Quick Sort (Classic) [Bidirectional],fiqa,324000,0.26758,500
+Quick Sort (Classic) [Sampling],fiqa,32400,0.24154,50
+Quick Sort (Classic) [Sampling],fiqa,64800,0.24078,100
+Quick Sort (Classic) [Sampling],fiqa,97200,0.24829,150
+Quick Sort (Classic) [Sampling],fiqa,129600,0.23719,200
+Quick Sort (Classic) [Sampling],fiqa,162000,0.25062,250
+Quick Sort (Classic) [Sampling],fiqa,194400,0.24524,300
+Quick Sort (Classic) [Sampling],fiqa,323987,0.2437,500
+Mohajer + Bubble [Bidirectional],fiqa,32400,0.15312,50
+Mohajer + Bubble [Bidirectional],fiqa,64800,0.15312,100
+Mohajer + Bubble [Bidirectional],fiqa,97200,0.15312,150
+Mohajer + Bubble [Bidirectional],fiqa,129600,0.25146,200
+Mohajer + Bubble [Bidirectional],fiqa,162000,0.2594,250
+Mohajer + Bubble [Bidirectional],fiqa,194400,0.25313,300
+Mohajer + Bubble [Bidirectional],fiqa,272890,0.26233,500
+Mohajer + Bubble [Sampling],fiqa,32400,0.15312,50
+Mohajer + Bubble [Sampling],fiqa,64800,0.20851,100
+Mohajer + Bubble [Sampling],fiqa,97200,0.23896,150
+Mohajer + Bubble [Sampling],fiqa,129600,0.25017,200
+Mohajer + Bubble [Sampling],fiqa,162000,0.25569,250
+Mohajer + Bubble [Sampling],fiqa,194326,0.26572,300
+Mohajer + Bubble [Sampling],fiqa,232424,0.2619,500
+PAC + Bubble [Bidirectional],fiqa,32400,0.23607,50
+PAC + Bubble [Bidirectional],fiqa,64800,0.23607,100
+PAC + Bubble [Bidirectional],fiqa,97200,0.23607,150
+PAC + Bubble [Bidirectional],fiqa,129600,0.23607,200
+PAC + Bubble [Bidirectional],fiqa,162000,0.23607,250
+PAC + Bubble [Bidirectional],fiqa,194400,0.26424,300
+PAC + Bubble [Bidirectional],fiqa,207532,0.29196,500
+PAC + Bubble [Sampling],fiqa,32400,0.23607,50
+PAC + Bubble [Sampling],fiqa,64800,0.23607,100
+PAC + Bubble [Sampling],fiqa,97200,0.25284,150
+PAC + Bubble [Sampling],fiqa,119215,0.27191,200
+PAC + Bubble [Sampling],fiqa,119215,0.27191,250
+PAC + Bubble [Sampling],fiqa,119215,0.27191,300
+PAC + Bubble [Sampling],fiqa,119215,0.27191,500
