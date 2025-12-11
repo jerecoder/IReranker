@@ -19,3 +19,4 @@ from .registry import (  # noqa: F401
     register_ranker,
 )
 from .sliding_window import SlidingWindowRanker as SlidingWindowRanker
+from .spectral_mle_ranker import SpectralMLERanker as SpectralMLERanker
