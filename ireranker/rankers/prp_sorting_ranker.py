@@ -4,6 +4,7 @@ from typing import List
 
 from ireranker.oracles import (
     BidirectionalMatrixOracle,
+    BudgetExceeded,
     CachedSamplingMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
@@ -54,7 +55,10 @@ class PRPSortingRanker(Ranker):
 
         k = self._effective_k(n)
 
-        self._partial_heapsort(order, k)
+        try:
+            self._partial_heapsort(order, k)
+        except BudgetExceeded:
+            pass
 
         order.reverse()
         return order

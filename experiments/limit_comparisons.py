@@ -8,171 +8,192 @@ from ireranker.rankers import get_ranker
 from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
 
 def run_experiment():
-    datasets = ["trec-covid", "dbpedia-entity", "fiqa"]
-    budgets = [50, 100, 150, 200, 250, 300, 500]
+    datasets = ["trec-covid", "dbpedia-entity", "fiqa", "webis-touche2020", "scifact"]
+    
+    # Single Unified Experiment
+    budgets = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700]
+    rankers = [
+        "Mohajer (IR)", 
+        "PAC + Bubble", 
+        "Bubble Sort (Classic)", 
+        "Quick Sort (Classic)", 
+        "PRP Sort (classic)",
+        "Jingle Bells"
+    ]
+
     seeds = [42]
     matrix_model = "flan-t5-large"
     k_values = [10]
     
     results = []
     output_path = Path("reports/limit_comparisons_experiment.csv")
-
-    ranker_names = ["Mohajer (IR)", "Bubble Sort (Classic)", "Quick Sort (Classic)", "Mohajer + Bubble", "PAC + Bubble"]
     
-    # Check if results exist to avoid re-running
+    # We will simply overwrite or append. Given the complexity of splitting, 
+    # let's just re-run fresh if the user wants clarity, or we could handle existing results.
+    # For now, let's keep it simple: if file exists, warn/load? 
+    # Actually, simpler to just run and overwrite if the user wants to re-run.
+    # But usually we check for existing to avoid re-computation.
+    # Let's drop the complicated inference logic for now since structure changed.
     if output_path.exists():
         print(f"Loading existing results from {output_path}")
         df = pd.read_csv(output_path)
-        if "Budget" not in df.columns:
-            print("Inferring 'Budget' column from data order...")
-            # Structure: Datasets (3) * Rankers (3) * Oracles (2) * Budgets (7)
-            # Total groups = 3 * 3 * 2 = 18
-            # Total rows should be 18 * 7 = 126
-            expected_rows = len(datasets) * len(ranker_names) * 2 * len(budgets)
-            if len(df) == expected_rows:
-                # The budgets list repeats for every group
-                df["Budget"] = budgets * (len(df) // len(budgets))
-            else:
-                print(f"Warning: Row count {len(df)} does not match expected {expected_rows}. Cannot safely infer budgets. Re-running experiment.")
-                output_path.unlink() # Force re-run
-                results = []
-    
-    if not output_path.exists():
+        # We assume the columns are correct.
+        results = df.to_dict('records')
+    else:
         results = []
-        for dataset_name in datasets:
-            print(f"Processing dataset: {dataset_name}")
-            dataset = load_beir_dataset(dataset_name, split="test", matrix_model=matrix_model)
-            task_qids = [t.query_id for t in dataset.tasks]
 
-            for seed in seeds:
-                for ranker_name in ranker_names:
-                    # 1. Bidirectional Oracle
-                    for budget in budgets:
-                        print(f"  {ranker_name}, Bidirectional Oracle, Budget: {budget}")
-                        oracle = BidirectionalMatrixOracle(comparison_limit=budget, comparison_limit_per_task=True)
-                        ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
-                        ranker.set_dataset(
-                            dataset_name,
-                            split="test",
-                            query_ids=task_qids,
-                            matrix_model=matrix_model,
-                        )
-                        
-                        metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
-                        
-                        results.append({
-                            "Ranker": f"{ranker_name} [Bidirectional]",
-                            "Dataset": dataset_name,
-                            "Comparisons": metrics["Comparisons"],
-                            "NDCG@10": metrics["NDCG"],
-                            "Budget": budget
-                        })
+    # Helper to check if result exists
+    def result_exists(dataset, ranker, budget, oracle_type):
+        for r in results:
+            if (r["Dataset"] == dataset and 
+                r["Ranker"] == ranker and 
+                r["Budget"] == budget and
+                oracle_type in r["Oracle"]):
+                return True
+        return False
 
-                    # 2. Sampling Oracle
-                    for budget in budgets:
-                        print(f"  {ranker_name}, Sampling Oracle, Budget: {budget}")
-                        oracle = SamplingMatrixOracle(seed=seed, comparison_limit=budget, comparison_limit_per_task=True)
-                        ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
-                        ranker.set_dataset(
-                            dataset_name,
-                            split="test",
-                            query_ids=task_qids,
-                            matrix_model=matrix_model,
-                        )
-                        
-                        metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
-                        
-                        results.append({
-                            "Ranker": f"{ranker_name} [Sampling]",
-                            "Dataset": dataset_name,
-                            "Comparisons": metrics["Comparisons"],
-                            "NDCG@10": metrics["NDCG"],
-                            "Budget": budget
-                        })
+    for dataset_name in datasets:
+        print(f"Processing dataset: {dataset_name}")
+        dataset = load_beir_dataset(dataset_name, split="test", matrix_model=matrix_model)
+        task_qids = [t.query_id for t in dataset.tasks]
 
-        df = pd.DataFrame(results)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        df.to_csv(output_path, index=False)
-        print(f"Results saved to {output_path}")
+        for seed in seeds:
+            for ranker_name in rankers:
+                # 1. Bidirectional Oracle
+                for budget in budgets:
+                    ranker_label = f"{ranker_name} [Bidirectional]"
+                    if result_exists(dataset_name, ranker_name, budget, "Bidirectional"):
+                        # print(f"Skipping {ranker_label}, budget {budget}: already exists.")
+                        continue
 
-    # Update README
+                    print(f"  {ranker_name}, Bidirectional, Budget: {budget}")
+                    oracle = BidirectionalMatrixOracle(comparison_limit=budget, comparison_limit_per_task=True)
+                    ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
+                    ranker.set_dataset(
+                        dataset_name,
+                        split="test",
+                        query_ids=task_qids,
+                        matrix_model=matrix_model,
+                    )
+                    
+                    metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
+                    
+                    results.append({
+                        "Ranker": ranker_name,
+                        "Oracle": "Bidirectional",
+                        "DisplayRanker": f"{ranker_name} [Bidirectional]",
+                        "Dataset": dataset_name,
+                        "Comparisons": metrics["Comparisons"],
+                        "NDCG@10": metrics["NDCG"],
+                        "Budget": budget
+                    })
+
+                # 2. Sampling Oracle
+                for budget in budgets:
+                    ranker_label = f"{ranker_name} [Sampling]"
+                    if result_exists(dataset_name, ranker_name, budget, "Sampling"):
+                        continue
+
+                    print(f"  {ranker_name}, Sampling, Budget: {budget}")
+                    oracle = SamplingMatrixOracle(seed=seed, comparison_limit=budget, comparison_limit_per_task=True)
+                    ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
+                    ranker.set_dataset(
+                        dataset_name,
+                        split="test",
+                        query_ids=task_qids,
+                        matrix_model=matrix_model,
+                    )
+                    
+                    metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
+                    
+                    results.append({
+                        "Ranker": ranker_name,
+                        "Oracle": "Sampling",
+                        "DisplayRanker": f"{ranker_name} [Sampling]",
+                        "Dataset": dataset_name,
+                        "Comparisons": metrics["Comparisons"],
+                        "NDCG@10": metrics["NDCG"],
+                        "Budget": budget
+                    })
+
+    # Save Results
+    df = pd.DataFrame(results)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(output_path, index=False)
+    print(f"Results saved to {output_path}")
+
+    # --- Update README ---
     readme_path = Path("README.md")
     if readme_path.exists():
         readme_content = readme_path.read_text(encoding="utf-8")
         
         # Remove existing "Limit Comparisons Experiment" sections
+        # We need a robust way to replace the whole block.
         header = "## Limit Comparisons Experiment"
         if header in readme_content:
             readme_content = readme_content.split(header)[0].rstrip()
         
         new_section = [header]
         
-        # Determine unique datasets to loop over, preserving order
         unique_datasets = df["Dataset"].unique()
-        
+
         for dataset in unique_datasets:
+            ds_df = df[df["Dataset"] == dataset]
+            if ds_df.empty:
+                continue
+
             new_section.append(f"\n### {dataset}")
             
-            # Filter for this dataset
-            ds_df = df[df["Dataset"] == dataset]
+            # Pivot: Index=DisplayRanker, Columns=Budget, Values=NDCG@10
+            pivot_df = ds_df.pivot_table(index="DisplayRanker", columns="Budget", values="NDCG@10", aggfunc='first')
             
-            # Pivot: Index=Ranker, Columns=Budget, Values=NDCG@10
-            pivot_df = ds_df.pivot(index="Ranker", columns="Budget", values="NDCG@10")
+            # Sort indices: grouping by Oracle type helps readability
+            pivot_df = pivot_df.sort_index()
             
-            # Reset index to make Ranker a column for printing
             pivot_df = pivot_df.reset_index()
+            columns = pivot_df.columns.tolist() 
             
-            # Manual Markdown Table Generation
-            columns = pivot_df.columns.tolist() # ['Ranker', 100, 1000, ...]
-            
-            # Header Row
+            # Header
             header_row = "| " + " | ".join(str(c) for c in columns) + " |"
             new_section.append(header_row)
-            
-            # Divider Row
             divider_row = "| " + " | ".join(["---"] * len(columns)) + " |"
             new_section.append(divider_row)
             
-            # Data Rows
-            # Data Rows
-            # Find max per column (excluding 'Ranker')
+            # Max per column
             max_per_col = {}
             for col in columns:
-                if col == "Ranker":
-                    continue
-                # pivot_df[col] might handle types weirdly if mixed. 
-                # Values are floats.
+                if col == "DisplayRanker": continue
                 max_per_col[col] = pivot_df[col].max()
 
+            # Rows
             for _, row in pivot_df.iterrows():
-                # Format floats to 4 decimal places if possible
                 formatted_values = []
                 for val, col_name in zip(row.values, columns):
-                    if col_name == "Ranker":
+                    if col_name == "DisplayRanker":
                          formatted_values.append(str(val))
                          continue
 
                     is_max = False
-                    if isinstance(val, (float, np.floating)):
-                         if np.isclose(val, max_per_col[col_name]):
-                             is_max = True
-                         str_val = f"{val:.4f}"
+                    if pd.notna(val): # Handle NaNs if budget missing for some ranker
+                        if isinstance(val, (float, np.floating)):
+                            if np.isclose(val, max_per_col[col_name]):
+                                is_max = True
+                            str_val = f"{val:.4f}"
+                        else:
+                            if val == max_per_col[col_name]:
+                                is_max = True
+                            str_val = str(val)
                     else:
-                         if val == max_per_col[col_name]:
-                             is_max = True
-                         str_val = str(val)
+                        str_val = "-"
                     
                     if is_max:
                         str_val = f"**{str_val}**"
                     formatted_values.append(str_val)
-                row_str = "| " + " | ".join(formatted_values) + " |"
-                new_section.append(row_str)
-        
+                new_section.append("| " + " | ".join(formatted_values) + " |")
+
         new_content = readme_content + "\n\n" + "\n".join(new_section) + "\n"
-        
         readme_path.write_text(new_content, encoding="utf-8")
-        print(f"Results written to {readme_path} (overwriting previous table)")
-    else:
-        print(f"README.md not found at {readme_path}")
+        print(f"Results written to {readme_path}")
+
 if __name__ == "__main__":
     run_experiment()
