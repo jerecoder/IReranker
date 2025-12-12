@@ -268,6 +268,146 @@ class MohajerBM25Ranker(MohajerRanker):
             return ranking + heap_tail + leftovers
 
 
+@register_ranker(
+    "Christmas Tree",
+    oracle_factories=[
+        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+    ],
+)
+class ChristmasTreeRanker(MohajerRanker):
+    """Ensemble of J Mohajer-BM25 runs with random BM25-sorted groups, averaged positions."""
+
+    def __init__(
+        self,
+        oracle: Oracle,
+        seed: int | None = None,
+        *,
+        num_bells: int = 3,
+        num_groups: int | None = None,
+        top_k: int = 10,
+    ):
+        self.num_bells = max(1, num_bells)
+        self.num_groups = num_groups
+        super().__init__(oracle, seed, top_k=top_k)
+
+    def set_seed(self, seed: int | None) -> None:
+        super().set_seed(seed)
+        self._bell_seed_rng = random.Random(self.seed)
+
+    def _rank(self) -> List[int]:
+        if self.n == 0:
+            return []
+
+        k_eff = min(self.k, self.n)
+        group_count = self._effective_group_count(k_eff)
+        bm25_order = list(range(self.n))
+        bm25_pos = {idx: pos for pos, idx in enumerate(bm25_order)}
+
+        per_rankings: list[list[int]] = []
+        bell_seeds = [self._bell_seed_rng.randint(0, 2**31 - 1) for _ in range(self.num_bells)]
+
+        for bell_seed in bell_seeds:
+            bell_rng = random.Random(bell_seed)
+            groups = self._build_random_groups(bm25_order, group_count, bell_rng)
+            ranking = self._merge_groups(groups, k_eff)
+            per_rankings.append(ranking)
+
+        scores = [0.0 for _ in range(self.n)]
+        counts = [0 for _ in range(self.n)]
+
+        for ranking in per_rankings:
+            for pos, idx in enumerate(ranking):
+                scores[idx] += pos
+                counts[idx] += 1
+
+        avg_pos = [
+            scores[idx] / counts[idx] if counts[idx] else float("inf") for idx in range(self.n)
+        ]
+
+        final_order = sorted(range(self.n), key=lambda idx: (avg_pos[idx], bm25_pos[idx]))
+        return final_order
+
+    def _effective_group_count(self, k_eff: int) -> int:
+        if self.num_groups is None or self.num_groups <= 0:
+            return max(1, k_eff)
+        return max(1, min(self.num_groups, self.n))
+
+    def _build_random_groups(
+        self, bm25_order: list[int], group_count: int, rng: random.Random
+    ) -> list[list[int]]:
+        shuffled = list(bm25_order)
+        rng.shuffle(shuffled)
+
+        groups: list[list[int]] = []
+        base = len(shuffled) // group_count
+        remainder = len(shuffled) % group_count
+        cursor = 0
+
+        for g in range(group_count):
+            size = base + (1 if g < remainder else 0)
+            chunk = shuffled[cursor : cursor + size]
+            cursor += size
+            groups.append(sorted(chunk))
+
+        return groups
+
+    def _merge_groups(self, groups: list[list[int]], k_eff: int) -> list[int]:
+        winner_heap: list[_HeapItem] = []
+        champ_to_group: dict[int, int] = {}
+        next_in_group = [1 if group else 0 for group in groups]
+        ranking: list[int] = []
+
+        try:
+            for g, group in enumerate(groups):
+                if not group:
+                    continue
+                champ = group[0]
+                heapq.heappush(winner_heap, _HeapItem(self, champ))
+                champ_to_group[champ] = g
+
+            if not winner_heap:
+                return []
+
+            while winner_heap and len(ranking) < k_eff:
+                best_item = heapq.heappop(winner_heap)
+                best_idx = best_item.idx
+                ranking.append(best_idx)
+
+                champ_group = champ_to_group.pop(best_idx)
+                if next_in_group[champ_group] < len(groups[champ_group]):
+                    new_champ = groups[champ_group][next_in_group[champ_group]]
+                    next_in_group[champ_group] += 1
+                    champ_to_group[new_champ] = champ_group
+                    heapq.heappush(winner_heap, _HeapItem(self, new_champ))
+
+            heap_tail = [item.idx for item in winner_heap]
+            ranked_set = set(ranking)
+            ranked_set.update(heap_tail)
+
+            leftovers: list[int] = []
+            for g, group in enumerate(groups):
+                start_at = next_in_group[g]
+                for idx in group[start_at:]:
+                    if idx not in ranked_set:
+                        leftovers.append(idx)
+
+            return ranking + heap_tail + leftovers
+
+        except BudgetExceeded:
+            heap_tail = [item.idx for item in winner_heap] if "winner_heap" in locals() else []
+            ranked_set = set(ranking) if "ranking" in locals() else set()
+            ranked_set.update(heap_tail)
+
+            leftovers: list[int] = []
+            for g, group in enumerate(groups):
+                start_at = next_in_group[g] if g < len(next_in_group) else 0
+                for idx in group[start_at:]:
+                    if idx not in ranked_set:
+                        leftovers.append(idx)
+
+            return ranking + heap_tail + leftovers
+
+
 class _HeapItem:
     """Wrap an index so that heapq uses the oracle-based comparator."""
 

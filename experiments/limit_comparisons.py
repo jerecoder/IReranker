@@ -18,7 +18,8 @@ def run_experiment():
         "Bubble Sort (Classic)", 
         "Quick Sort (Classic)", 
         "PRP Sort (classic)",
-        "Jingle Bells"
+        "Jingle Bells",
+        "Christmas Tree"
     ]
 
     seeds = [42]
