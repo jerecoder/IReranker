@@ -170,7 +170,7 @@ class MohajerRanker(Ranker):
 
 
 @register_ranker(
-    "Mohajer (BM25)",
+    "Jingle Bells",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
     ],
