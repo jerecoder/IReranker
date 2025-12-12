@@ -6,12 +6,9 @@ import random
 from typing import List
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
     BudgetExceeded,
-    CachedSamplingMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
-    WeirdSamplingMatrixOracle,
 )
 
 from .ranker import Ranker
