@@ -208,7 +208,13 @@ def _render_ndcg10_grid(
     divider = "| " + " | ".join("---" for _ in headers) + " |"
     lines = ["| " + " | ".join(headers) + " |", divider]
 
-    for r in rankers:
+    def _sort_key(ranker: str) -> tuple[int, float, str]:
+        avg = ranker_avgs.get(ranker)
+        if avg is None:
+            return (1, 0.0, ranker.lower())
+        return (0, -avg, ranker.lower())
+
+    for r in sorted(rankers, key=_sort_key):
         row_cells = [r]
         for ds in datasets:
             ds_scores = score_map.get(ds, {})
