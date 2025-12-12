@@ -22,12 +22,6 @@ from .registry import register_ranker
     "Mohajer (IR)",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
-        (
-            "weird $(1.5)$",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
     ],
 )
 class MohajerRanker(Ranker):
@@ -173,6 +167,108 @@ class MohajerRanker(Ranker):
             wins += not self.lt(i, j)
             total += 1
         return wins >= total / 2
+
+
+@register_ranker(
+    "Mohajer (BM25)",
+    oracle_factories=[
+        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+    ],
+)
+class MohajerBM25Ranker(MohajerRanker):
+    """Mohajer variant that consumes BM25-ordered slices instead of in-group tournaments."""
+
+    def __init__(self, oracle: Oracle, seed: int | None = None, top_k: int = 10):
+        super().__init__(oracle, seed, top_k=top_k)
+
+    def _rank(self) -> List[int]:
+        if self.n == 0:
+            return []
+
+        K = min(self.k, self.n)
+        Q = (self.n + K - 1) // K
+
+        indices = self._get_indices()
+        groups: list[list[int]] = []
+        next_in_group: list[int] = []
+        ranking: list[int] = []
+
+        try:
+            # Partition candidates into strided BM25-ordered groups.
+            for g in range(K):
+                start = g * Q
+                end = min((g + 1) * Q, self.n)
+                group_indices = indices[start:end]
+                groups.append(group_indices)
+                next_in_group.append(0)
+
+            # Initialize heap with the BM25 head from each group.
+            winner_heap: list[_HeapItem] = []
+            champ_to_group: dict[int, int] = {}
+
+            for g, group_indices in enumerate(groups):
+                if not group_indices:
+                    continue
+
+                champ = group_indices[0]
+                next_in_group[g] = 1
+                heapq.heappush(winner_heap, _HeapItem(self, champ))
+                champ_to_group[champ] = g
+
+            if not winner_heap:
+                return []
+
+            # Merge groups using the same Mohajer heap logic.
+            while winner_heap and len(ranking) < K:
+                best_item = heapq.heappop(winner_heap)
+                best_item_idx = best_item.idx
+                ranking.append(best_item_idx)
+
+                champ_group = champ_to_group.pop(best_item_idx)
+
+                if next_in_group[champ_group] < len(groups[champ_group]):
+                    new_champ = groups[champ_group][next_in_group[champ_group]]
+                    next_in_group[champ_group] += 1
+                    champ_to_group[new_champ] = champ_group
+                    heapq.heappush(winner_heap, _HeapItem(self, new_champ))
+
+            heap_tail = [item.idx for item in winner_heap]
+
+            ranked_set = set(ranking)
+            ranked_set.update(heap_tail)
+
+            leftovers: list[int] = []
+            for g, group_indices in enumerate(groups):
+                start_at = next_in_group[g]
+                for idx in group_indices[start_at:]:
+                    if idx not in ranked_set:
+                        leftovers.append(idx)
+
+            for idx in indices:
+                if idx not in ranked_set and idx not in leftovers:
+                    leftovers.append(idx)
+
+            return ranking + heap_tail + leftovers
+
+        except BudgetExceeded:
+            heap_tail = [item.idx for item in winner_heap] if "winner_heap" in locals() else []
+            ranked_set = set(ranking)
+            ranked_set.update(heap_tail)
+
+            leftovers: list[int] = []
+            if "groups" in locals():
+                for g, group_indices in enumerate(groups):
+                    start_at = next_in_group[g] if g < len(next_in_group) else 0
+                    for idx in group_indices[start_at:]:
+                        if idx not in ranked_set:
+                            leftovers.append(idx)
+
+            if "indices" in locals():
+                for idx in indices:
+                    if idx not in ranked_set and idx not in leftovers:
+                        leftovers.append(idx)
+
+            return ranking + heap_tail + leftovers
 
 
 class _HeapItem:
