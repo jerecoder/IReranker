@@ -17,7 +17,9 @@ def main():
         'Quick Sort (Classic)': '#dfa51c',
         'PRP Sort (classic)': '#d51d1b',
         'Jingle Bells': '#1b4dd5',
-        'Christmas Tree': '#8b2ed5'
+        'Christmas Tree': '#8b2ed5',
+        'bm25': '#444444',
+        'BM25': '#444444',
     }
 
     # Verify file exists
@@ -45,16 +47,20 @@ def main():
         ("Quick Sort (Classic)", "Bidirectional"),
         ("PRP Sort (classic)", "Bidirectional"),
         ("Jingle Bells", "Sampling"),
-        ("Christmas Tree", "Sampling")
+        ("Christmas Tree", "Sampling"),
+        ("bm25", "Bidirectional"),
     ]
     
     # Set 2: Oracle Comparison (Only Baselines)
     oracle_comparison_rankers = [
+        "Mohajer (IR)",
+        "PAC + Bubble",
         "Bubble Sort (Classic)",
         "Quick Sort (Classic)",
         "PRP Sort (classic)",
         "Jingle Bells",
-        "Christmas Tree"
+        "Christmas Tree",
+        "bm25",
     ]
 
     def _mask_for_pairs(dataframe, pairs):

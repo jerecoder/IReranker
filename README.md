@@ -122,11 +122,11 @@ Per dataset: CSV `summary.csv` with one row per ranker & k
 - `reports/beir-metrics/` contiene ejemplos de salidas; puedes borrarlas o regenerarlas con `make beir-eval`.
 - Graficar NDCG@k desde un `summary.csv`: `python -m ireranker.plots ndcg-bar nfcorpus --k 10`.
 
-
 ## BEIR results
 
 Tables auto-updated after each BEIR evaluation.
 
+<!-- BEGIN_BEIR_RESULTS -->
 ### flan-t5-large
 | Ranker | dbpedia-entity | fiqa | scifact | trec-covid | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -166,14 +166,13 @@ Tables auto-updated after each BEIR evaluation.
 | pac top-k (3-round) [cached-sampling] | 0.2017 | 0.2378 | 0.6228 | 0.7332 | 0.3035 | 0.4198 | 631628 | 30668 |
 | pac top-k (optimized) [cached-sampling] | 0.1199 | 0.2452 | 0.6642 | 0.6718 | 0.3953 | 0.4193 | 85643 | **0** |
 | pac top-k (optimized) [sampling] | 0.1199 | 0.2452 | 0.6642 | 0.6718 | 0.3953 | 0.4193 | 42821 | **0** |
+| jingle bells [sampling] | 0.1540 | 0.2478 | 0.6452 | 0.6688 | 0.3784 | 0.4188 | 21085 | **0** |
 | pac top-k (3-round) [weird $(1.5)$] | 0.2025 | 0.2325 | 0.6453 | 0.7177 | 0.2952 | 0.4186 | 347506 | **0** |
-| mohajer (ir) [weird $(1.5)$] | 0.2419 | 0.2520 | 0.5648 | 0.7693 | 0.2558 | 0.4168 | 69352 | **0** |
 | mohajer + bubble [bidirectional] | 0.2411 | 0.2623 | 0.5487 | 0.7556 | 0.2665 | 0.4149 | 120218 | 22681 |
 | mohajer (ir) [sampling] | 0.2412 | 0.2485 | 0.5754 | 0.7611 | 0.2445 | 0.4141 | 67660 | **0** |
 | mohajer + bubble [cached-sampling] | 0.2442 | 0.2683 | 0.5694 | 0.7437 | 0.2390 | 0.4129 | 122975 | 36135 |
-| mohajer (ir) [cached-sampling] | 0.2396 | 0.2492 | 0.5799 | 0.7611 | 0.2335 | 0.4127 | 108393 | 13245 |
-| mohajer (ir) [bidirectional] | 0.2391 | 0.2587 | 0.5385 | 0.7574 | 0.2641 | 0.4116 | 113824 | 14300 |
 | bm25 [bidirectional] | 0.1037 | 0.2361 | 0.6789 | 0.5947 | 0.4422 | 0.4111 | **0** | **0** |
+| christmas tree [sampling] | 0.1321 | 0.2463 | 0.6579 | 0.6180 | 0.3878 | 0.4084 | 63910 | **0** |
 | spectral mle (refinement) [bidirectional] | 0.2050 | 0.2034 | 0.5495 | 0.6674 | 0.2943 | 0.3839 | 1452416 | **0** |
 
 ### flan-t5-xl
@@ -200,6 +199,7 @@ Tables auto-updated after each BEIR evaluation.
 | pac + bubble [cached-sampling] | n/a | n/a | 0.6613 | 0.7003 | 0.3979 | 0.5865 | 45099 | 1706 |
 | pac top-k (3-round) [cached-sampling] | n/a | n/a | 0.6537 | 0.7356 | 0.3518 | 0.5804 | 288337 | 12658 |
 | pac top-k (2-round) [bidirectional] | n/a | n/a | 0.6647 | 0.7661 | 0.3084 | 0.5797 | 267599 | 161 |
+| jingle bells [sampling] | n/a | n/a | 0.6523 | 0.6886 | 0.3908 | 0.5772 | 8922 | **0** |
 | pac top-k (3-round) [sampling] | n/a | n/a | 0.6414 | 0.7391 | 0.3419 | 0.5742 | 156827 | **0** |
 | prp sort (classic) [cached-sampling] | n/a | n/a | 0.6627 | 0.7822 | 0.2732 | 0.5727 | 207726 | 6170 |
 | bm25 [bidirectional] | n/a | n/a | 0.6789 | 0.5947 | **0.4422** | 0.5719 | **0** | **0** |
@@ -210,24 +210,24 @@ Tables auto-updated after each BEIR evaluation.
 | mohajer + bubble [sampling] | n/a | n/a | 0.6354 | **0.7855** | 0.2794 | 0.5668 | 46831 | **0** |
 | mohajer + bubble [weird $(1.5)$] | n/a | n/a | 0.6411 | 0.7776 | 0.2653 | 0.5613 | 42171 | **0** |
 | mohajer (ir) [sampling] | n/a | n/a | 0.6276 | 0.7761 | 0.2720 | 0.5586 | 30891 | **0** |
-| mohajer (ir) [weird $(1.5)$] | n/a | n/a | 0.6227 | 0.7708 | 0.2735 | 0.5556 | 31599 | **0** |
+| christmas tree [sampling] | n/a | n/a | 0.6520 | 0.6259 | 0.3953 | 0.5577 | 27525 | **0** |
 | quick sort (classic) [cached-sampling] | n/a | n/a | 0.6353 | 0.7645 | 0.2657 | 0.5552 | 145921 | **0** |
 | quick sort (classic) [sampling] | n/a | n/a | 0.6353 | 0.7645 | 0.2657 | 0.5552 | 72960 | **0** |
 | spectral mle (refinement) [weird $(1.5)$] | n/a | n/a | 0.6593 | 0.7295 | 0.2759 | 0.5549 | 333622 | **0** |
 | pac top-k (2-round) [weird $(1.5)$] | n/a | n/a | 0.6274 | 0.7636 | 0.2735 | 0.5548 | 140596 | **0** |
-| mohajer (ir) [cached-sampling] | n/a | n/a | 0.6181 | 0.7659 | 0.2756 | 0.5532 | 51028 | 5282 |
 | mohajer + bubble [cached-sampling] | n/a | n/a | 0.6107 | 0.7663 | 0.2772 | 0.5514 | 57912 | 16439 |
 | quick sort (classic) [bidirectional] | n/a | n/a | 0.6139 | 0.7717 | 0.2581 | 0.5479 | 249733 | **0** |
 | quick sort (classic) [weird $(1.5)$] | n/a | n/a | 0.6113 | 0.7572 | 0.2699 | 0.5461 | 76506 | **0** |
 | mohajer + bubble [bidirectional] | n/a | n/a | 0.6188 | 0.7598 | 0.2571 | 0.5452 | 57175 | 9527 |
 | spectral mle (refinement) [cached-sampling] | n/a | n/a | 0.6345 | 0.7386 | 0.2570 | 0.5434 | 667245 | **0** |
 | spectral mle (refinement) [sampling] | n/a | n/a | 0.6345 | 0.7386 | 0.2570 | 0.5434 | 333622 | **0** |
-| mohajer (ir) [bidirectional] | n/a | n/a | 0.6122 | 0.7598 | 0.2545 | 0.5422 | 53775 | 5537 |
 | spectral mle (refinement) [bidirectional] | n/a | n/a | 0.5300 | 0.6819 | 0.2693 | 0.4937 | 667245 | **0** |
 
 Notes:
 - fiqa: skipped (missing rerank matrix)
 - dbpedia-entity: skipped (missing rerank matrix)
+<!-- END_BEIR_RESULTS -->
+
 
 ## Limit Comparisons Experiment
 
