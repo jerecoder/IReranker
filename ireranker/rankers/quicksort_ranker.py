@@ -19,12 +19,12 @@ from .registry import register_ranker
     "Quick Sort (Classic)",
     oracle_factories=[
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
-        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
-        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        (
-            "weird $(1.5)$",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
+        # ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
+        # ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        # (
+        #     "weird $(1.5)$",
+        #     lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
+        # ),
     ],
 )
 class QuicksortTopKRanker(Ranker):

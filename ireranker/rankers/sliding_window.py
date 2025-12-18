@@ -14,18 +14,18 @@ from .ranker import Ranker
 from .registry import register_ranker
 
 
-@register_ranker(
-    "Sliding Window PRP (Classic)",
-    oracle_factories=[
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
-        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
-        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        (
-            "weird $(1.5)$",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
-    ],
-)
+# @register_ranker(
+#     "Sliding Window PRP (Classic)",
+#     oracle_factories=[
+#         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+#         ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
+#         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+#         (
+#             "weird $(1.5)$",
+#             lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
+#         ),
+#     ],
+# )
 class SlidingWindowRanker(Ranker):
     """PRP-Sliding-K: sliding-window passes starting from the bottom of the list.
 
