@@ -128,104 +128,97 @@ Tables auto-updated after each BEIR evaluation.
 
 <!-- BEGIN_BEIR_RESULTS -->
 ### flan-t5-large
-| Ranker | dbpedia-entity | fiqa | scifact | trec-covid | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bubble sort (classic) [weird $(1.5)$] | 0.1217 | 0.3179 | 0.6826 | 0.7320 | 0.4344 | **0.4577** | 598184 | **0** |
-| sliding window prp (classic) [cached-sampling] | 0.1208 | 0.3021 | 0.6920 | 0.7421 | 0.4256 | 0.4565 | 218071 | 174876 |
-| bubble sort (classic) [sampling] | 0.1211 | **0.3231** | 0.6725 | 0.7473 | 0.4119 | 0.4552 | 995151 | **0** |
-| pac top-k (2-round) [bidirectional] | 0.2759 | 0.2921 | 0.6664 | 0.7403 | 0.2977 | 0.4545 | 589811 | 520 |
-| bubble sort (classic) [bidirectional] | 0.1185 | 0.2945 | **0.6925** | 0.7177 | **0.4473** | 0.4541 | 144780 | 192167 |
-| sliding window prp (classic) [bidirectional] | 0.1185 | 0.2945 | **0.6925** | 0.7177 | **0.4473** | 0.4541 | 135980 | 162085 |
-| sliding window prp (classic) [weird $(1.5)$] | 0.1214 | 0.3127 | 0.6652 | 0.7522 | 0.4147 | 0.4533 | 281239 | **0** |
-| prp sort (classic) [bidirectional] | 0.1830 | 0.3127 | 0.6747 | 0.7530 | 0.3321 | 0.4511 | 292132 | 6198 |
-| pac top-k (3-round) [bidirectional] | 0.2337 | 0.2877 | 0.6589 | 0.7378 | 0.3311 | 0.4498 | 649122 | 38213 |
-| sliding window prp (classic) [sampling] | 0.1223 | 0.3138 | 0.6519 | 0.7597 | 0.3994 | 0.4494 | 284387 | **0** |
-| bubble sort (classic) [cached-sampling] | 0.1190 | 0.2970 | 0.6747 | 0.7273 | 0.4249 | 0.4486 | 247678 | 1014767 |
-| pac + bubble [weird $(1.5)$] | 0.1515 | 0.2762 | 0.6781 | 0.6889 | 0.4327 | 0.4455 | 50648 | **0** |
-| quick sort (classic) [bidirectional] | **0.3180** | 0.2684 | 0.6008 | 0.7661 | 0.2736 | 0.4454 | 755133 | **0** |
-| pac + bubble [bidirectional] | 0.1495 | 0.2920 | 0.6845 | 0.6729 | 0.4143 | 0.4426 | 93239 | 1954 |
-| pac top-k (2-round) [cached-sampling] | 0.2538 | 0.2461 | 0.6444 | 0.7620 | 0.2944 | 0.4401 | 657860 | 2046 |
-| pac top-k (2-round) [weird $(1.5)$] | 0.2526 | 0.2406 | 0.6399 | 0.7483 | 0.3126 | 0.4388 | 306259 | **0** |
-| pac top-k (3-round) [sampling] | 0.1953 | 0.2511 | 0.6594 | 0.7219 | 0.3550 | 0.4365 | 347574 | **0** |
-| pac + bubble [sampling] | 0.1530 | 0.2719 | 0.6699 | 0.7002 | 0.3823 | 0.4355 | 52867 | **0** |
-| spectral mle (refinement) [weird $(1.5)$] | 0.2197 | 0.3006 | 0.6242 | 0.7209 | 0.3114 | 0.4353 | 726208 | **0** |
-| pac top-k (2-round) [sampling] | 0.2554 | 0.2630 | 0.6247 | 0.7408 | 0.2880 | 0.4344 | 330719 | **0** |
-| prp sort (classic) [weird $(1.5)$] | 0.1848 | 0.2981 | 0.6411 | 0.7421 | 0.3019 | 0.4336 | 183841 | **0** |
-| prp sort (classic) [cached-sampling] | 0.1879 | 0.2827 | 0.6233 | 0.7589 | 0.2949 | 0.4295 | 400552 | 11179 |
-| pac + bubble [cached-sampling] | 0.1472 | 0.2632 | 0.6567 | 0.6884 | 0.3860 | 0.4283 | 97842 | 3730 |
-| quick sort (classic) [cached-sampling] | 0.3043 | 0.2457 | 0.5873 | 0.7470 | 0.2506 | 0.4270 | 465101 | **0** |
-| quick sort (classic) [sampling] | 0.3043 | 0.2457 | 0.5873 | 0.7470 | 0.2506 | 0.4270 | 232551 | **0** |
-| quick sort (classic) [weird $(1.5)$] | 0.3101 | 0.2578 | 0.5752 | 0.7458 | 0.2442 | 0.4266 | 249228 | **0** |
-| prp sort (classic) [sampling] | 0.1884 | 0.2770 | 0.6174 | 0.7497 | 0.2993 | 0.4263 | 210097 | **0** |
-| pac top-k (optimized) [bidirectional] | 0.1240 | 0.2640 | 0.6785 | 0.6516 | 0.4084 | 0.4253 | 85643 | **0** |
-| pac top-k (optimized) [weird $(1.5)$] | 0.1237 | 0.2505 | 0.6683 | 0.6679 | 0.4143 | 0.4249 | 42821 | **0** |
-| mohajer + bubble [sampling] | 0.2457 | 0.2619 | 0.5880 | **0.7708** | 0.2570 | 0.4247 | 99555 | **0** |
-| mohajer + bubble [weird $(1.5)$] | 0.2453 | 0.2770 | 0.5746 | 0.7674 | 0.2522 | 0.4233 | 90619 | **0** |
-| spectral mle (refinement) [cached-sampling] | 0.2272 | 0.2882 | 0.6155 | 0.7219 | 0.2565 | 0.4219 | 1452416 | **0** |
-| spectral mle (refinement) [sampling] | 0.2272 | 0.2882 | 0.6155 | 0.7219 | 0.2565 | 0.4219 | 726208 | **0** |
-| pac top-k (3-round) [cached-sampling] | 0.2017 | 0.2378 | 0.6228 | 0.7332 | 0.3035 | 0.4198 | 631628 | 30668 |
-| pac top-k (optimized) [cached-sampling] | 0.1199 | 0.2452 | 0.6642 | 0.6718 | 0.3953 | 0.4193 | 85643 | **0** |
-| pac top-k (optimized) [sampling] | 0.1199 | 0.2452 | 0.6642 | 0.6718 | 0.3953 | 0.4193 | 42821 | **0** |
-| jingle bells [sampling] | 0.1540 | 0.2478 | 0.6452 | 0.6688 | 0.3784 | 0.4188 | 21085 | **0** |
-| pac top-k (3-round) [weird $(1.5)$] | 0.2025 | 0.2325 | 0.6453 | 0.7177 | 0.2952 | 0.4186 | 347506 | **0** |
-| mohajer + bubble [bidirectional] | 0.2411 | 0.2623 | 0.5487 | 0.7556 | 0.2665 | 0.4149 | 120218 | 22681 |
-| mohajer (ir) [sampling] | 0.2412 | 0.2485 | 0.5754 | 0.7611 | 0.2445 | 0.4141 | 67660 | **0** |
-| mohajer + bubble [cached-sampling] | 0.2442 | 0.2683 | 0.5694 | 0.7437 | 0.2390 | 0.4129 | 122975 | 36135 |
-| bm25 [bidirectional] | 0.1037 | 0.2361 | 0.6789 | 0.5947 | 0.4422 | 0.4111 | **0** | **0** |
-| christmas tree [sampling] | 0.1321 | 0.2463 | 0.6579 | 0.6180 | 0.3878 | 0.4084 | 63910 | **0** |
-| spectral mle (refinement) [bidirectional] | 0.2050 | 0.2034 | 0.5495 | 0.6674 | 0.2943 | 0.3839 | 1452416 | **0** |
+| Ranker | dbpedia-entity | dl-2019 | dl-2020 | fiqa | robust04 | scifact | trec-covid | trec-news | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bubble sort (classic) [sampling] | 0.1211 | **0.6761** | **0.6390** | **0.3231** | 0.4575 | 0.6725 | 0.7473 | n/a | 0.4119 | **0.5061** | 874179 | **0** |
+| bubble sort (classic) [weird $(1.5)$] | 0.1217 | 0.6620 | 0.6209 | 0.3179 | 0.4621 | 0.6826 | 0.7320 | n/a | 0.4344 | 0.5042 | 519667 | **0** |
+| sliding window prp (classic) [weird $(1.5)$] | 0.1214 | 0.6674 | 0.6227 | 0.3127 | **0.4654** | 0.6652 | 0.7522 | n/a | 0.4147 | 0.5027 | 236659 | **0** |
+| sliding window prp (classic) [cached-sampling] | 0.1208 | 0.6429 | 0.6167 | 0.3021 | 0.4475 | 0.6920 | 0.7421 | n/a | 0.4256 | 0.4987 | 192310 | 142175 |
+| sliding window prp (classic) [sampling] | 0.1223 | 0.6612 | 0.6206 | 0.3138 | 0.4605 | 0.6519 | 0.7597 | n/a | 0.3994 | 0.4987 | 238627 | **0** |
+| bubble sort (classic) [cached-sampling] | 0.1190 | 0.6434 | 0.6004 | 0.2970 | 0.4529 | 0.6747 | 0.7273 | n/a | 0.4249 | 0.4925 | 221723 | 865911 |
+| prp sort (classic) [bidirectional] | 0.1830 | 0.6501 | 0.6264 | 0.3127 | 0.4043 | 0.6747 | 0.7530 | n/a | 0.3321 | 0.4920 | 249042 | 5273 |
+| pac top-k (2-round) [bidirectional] | 0.2759 | 0.6329 | 0.5928 | 0.2921 | 0.4363 | 0.6664 | 0.7403 | n/a | 0.2977 | 0.4918 | 494384 | 484 |
+| bubble sort (classic) [bidirectional] | 0.1185 | 0.6342 | 0.5859 | 0.2945 | 0.4416 | **0.6925** | 0.7177 | n/a | **0.4473** | 0.4915 | 129175 | 162247 |
+| sliding window prp (classic) [bidirectional] | 0.1185 | 0.6342 | 0.5859 | 0.2945 | 0.4416 | **0.6925** | 0.7177 | n/a | **0.4473** | 0.4915 | 119434 | 133890 |
+| pac top-k (3-round) [bidirectional] | 0.2337 | 0.6447 | 0.5818 | 0.2877 | 0.4415 | 0.6589 | 0.7378 | n/a | 0.3311 | 0.4896 | 539932 | 31566 |
+| quick sort (classic) [bidirectional] | **0.3180** | 0.6454 | 0.5847 | 0.2684 | 0.4100 | 0.6008 | 0.7661 | n/a | 0.2736 | 0.4834 | 615241 | **0** |
+| prp sort (classic) [weird $(1.5)$] | 0.1848 | 0.6469 | 0.6296 | 0.2981 | 0.4050 | 0.6411 | 0.7421 | n/a | 0.3019 | 0.4812 | 157902 | **0** |
+| pac + bubble [bidirectional] | 0.1495 | 0.6174 | 0.5719 | 0.2920 | 0.4405 | 0.6845 | 0.6729 | n/a | 0.4143 | 0.4804 | 78058 | 1627 |
+| pac + bubble [weird $(1.5)$] | 0.1515 | 0.6082 | 0.5755 | 0.2762 | 0.4142 | 0.6781 | 0.6889 | n/a | 0.4327 | 0.4782 | 42500 | **0** |
+| pac top-k (2-round) [cached-sampling] | 0.2538 | 0.6391 | 0.5726 | 0.2461 | 0.3752 | 0.6444 | 0.7620 | n/a | 0.2944 | 0.4734 | 553928 | 1773 |
+| prp sort (classic) [cached-sampling] | 0.1879 | 0.6265 | 0.6021 | 0.2827 | 0.3867 | 0.6233 | 0.7589 | n/a | 0.2949 | 0.4704 | 346448 | 9820 |
+| pac + bubble [sampling] | 0.1530 | 0.5998 | 0.5730 | 0.2719 | 0.4104 | 0.6699 | 0.7002 | n/a | 0.3823 | 0.4701 | 44359 | **0** |
+| pac top-k (3-round) [sampling] | 0.1953 | 0.6050 | 0.5897 | 0.2511 | 0.3823 | 0.6594 | 0.7219 | n/a | 0.3550 | 0.4700 | 289804 | **0** |
+| prp sort (classic) [sampling] | 0.1884 | 0.6240 | 0.6027 | 0.2770 | 0.3836 | 0.6174 | 0.7497 | n/a | 0.2993 | 0.4678 | 181987 | **0** |
+| pac top-k (2-round) [sampling] | 0.2554 | 0.6132 | 0.5723 | 0.2630 | 0.3712 | 0.6247 | 0.7408 | n/a | 0.2880 | 0.4661 | 278104 | **0** |
+| mohajer + bubble [weird $(1.5)$] | 0.2453 | 0.6218 | 0.5883 | 0.2770 | 0.3930 | 0.5746 | 0.7674 | n/a | 0.2522 | 0.4650 | 76382 | **0** |
+| pac + bubble [cached-sampling] | 0.1472 | 0.6065 | 0.5682 | 0.2632 | 0.4001 | 0.6567 | 0.6884 | n/a | 0.3860 | 0.4645 | 82096 | 3122 |
+| mohajer + bubble [sampling] | 0.2457 | 0.6175 | 0.5882 | 0.2619 | 0.3779 | 0.5880 | **0.7708** | n/a | 0.2570 | 0.4634 | 84200 | **0** |
+| pac top-k (2-round) [weird $(1.5)$] | 0.2526 | 0.6078 | 0.5618 | 0.2406 | 0.3409 | 0.6399 | 0.7483 | n/a | 0.3126 | 0.4631 | 256623 | **0** |
+| pac top-k (optimized) [bidirectional] | 0.1240 | 0.5939 | 0.5443 | 0.2640 | 0.4305 | 0.6785 | 0.6516 | n/a | 0.4084 | 0.4619 | 71731 | **0** |
+| quick sort (classic) [weird $(1.5)$] | 0.3101 | 0.6290 | 0.5593 | 0.2578 | 0.3687 | 0.5752 | 0.7458 | n/a | 0.2442 | 0.4613 | 191680 | **0** |
+| quick sort (classic) [cached-sampling] | 0.3043 | 0.6175 | 0.5811 | 0.2457 | 0.3543 | 0.5873 | 0.7470 | n/a | 0.2506 | 0.4610 | 357958 | **0** |
+| quick sort (classic) [sampling] | 0.3043 | 0.6175 | 0.5811 | 0.2457 | 0.3543 | 0.5873 | 0.7470 | n/a | 0.2506 | 0.4610 | 178979 | **0** |
+| pac top-k (3-round) [cached-sampling] | 0.2017 | 0.6168 | 0.5592 | 0.2378 | 0.3901 | 0.6228 | 0.7332 | n/a | 0.3035 | 0.4581 | 528259 | 24992 |
+| mohajer + bubble [bidirectional] | 0.2411 | 0.6296 | 0.5637 | 0.2623 | 0.3775 | 0.5487 | 0.7556 | n/a | 0.2665 | 0.4556 | 101128 | 18957 |
+| pac top-k (3-round) [weird $(1.5)$] | 0.2025 | 0.6077 | 0.5735 | 0.2325 | 0.3692 | 0.6453 | 0.7177 | n/a | 0.2952 | 0.4554 | 289761 | **0** |
+| pac top-k (optimized) [weird $(1.5)$] | 0.1237 | 0.5691 | 0.5367 | 0.2505 | 0.4054 | 0.6683 | 0.6679 | n/a | 0.4143 | 0.4545 | 35865 | **0** |
+| pac top-k (optimized) [cached-sampling] | 0.1199 | 0.5850 | 0.5365 | 0.2452 | 0.4151 | 0.6642 | 0.6718 | n/a | 0.3953 | 0.4541 | 71731 | **0** |
+| pac top-k (optimized) [sampling] | 0.1199 | 0.5850 | 0.5365 | 0.2452 | 0.4151 | 0.6642 | 0.6718 | n/a | 0.3953 | 0.4541 | 35865 | **0** |
+| jingle bells [sampling] | 0.1540 | 0.5892 | 0.5398 | 0.2478 | 0.4050 | 0.6452 | 0.6688 | n/a | 0.3784 | 0.4535 | 17348 | **0** |
+| mohajer + bubble [cached-sampling] | 0.2442 | 0.6215 | 0.5815 | 0.2683 | 0.3466 | 0.5694 | 0.7437 | n/a | 0.2390 | 0.4518 | 103452 | 30645 |
+| mohajer (ir) [sampling] | 0.2412 | 0.6064 | 0.5723 | 0.2485 | 0.3624 | 0.5754 | 0.7611 | n/a | 0.2445 | 0.4515 | 56609 | **0** |
+| christmas tree [sampling] | 0.1321 | 0.5411 | 0.5165 | 0.2463 | 0.4052 | 0.6579 | 0.6180 | n/a | 0.3878 | 0.4381 | 52672 | **0** |
+| bm25 [bidirectional] | 0.1037 | 0.5058 | 0.4796 | 0.2361 | 0.4070 | 0.6789 | 0.5947 | **0.3553** | 0.4422 | 0.4226 | **0** | **0** |
 
 ### flan-t5-xl
-| Ranker | dbpedia-entity | fiqa | scifact | trec-covid | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| bubble sort (classic) [bidirectional] | n/a | n/a | 0.7131 | 0.7482 | 0.4282 | **0.6298** | 87338 | 94329 |
-| sliding window prp (classic) [bidirectional] | n/a | n/a | 0.7131 | 0.7482 | 0.4282 | **0.6298** | 77597 | 70749 |
-| bubble sort (classic) [weird $(1.5)$] | n/a | n/a | **0.7182** | 0.7746 | 0.3957 | 0.6295 | 316458 | **0** |
-| sliding window prp (classic) [cached-sampling] | n/a | n/a | 0.7094 | 0.7662 | 0.3907 | 0.6221 | 121327 | 70893 |
-| bubble sort (classic) [cached-sampling] | n/a | n/a | 0.7026 | 0.7638 | 0.3978 | 0.6214 | 145125 | 491235 |
-| sliding window prp (classic) [weird $(1.5)$] | n/a | n/a | 0.6942 | 0.7638 | 0.3898 | 0.6159 | 131557 | **0** |
-| pac + bubble [bidirectional] | n/a | n/a | 0.7043 | 0.7132 | 0.4110 | 0.6095 | 43447 | 1032 |
-| bubble sort (classic) [sampling] | n/a | n/a | 0.7019 | 0.7809 | 0.3453 | 0.6094 | 530596 | **0** |
-| sliding window prp (classic) [sampling] | n/a | n/a | 0.6861 | 0.7791 | 0.3486 | 0.6046 | 131557 | **0** |
-| pac + bubble [sampling] | n/a | n/a | 0.6857 | 0.7130 | 0.3877 | 0.5955 | 24407 | **0** |
-| pac + bubble [weird $(1.5)$] | n/a | n/a | 0.6841 | 0.6997 | 0.3975 | 0.5938 | 23447 | **0** |
-| pac top-k (optimized) [bidirectional] | n/a | n/a | 0.6765 | 0.6823 | 0.4207 | 0.5932 | 39367 | **0** |
-| pac top-k (optimized) [cached-sampling] | n/a | n/a | 0.6823 | 0.6895 | 0.4073 | 0.5930 | 39367 | **0** |
-| pac top-k (optimized) [sampling] | n/a | n/a | 0.6823 | 0.6895 | 0.4073 | 0.5930 | 19684 | **0** |
-| prp sort (classic) [bidirectional] | n/a | n/a | 0.7057 | 0.7825 | 0.2843 | 0.5908 | 147551 | 3174 |
-| prp sort (classic) [weird $(1.5)$] | n/a | n/a | 0.6861 | 0.7794 | 0.3037 | 0.5897 | 94922 | **0** |
-| pac top-k (optimized) [weird $(1.5)$] | n/a | n/a | 0.6732 | 0.6805 | 0.4144 | 0.5894 | 19684 | **0** |
-| pac top-k (3-round) [bidirectional] | n/a | n/a | 0.6659 | 0.7732 | 0.3264 | 0.5885 | 282873 | 16007 |
-| pac + bubble [cached-sampling] | n/a | n/a | 0.6613 | 0.7003 | 0.3979 | 0.5865 | 45099 | 1706 |
-| pac top-k (3-round) [cached-sampling] | n/a | n/a | 0.6537 | 0.7356 | 0.3518 | 0.5804 | 288337 | 12658 |
-| pac top-k (2-round) [bidirectional] | n/a | n/a | 0.6647 | 0.7661 | 0.3084 | 0.5797 | 267599 | 161 |
-| jingle bells [sampling] | n/a | n/a | 0.6523 | 0.6886 | 0.3908 | 0.5772 | 8922 | **0** |
-| pac top-k (3-round) [sampling] | n/a | n/a | 0.6414 | 0.7391 | 0.3419 | 0.5742 | 156827 | **0** |
-| prp sort (classic) [cached-sampling] | n/a | n/a | 0.6627 | 0.7822 | 0.2732 | 0.5727 | 207726 | 6170 |
-| bm25 [bidirectional] | n/a | n/a | 0.6789 | 0.5947 | **0.4422** | 0.5719 | **0** | **0** |
-| pac top-k (2-round) [cached-sampling] | n/a | n/a | 0.6581 | 0.7624 | 0.2934 | 0.5713 | 300079 | 999 |
-| pac top-k (3-round) [weird $(1.5)$] | n/a | n/a | 0.6507 | 0.7475 | 0.3143 | 0.5708 | 156827 | **0** |
-| prp sort (classic) [sampling] | n/a | n/a | 0.6598 | 0.7644 | 0.2824 | 0.5689 | 109384 | **0** |
-| pac top-k (2-round) [sampling] | n/a | n/a | 0.6522 | 0.7475 | 0.3049 | 0.5682 | 150986 | **0** |
-| mohajer + bubble [sampling] | n/a | n/a | 0.6354 | **0.7855** | 0.2794 | 0.5668 | 46831 | **0** |
-| mohajer + bubble [weird $(1.5)$] | n/a | n/a | 0.6411 | 0.7776 | 0.2653 | 0.5613 | 42171 | **0** |
-| mohajer (ir) [sampling] | n/a | n/a | 0.6276 | 0.7761 | 0.2720 | 0.5586 | 30891 | **0** |
-| christmas tree [sampling] | n/a | n/a | 0.6520 | 0.6259 | 0.3953 | 0.5577 | 27525 | **0** |
-| quick sort (classic) [cached-sampling] | n/a | n/a | 0.6353 | 0.7645 | 0.2657 | 0.5552 | 145921 | **0** |
-| quick sort (classic) [sampling] | n/a | n/a | 0.6353 | 0.7645 | 0.2657 | 0.5552 | 72960 | **0** |
-| spectral mle (refinement) [weird $(1.5)$] | n/a | n/a | 0.6593 | 0.7295 | 0.2759 | 0.5549 | 333622 | **0** |
-| pac top-k (2-round) [weird $(1.5)$] | n/a | n/a | 0.6274 | 0.7636 | 0.2735 | 0.5548 | 140596 | **0** |
-| mohajer + bubble [cached-sampling] | n/a | n/a | 0.6107 | 0.7663 | 0.2772 | 0.5514 | 57912 | 16439 |
-| quick sort (classic) [bidirectional] | n/a | n/a | 0.6139 | 0.7717 | 0.2581 | 0.5479 | 249733 | **0** |
-| quick sort (classic) [weird $(1.5)$] | n/a | n/a | 0.6113 | 0.7572 | 0.2699 | 0.5461 | 76506 | **0** |
-| mohajer + bubble [bidirectional] | n/a | n/a | 0.6188 | 0.7598 | 0.2571 | 0.5452 | 57175 | 9527 |
-| spectral mle (refinement) [cached-sampling] | n/a | n/a | 0.6345 | 0.7386 | 0.2570 | 0.5434 | 667245 | **0** |
-| spectral mle (refinement) [sampling] | n/a | n/a | 0.6345 | 0.7386 | 0.2570 | 0.5434 | 333622 | **0** |
-| spectral mle (refinement) [bidirectional] | n/a | n/a | 0.5300 | 0.6819 | 0.2693 | 0.4937 | 667245 | **0** |
+| Ranker | dbpedia-entity | dl-2019 | dl-2020 | fiqa | robust04 | scifact | trec-covid | trec-news | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bubble sort (classic) [weird $(1.5)$] | n/a | 0.7012 | 0.6837 | n/a | n/a | **0.7182** | 0.7746 | n/a | 0.3957 | **0.6547** | 344522 | **0** |
+| bubble sort (classic) [bidirectional] | n/a | 0.6844 | 0.6697 | n/a | n/a | 0.7131 | 0.7482 | n/a | 0.4282 | 0.6487 | 131182 | 128504 |
+| sliding window prp (classic) [bidirectional] | n/a | 0.6844 | 0.6697 | n/a | n/a | 0.7131 | 0.7482 | n/a | 0.4282 | 0.6487 | 99597 | 63747 |
+| bubble sort (classic) [cached-sampling] | n/a | 0.6920 | 0.6801 | n/a | n/a | 0.7026 | 0.7638 | n/a | 0.3978 | 0.6472 | 191360 | 445363 |
+| sliding window prp (classic) [cached-sampling] | n/a | 0.6848 | 0.6729 | n/a | n/a | 0.7094 | 0.7662 | n/a | 0.3907 | 0.6448 | 136674 | 58711 |
+| sliding window prp (classic) [weird $(1.5)$] | n/a | 0.6960 | 0.6745 | n/a | n/a | 0.6942 | 0.7638 | n/a | 0.3898 | 0.6437 | 127048 | **0** |
+| bubble sort (classic) [sampling] | n/a | 0.7004 | 0.6831 | n/a | n/a | 0.7019 | 0.7809 | n/a | 0.3453 | 0.6423 | 513841 | **0** |
+| sliding window prp (classic) [sampling] | n/a | 0.7040 | 0.6700 | n/a | n/a | 0.6861 | 0.7791 | n/a | 0.3486 | 0.6376 | 127048 | **0** |
+| prp sort (classic) [bidirectional] | n/a | **0.7058** | **0.6892** | n/a | n/a | 0.7057 | 0.7825 | n/a | 0.2843 | 0.6335 | 165520 | 3994 |
+| prp sort (classic) [weird $(1.5)$] | n/a | 0.7011 | 0.6852 | n/a | n/a | 0.6861 | 0.7794 | n/a | 0.3037 | 0.6311 | 100332 | **0** |
+| prp sort (classic) [cached-sampling] | n/a | 0.6892 | 0.6762 | n/a | n/a | 0.6627 | 0.7822 | n/a | 0.2732 | 0.6167 | 210283 | 6303 |
+| pac top-k (3-round) [bidirectional] | n/a | 0.6754 | 0.6395 | n/a | n/a | 0.6659 | 0.7732 | n/a | 0.3264 | 0.6161 | 274316 | 14656 |
+| prp sort (classic) [sampling] | n/a | 0.6896 | 0.6771 | n/a | n/a | 0.6598 | 0.7644 | n/a | 0.2824 | 0.6147 | 111155 | **0** |
+| pac top-k (2-round) [bidirectional] | n/a | 0.6897 | 0.6434 | n/a | n/a | 0.6647 | 0.7661 | n/a | 0.3084 | 0.6145 | 260773 | 223 |
+| mohajer + bubble [sampling] | n/a | 0.6947 | 0.6630 | n/a | n/a | 0.6354 | **0.7855** | n/a | 0.2794 | 0.6116 | 44556 | **0** |
+| mohajer + bubble [weird $(1.5)$] | n/a | 0.6853 | 0.6788 | n/a | n/a | 0.6411 | 0.7776 | n/a | 0.2653 | 0.6096 | 40502 | **0** |
+| pac + bubble [bidirectional] | n/a | 0.6260 | 0.5862 | n/a | n/a | 0.7043 | 0.7132 | n/a | 0.4110 | 0.6081 | 42291 | 1063 |
+| mohajer (ir) [sampling] | n/a | 0.6873 | 0.6763 | n/a | n/a | 0.6276 | 0.7761 | n/a | 0.2720 | 0.6079 | 29798 | **0** |
+| quick sort (classic) [cached-sampling] | n/a | 0.6879 | 0.6816 | n/a | n/a | 0.6353 | 0.7645 | n/a | 0.2657 | 0.6070 | 144563 | **0** |
+| quick sort (classic) [sampling] | n/a | 0.6879 | 0.6816 | n/a | n/a | 0.6353 | 0.7645 | n/a | 0.2657 | 0.6070 | 72282 | **0** |
+| pac top-k (3-round) [cached-sampling] | n/a | 0.6634 | 0.6305 | n/a | n/a | 0.6537 | 0.7356 | n/a | 0.3518 | 0.6070 | 278530 | 12179 |
+| pac top-k (2-round) [cached-sampling] | n/a | 0.6790 | 0.6350 | n/a | n/a | 0.6581 | 0.7624 | n/a | 0.2934 | 0.6056 | 283189 | 780 |
+| pac top-k (2-round) [sampling] | n/a | 0.6698 | 0.6449 | n/a | n/a | 0.6522 | 0.7475 | n/a | 0.3049 | 0.6039 | 142347 | **0** |
+| quick sort (classic) [bidirectional] | n/a | 0.7036 | 0.6719 | n/a | n/a | 0.6139 | 0.7717 | n/a | 0.2581 | 0.6038 | 220001 | **0** |
+| mohajer + bubble [cached-sampling] | n/a | 0.6929 | 0.6647 | n/a | n/a | 0.6107 | 0.7663 | n/a | 0.2772 | 0.6024 | 56164 | 15478 |
+| quick sort (classic) [weird $(1.5)$] | n/a | 0.6981 | 0.6745 | n/a | n/a | 0.6113 | 0.7572 | n/a | 0.2699 | 0.6022 | 74908 | **0** |
+| pac top-k (3-round) [sampling] | n/a | 0.6532 | 0.6261 | n/a | n/a | 0.6414 | 0.7391 | n/a | 0.3419 | 0.6003 | 151444 | **0** |
+| pac top-k (2-round) [weird $(1.5)$] | n/a | 0.6857 | 0.6487 | n/a | n/a | 0.6274 | 0.7636 | n/a | 0.2735 | 0.5998 | 135472 | **0** |
+| pac + bubble [weird $(1.5)$] | n/a | 0.6170 | 0.5928 | n/a | n/a | 0.6841 | 0.6997 | n/a | 0.3975 | 0.5982 | 22811 | **0** |
+| pac top-k (3-round) [weird $(1.5)$] | n/a | 0.6593 | 0.6113 | n/a | n/a | 0.6507 | 0.7475 | n/a | 0.3143 | 0.5966 | 151444 | **0** |
+| pac + bubble [sampling] | n/a | 0.6105 | 0.5851 | n/a | n/a | 0.6857 | 0.7130 | n/a | 0.3877 | 0.5964 | 23577 | **0** |
+| mohajer + bubble [bidirectional] | n/a | 0.6659 | 0.6745 | n/a | n/a | 0.6188 | 0.7598 | n/a | 0.2571 | 0.5952 | 55077 | 9485 |
+| pac + bubble [cached-sampling] | n/a | 0.6044 | 0.5943 | n/a | n/a | 0.6613 | 0.7003 | n/a | 0.3979 | 0.5916 | 43732 | 1587 |
+| jingle bells [sampling] | n/a | 0.6226 | 0.5777 | n/a | n/a | 0.6523 | 0.6886 | n/a | 0.3908 | 0.5864 | 8595 | **0** |
+| pac top-k (optimized) [bidirectional] | n/a | 0.5995 | 0.5499 | n/a | n/a | 0.6765 | 0.6823 | n/a | 0.4207 | 0.5858 | 38006 | **0** |
+| pac top-k (optimized) [cached-sampling] | n/a | 0.5933 | 0.5502 | n/a | n/a | 0.6823 | 0.6895 | n/a | 0.4073 | 0.5845 | 38006 | **0** |
+| pac top-k (optimized) [sampling] | n/a | 0.5933 | 0.5502 | n/a | n/a | 0.6823 | 0.6895 | n/a | 0.4073 | 0.5845 | 19003 | **0** |
+| pac top-k (optimized) [weird $(1.5)$] | n/a | 0.5894 | 0.5504 | n/a | n/a | 0.6732 | 0.6805 | n/a | 0.4144 | 0.5816 | 19003 | **0** |
+| christmas tree [sampling] | n/a | 0.5481 | 0.5287 | n/a | n/a | 0.6520 | 0.6259 | n/a | 0.3953 | 0.5500 | 26452 | **0** |
+| bm25 [bidirectional] | n/a | 0.5058 | 0.4796 | n/a | n/a | 0.6789 | 0.5947 | **0.3553** | **0.4422** | 0.5094 | **0** | **0** |
 
 Notes:
 - fiqa: skipped (missing rerank matrix)
 - dbpedia-entity: skipped (missing rerank matrix)
+- robust04: skipped (missing rerank matrix)
 <!-- END_BEIR_RESULTS -->
 
 

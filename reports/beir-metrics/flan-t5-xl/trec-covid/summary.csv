@@ -39,7 +39,3 @@ sliding window prp (classic),bidirectional,10,0.74818,0.01838,0.01986,0.786,5136
 sliding window prp (classic),cached-sampling,10,0.76623,0.0193,0.02065,0.818,65126,16937,1.1765347173172004e-05
 sliding window prp (classic),sampling,10,0.77913,0.01938,0.02083,0.824,49500,0,1.574e-05
 sliding window prp (classic),weird $(1.5)$,10,0.76377,0.01878,0.02026,0.81,49500,0,1.542969696969697e-05
-spectral mle (refinement),bidirectional,10,0.6819,0.01643,0.01987,0.77,251200,0,2.7145700636942673e-06
-spectral mle (refinement),cached-sampling,10,0.7386,0.01849,0.02072,0.798,251200,0,2.9402866242038218e-06
-spectral mle (refinement),sampling,10,0.7386,0.01849,0.02072,0.798,125600,0,5.8805732484076435e-06
-spectral mle (refinement),weird $(1.5)$,10,0.72954,0.0177,0.02044,0.796,125600,0,5.8084394904458596e-06

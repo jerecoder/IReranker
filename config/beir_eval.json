@@ -4,7 +4,10 @@
     "trec-covid",
     "scifact",
     "fiqa",
-    "dbpedia-entity"
+    "dbpedia-entity",
+    "dl-2019",
+    "dl-2020",
+    "robust04"
   ],
   "split": "test",
   "max_queries": null,

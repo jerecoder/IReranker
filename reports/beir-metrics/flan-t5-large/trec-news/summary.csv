@@ -1,0 +1,2 @@
+ranker,oracle,k,NDCG,MAP,Recall,Precision,Comparisons,CacheHits,NDCG_per_comp
+bm25,bidirectional,10,0.35533,0.10867,0.13785,0.48596,0,0,0.0
