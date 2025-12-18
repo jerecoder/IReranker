@@ -6,16 +6,11 @@ import numpy as np
 from scipy.optimize import brentq
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
     BudgetExceeded,
-    CachedSamplingMatrixOracle,
     Oracle,
-    SamplingMatrixOracle,
-    WeirdSamplingMatrixOracle,
 )
 
 from .ranker import Ranker
-from .registry import register_ranker
 
 
 # @register_ranker(

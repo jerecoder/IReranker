@@ -1,11 +1,8 @@
 from __future__ import annotations
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
-    CachedSamplingMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
-    WeirdSamplingMatrixOracle,
 )
 
 from .pac_optimized import PACOptimizedRanker

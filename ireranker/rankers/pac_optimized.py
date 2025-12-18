@@ -4,16 +4,11 @@ import random
 from typing import List
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
     BudgetExceeded,
-    CachedSamplingMatrixOracle,
     Oracle,
-    SamplingMatrixOracle,
-    WeirdSamplingMatrixOracle,
 )
 
 from .ranker import Ranker
-from .registry import register_ranker
 
 
 # @register_ranker(
