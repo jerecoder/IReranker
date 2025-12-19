@@ -8,18 +8,15 @@ from ireranker.rankers import get_ranker
 from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
 
 def run_experiment():
-    datasets = ["trec-covid", "dbpedia-entity", "fiqa", "webis-touche2020", "scifact"]
-    
+    datasets = ["trec-covid", "scifact", "fiqa"]
+
     # Single Unified Experiment
     budgets = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700]
     rankers = [
-        "Mohajer (IR)", 
-        "PAC + Bubble", 
-        "Bubble Sort (Classic)", 
-        "Quick Sort (Classic)", 
-        "PRP Sort (classic)",
-        "Jingle Bells",
-        "Christmas Tree"
+        "mohajer (ir)",
+        "pac + bubble",
+        "bubble sort (classic)",
+        "prp sort (classic)"
     ]
 
     seeds = [42]
