@@ -7,7 +7,13 @@ from pathlib import Path
 def main():
     # Config
     DATA_PATH = Path("reports/limit_comparisons_experiment.csv")
-    OUTPUT_DIR = Path("reports")
+    OUTPUT_DIR = Path("reports/figures")
+
+    # Create subdirectories
+    (OUTPUT_DIR / "main").mkdir(parents=True, exist_ok=True)
+    (OUTPUT_DIR / "oracles_al").mkdir(parents=True, exist_ok=True)
+    (OUTPUT_DIR / "oracles_classic").mkdir(parents=True, exist_ok=True)
+    (OUTPUT_DIR / "aggregated").mkdir(parents=True, exist_ok=True)
 
     # Set plot style
     plt.style.use('seaborn-v0_8-darkgrid')
@@ -141,7 +147,7 @@ def main():
             ax.legend(frameon=True, shadow=True, fancybox=True, loc='best')
 
             plt.tight_layout()
-            out1 = OUTPUT_DIR / f"limit_comparisons_main_{ds}.png"
+            out1 = OUTPUT_DIR / "main" / f"limit_comparisons_main_{ds}.png"
             plt.savefig(out1, dpi=300, bbox_inches='tight')
             print(f"Saved {out1}")
             plt.close()
@@ -184,7 +190,7 @@ def main():
             ax.legend(frameon=True, shadow=True, fancybox=True, loc='best', ncol=2)
 
             plt.tight_layout()
-            out2_al = OUTPUT_DIR / f"limit_comparisons_oracles_al_{ds}.png"
+            out2_al = OUTPUT_DIR / "oracles_al" / f"limit_comparisons_oracles_al_{ds}.png"
             plt.savefig(out2_al, dpi=300, bbox_inches='tight')
             print(f"Saved {out2_al}")
             plt.close()
@@ -227,7 +233,7 @@ def main():
             ax.legend(frameon=True, shadow=True, fancybox=True, loc='best', ncol=2)
 
             plt.tight_layout()
-            out2_classic = OUTPUT_DIR / f"limit_comparisons_oracles_classic_{ds}.png"
+            out2_classic = OUTPUT_DIR / "oracles_classic" / f"limit_comparisons_oracles_classic_{ds}.png"
             plt.savefig(out2_classic, dpi=300, bbox_inches='tight')
             print(f"Saved {out2_classic}")
             plt.close()
@@ -269,7 +275,7 @@ def main():
         ax.legend(frameon=True, shadow=True, fancybox=True, loc='best')
 
         plt.tight_layout()
-        out_all_main = OUTPUT_DIR / "limit_comparisons_main_all.png"
+        out_all_main = OUTPUT_DIR / "aggregated" / "limit_comparisons_main_all.png"
         plt.savefig(out_all_main, dpi=300, bbox_inches='tight')
         print(f"Saved {out_all_main}")
         plt.close()
@@ -317,7 +323,7 @@ def main():
         ax.legend(frameon=True, shadow=True, fancybox=True, loc='best', ncol=2)
 
         plt.tight_layout()
-        out_all_oracle_al = OUTPUT_DIR / "limit_comparisons_oracles_all_al.png"
+        out_all_oracle_al = OUTPUT_DIR / "aggregated" / "limit_comparisons_oracles_all_al.png"
         plt.savefig(out_all_oracle_al, dpi=300, bbox_inches='tight')
         print(f"Saved {out_all_oracle_al}")
         plt.close()
@@ -364,7 +370,7 @@ def main():
         ax.legend(frameon=True, shadow=True, fancybox=True, loc='best', ncol=2)
 
         plt.tight_layout()
-        out_all_oracle_classic = OUTPUT_DIR / "limit_comparisons_oracles_all_classic.png"
+        out_all_oracle_classic = OUTPUT_DIR / "aggregated" / "limit_comparisons_oracles_all_classic.png"
         plt.savefig(out_all_oracle_classic, dpi=300, bbox_inches='tight')
         print(f"Saved {out_all_oracle_classic}")
         plt.close()
