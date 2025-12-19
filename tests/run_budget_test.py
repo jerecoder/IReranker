@@ -1,11 +1,5 @@
 
 import sys
-from unittest.mock import MagicMock
-
-# Mock missing dependencies
-sys.modules["dotenv"] = MagicMock()
-sys.modules["loguru"] = MagicMock()
-sys.modules["tqdm"] = MagicMock()
 
 from ireranker.oracles import Oracle, BudgetExceeded
 from ireranker.rankers import MohajerRanker

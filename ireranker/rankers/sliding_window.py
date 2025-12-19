@@ -10,15 +10,9 @@ from .ranker import Ranker
 
 
 # @register_ranker(
-#     "Sliding Window PRP (Classic)",
+#     "sliding window prp (classic)",
 #     oracle_factories=[
 #         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
-#         ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
-#         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-#         (
-#             "weird $(1.5)$",
-#             lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-#         ),
 #     ],
 # )
 class SlidingWindowRanker(Ranker):

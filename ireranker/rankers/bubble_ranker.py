@@ -13,7 +13,7 @@ from .registry import register_ranker
 
 
 @register_ranker(
-    "Bubble Sort (Classic)",
+    "bubble sort (classic)",
     oracle_factories=[
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
     ],

@@ -25,5 +25,9 @@ REPORTS_DIR = PROJ_ROOT / "reports"
 FIGURES_DIR = REPORTS_DIR / "figures"
 
 
-logger.remove(0)
+try:
+    logger.remove(0)
+except ValueError:
+    # Handler 0 may not exist if this module is being reloaded
+    pass
 logger.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
