@@ -9,17 +9,39 @@ def main():
     DATA_PATH = Path("reports/limit_comparisons_experiment.csv")
     OUTPUT_DIR = Path("reports")
 
-    # Define colors
+    # Set plot style
+    plt.style.use('seaborn-v0_8-darkgrid')
+    sns.set_palette("husl")
+
+    # Set global font sizes and style
+    plt.rcParams.update({
+        'font.size': 11,
+        'axes.titlesize': 14,
+        'axes.labelsize': 12,
+        'xtick.labelsize': 10,
+        'ytick.labelsize': 10,
+        'legend.fontsize': 10,
+        'figure.titlesize': 16,
+        'font.family': 'sans-serif',
+        'axes.grid': True,
+        'grid.alpha': 0.6,
+        'grid.linewidth': 0.8,
+        'axes.facecolor': '#f8f9fa',
+        'figure.facecolor': 'white'
+    })
+
+    # Define colors - more vibrant and distinct palette
     colors_map = {
-        'Mohajer (IR)': '#345834',
-        'PAC + Bubble': '#65976a',
-        'Bubble Sort (Classic)': '#791818',
-        'Quick Sort (Classic)': '#dfa51c',
-        'PRP Sort (classic)': '#d51d1b',
-        'Jingle Bells': '#1b4dd5',
-        'Christmas Tree': '#8b2ed5',
-        'bm25': '#444444',
-        'BM25': '#444444',
+        'mohajer (ir)': '#2ecc71',           # Emerald green
+        'mohajer + bubble': '#16a085',       # Dark turquoise
+        'pac + bubble': '#3498db',           # Bright blue
+        'bubble sort (classic)': '#e74c3c',  # Red
+        'quick sort (classic)': '#f39c12',   # Orange
+        'prp sort (classic)': '#9b59b6',     # Purple
+        'jingle bells': '#1abc9c',           # Turquoise
+        'christmas tree': '#e67e22',         # Carrot
+        'bm25': '#34495e',                   # Dark grey-blue
+        'BM25': '#34495e',
     }
 
     # Verify file exists
@@ -29,8 +51,8 @@ def main():
 
     # Load Data
     df = pd.read_csv(DATA_PATH)
-    
-    # Filter Budget <= 700
+
+    # Filter Budget <= 700 (exclude 800)
     df = df[df["Budget"] <= 700].copy()
 
     # Display-only Oracle labels (leave metrics untouched)
@@ -47,30 +69,33 @@ def main():
     datasets = df["Dataset"].unique()
     
     # --- Definition of Ranker/Oracle Sets ---
-    
+
     # Set 1: Main Comparison
     main_comparison_pairs = [
-        ("Mohajer (IR)", "Sampling"), 
-        ("PAC + Bubble", "Sampling"), 
-        ("Bubble Sort (Classic)", "Bidirectional"),
-        ("Quick Sort (Classic)", "Bidirectional"),
-        ("PRP Sort (classic)", "Bidirectional"),
-        ("Jingle Bells", "Sampling"),
-        ("Christmas Tree", "Sampling"),
+        ("mohajer (ir)", "Sampling"),
+        ("mohajer + bubble", "Sampling"),
+        ("pac + bubble", "Sampling"),
+        ("bubble sort (classic)", "Bidirectional"),
+        ("quick sort (classic)", "Bidirectional"),
+        ("prp sort (classic)", "Bidirectional"),
+        ("jingle bells", "Sampling"),
+        ("christmas tree", "Sampling"),
         ("bm25", "Bidirectional"),
     ]
-    
+
     # Set 2: Oracle Comparison, split to reduce clutter
-    ir_rankers = [
-        "Mohajer (IR)",
-        "PAC + Bubble",
-        "Jingle Bells",
-        "Christmas Tree",
+    # AL = Active Learners
+    al_rankers = [
+        "mohajer (ir)",
+        "mohajer + bubble",
+        "pac + bubble",
+        "jingle bells",
+        "christmas tree",
     ]
     classic_rankers = [
-        "Bubble Sort (Classic)",
-        "Quick Sort (Classic)",
-        "PRP Sort (classic)",
+        "bubble sort (classic)",
+        "quick sort (classic)",
+        "prp sort (classic)",
         "bm25",
     ]
 
@@ -90,84 +115,120 @@ def main():
         # ---------------------------------------------------------
         mask1 = _mask_for_pairs(ds_data, main_comparison_pairs)
         data1 = ds_data[mask1].sort_values("Budget")
-        
+
         if not data1.empty:
-            plt.figure(figsize=(10, 6))
-            sns.lineplot(
-                data=data1, 
-                x="Budget", 
-                y="NDCG@10", 
-                hue="Ranker", 
-                palette=colors_map, 
-                marker="o",
-                linewidth=2
-            )
-            plt.title(f"{ds}")
-            plt.xlabel("Comparison Budget")
-            plt.ylabel("NDCG@10")
-            plt.xlim(0, 750)
+            fig, ax = plt.subplots(figsize=(12, 7))
+
+            for ranker in data1["Ranker"].unique():
+                ranker_data = data1[data1["Ranker"] == ranker]
+                ax.plot(
+                    ranker_data["Budget"],
+                    ranker_data["NDCG@10"],
+                    marker='o',
+                    markersize=8,
+                    linewidth=2.5,
+                    label=ranker,
+                    color=colors_map.get(ranker, '#000000'),
+                    alpha=0.9,
+                    markeredgewidth=1.5,
+                    markeredgecolor='white'
+                )
+
+            ax.set_xlabel("Inference Budget")
+            ax.set_ylabel("NDCG@10")
+            ax.set_xlim(0, 750)
+            ax.grid(True, alpha=0.6, linestyle='-', linewidth=0.8)
+            ax.legend(frameon=True, shadow=True, fancybox=True, loc='best')
+
             plt.tight_layout()
-            
             out1 = OUTPUT_DIR / f"limit_comparisons_main_{ds}.png"
-            plt.savefig(out1)
+            plt.savefig(out1, dpi=300, bbox_inches='tight')
             print(f"Saved {out1}")
             plt.close()
 
     # ---------------------------------------------------------
-    # Plot 2: Oracle Comparison (IR rankers only)
+    # Plot 2: Oracle Comparison (Active Learning rankers only)
     # ---------------------------------------------------------
-        data2_ir = ds_data[ds_data["Ranker"].isin(ir_rankers)].sort_values("Budget")
-        
-        if not data2_ir.empty:
-            plt.figure(figsize=(10, 6))
-            sns.lineplot(
-                data=data2_ir, 
-                x="Budget", 
-                y="NDCG@10", 
-                hue="Ranker", 
-                style="OracleDisplay",
-                palette=colors_map, 
-                markers=True,
-                dashes={"Bidireccional": "", "Estocastico": (2, 2), "BM25": ""},
-                linewidth=2
-            )
-            plt.title(f"{ds}")
-            plt.xlabel("Comparison Budget")
-            plt.ylabel("NDCG@10")
-            plt.xlim(0, 750)
+        data2_al = ds_data[ds_data["Ranker"].isin(al_rankers)].sort_values("Budget")
+
+        if not data2_al.empty:
+            fig, ax = plt.subplots(figsize=(12, 7))
+
+            for ranker in data2_al["Ranker"].unique():
+                for oracle in data2_al["OracleDisplay"].unique():
+                    subset = data2_al[(data2_al["Ranker"] == ranker) & (data2_al["OracleDisplay"] == oracle)]
+                    if subset.empty:
+                        continue
+
+                    linestyle = '--' if oracle == "Estocastico" else '-'
+                    marker = 's' if oracle == "Estocastico" else 'o'
+
+                    ax.plot(
+                        subset["Budget"],
+                        subset["NDCG@10"],
+                        marker=marker,
+                        markersize=7,
+                        linewidth=2.5,
+                        linestyle=linestyle,
+                        label=f"{ranker} [{oracle}]",
+                        color=colors_map.get(ranker, '#000000'),
+                        alpha=0.9,
+                        markeredgewidth=1.5,
+                        markeredgecolor='white'
+                    )
+
+            ax.set_xlabel("Inference Budget")
+            ax.set_ylabel("NDCG@10")
+            ax.set_xlim(0, 750)
+            ax.grid(True, alpha=0.6, linestyle='-', linewidth=0.8)
+            ax.legend(frameon=True, shadow=True, fancybox=True, loc='best', ncol=2)
+
             plt.tight_layout()
-            
-            out2_ir = OUTPUT_DIR / f"limit_comparisons_oracles_ir_{ds}.png"
-            plt.savefig(out2_ir)
-            print(f"Saved {out2_ir}")
+            out2_al = OUTPUT_DIR / f"limit_comparisons_oracles_al_{ds}.png"
+            plt.savefig(out2_al, dpi=300, bbox_inches='tight')
+            print(f"Saved {out2_al}")
             plt.close()
 
         # ---------------------------------------------------------
         # Plot 3: Oracle Comparison (Classic rankers only)
         # ---------------------------------------------------------
         data2_classic = ds_data[ds_data["Ranker"].isin(classic_rankers)].sort_values("Budget")
-        
+
         if not data2_classic.empty:
-            plt.figure(figsize=(10, 6))
-            sns.lineplot(
-                data=data2_classic, 
-                x="Budget", 
-                y="NDCG@10", 
-                hue="Ranker", 
-                style="OracleDisplay",
-                palette=colors_map, 
-                markers=True,
-                dashes={"Bidireccional": "", "Estocastico": (2, 2), "BM25": ""},
-                linewidth=2
-            )
-            plt.title(f"{ds}")
-            plt.xlabel("Comparison Budget")
-            plt.ylabel("NDCG@10")
-            plt.xlim(0, 750)
+            fig, ax = plt.subplots(figsize=(12, 7))
+
+            for ranker in data2_classic["Ranker"].unique():
+                for oracle in data2_classic["OracleDisplay"].unique():
+                    subset = data2_classic[(data2_classic["Ranker"] == ranker) & (data2_classic["OracleDisplay"] == oracle)]
+                    if subset.empty:
+                        continue
+
+                    linestyle = '--' if oracle == "Estocastico" else '-'
+                    marker = 's' if oracle == "Estocastico" else 'o'
+
+                    ax.plot(
+                        subset["Budget"],
+                        subset["NDCG@10"],
+                        marker=marker,
+                        markersize=7,
+                        linewidth=2.5,
+                        linestyle=linestyle,
+                        label=f"{ranker} [{oracle}]",
+                        color=colors_map.get(ranker, '#000000'),
+                        alpha=0.9,
+                        markeredgewidth=1.5,
+                        markeredgecolor='white'
+                    )
+
+            ax.set_xlabel("Inference Budget")
+            ax.set_ylabel("NDCG@10")
+            ax.set_xlim(0, 750)
+            ax.grid(True, alpha=0.6, linestyle='-', linewidth=0.8)
+            ax.legend(frameon=True, shadow=True, fancybox=True, loc='best', ncol=2)
+
             plt.tight_layout()
-            
             out2_classic = OUTPUT_DIR / f"limit_comparisons_oracles_classic_{ds}.png"
-            plt.savefig(out2_classic)
+            plt.savefig(out2_classic, dpi=300, bbox_inches='tight')
             print(f"Saved {out2_classic}")
             plt.close()
 
@@ -183,57 +244,82 @@ def main():
             .mean()
             .sort_values("Budget")
         )
-        plt.figure(figsize=(10, 6))
-        sns.lineplot(
-            data=grouped,
-            x="Budget",
-            y="NDCG@10",
-            hue="Ranker",
-            style="OracleDisplay",
-            palette=colors_map,
-            markers=True,
-            linewidth=2,
-        )
-        plt.title("All datasets (avg NDCG@10) — Main comparison")
-        plt.xlabel("Comparison Budget")
-        plt.ylabel("Avg NDCG@10")
-        plt.xlim(0, 750)
+
+        fig, ax = plt.subplots(figsize=(12, 7))
+
+        for ranker in grouped["Ranker"].unique():
+            ranker_data = grouped[grouped["Ranker"] == ranker]
+            ax.plot(
+                ranker_data["Budget"],
+                ranker_data["NDCG@10"],
+                marker='o',
+                markersize=8,
+                linewidth=2.5,
+                label=ranker,
+                color=colors_map.get(ranker, '#000000'),
+                alpha=0.9,
+                markeredgewidth=1.5,
+                markeredgecolor='white'
+            )
+
+        ax.set_xlabel("Inference Budget")
+        ax.set_ylabel("Average NDCG@10")
+        ax.set_xlim(0, 750)
+        ax.grid(True, alpha=0.6, linestyle='-', linewidth=0.8)
+        ax.legend(frameon=True, shadow=True, fancybox=True, loc='best')
+
         plt.tight_layout()
         out_all_main = OUTPUT_DIR / "limit_comparisons_main_all.png"
-        plt.savefig(out_all_main)
+        plt.savefig(out_all_main, dpi=300, bbox_inches='tight')
         print(f"Saved {out_all_main}")
         plt.close()
 
-    # Aggregated oracle comparisons (split IR vs Classic)
-    agg_oracle_ir = df[df["Ranker"].isin(ir_rankers)]
-    if not agg_oracle_ir.empty:
+    # Aggregated oracle comparisons (split AL vs Classic)
+    agg_oracle_al = df[df["Ranker"].isin(al_rankers)]
+    if not agg_oracle_al.empty:
         grouped = (
-            agg_oracle_ir.groupby(["Ranker", "Oracle", "OracleDisplay", "Budget"], as_index=False)[
+            agg_oracle_al.groupby(["Ranker", "Oracle", "OracleDisplay", "Budget"], as_index=False)[
                 "NDCG@10"
             ]
             .mean()
             .sort_values("Budget")
         )
-        plt.figure(figsize=(10, 6))
-        sns.lineplot(
-            data=grouped,
-            x="Budget",
-            y="NDCG@10",
-            hue="Ranker",
-            style="OracleDisplay",
-            palette=colors_map,
-            markers=True,
-            dashes={"Bidireccional": "", "Estocastico": (2, 2), "BM25": ""},
-            linewidth=2,
-        )
-        plt.title("All datasets (avg NDCG@10) — Oracle comparison (IR)")
-        plt.xlabel("Comparison Budget")
-        plt.ylabel("Avg NDCG@10")
-        plt.xlim(0, 750)
+
+        fig, ax = plt.subplots(figsize=(12, 7))
+
+        for ranker in grouped["Ranker"].unique():
+            for oracle in grouped["OracleDisplay"].unique():
+                subset = grouped[(grouped["Ranker"] == ranker) & (grouped["OracleDisplay"] == oracle)]
+                if subset.empty:
+                    continue
+
+                linestyle = '--' if oracle == "Estocastico" else '-'
+                marker = 's' if oracle == "Estocastico" else 'o'
+
+                ax.plot(
+                    subset["Budget"],
+                    subset["NDCG@10"],
+                    marker=marker,
+                    markersize=7,
+                    linewidth=2.5,
+                    linestyle=linestyle,
+                    label=f"{ranker} [{oracle}]",
+                    color=colors_map.get(ranker, '#000000'),
+                    alpha=0.9,
+                    markeredgewidth=1.5,
+                    markeredgecolor='white'
+                )
+
+        ax.set_xlabel("Inference Budget")
+        ax.set_ylabel("Average NDCG@10")
+        ax.set_xlim(0, 750)
+        ax.grid(True, alpha=0.6, linestyle='-', linewidth=0.8)
+        ax.legend(frameon=True, shadow=True, fancybox=True, loc='best', ncol=2)
+
         plt.tight_layout()
-        out_all_oracle_ir = OUTPUT_DIR / "limit_comparisons_oracles_all_ir.png"
-        plt.savefig(out_all_oracle_ir)
-        print(f"Saved {out_all_oracle_ir}")
+        out_all_oracle_al = OUTPUT_DIR / "limit_comparisons_oracles_all_al.png"
+        plt.savefig(out_all_oracle_al, dpi=300, bbox_inches='tight')
+        print(f"Saved {out_all_oracle_al}")
         plt.close()
 
     agg_oracle_classic = df[df["Ranker"].isin(classic_rankers)]
@@ -245,25 +331,41 @@ def main():
             .mean()
             .sort_values("Budget")
         )
-        plt.figure(figsize=(10, 6))
-        sns.lineplot(
-            data=grouped,
-            x="Budget",
-            y="NDCG@10",
-            hue="Ranker",
-            style="OracleDisplay",
-            palette=colors_map,
-            markers=True,
-            dashes={"Bidireccional": "", "Estocastico": (2, 2), "BM25": ""},
-            linewidth=2,
-        )
-        plt.title("All datasets (avg NDCG@10) — Oracle comparison (Classic)")
-        plt.xlabel("Comparison Budget")
-        plt.ylabel("Avg NDCG@10")
-        plt.xlim(0, 750)
+
+        fig, ax = plt.subplots(figsize=(12, 7))
+
+        for ranker in grouped["Ranker"].unique():
+            for oracle in grouped["OracleDisplay"].unique():
+                subset = grouped[(grouped["Ranker"] == ranker) & (grouped["OracleDisplay"] == oracle)]
+                if subset.empty:
+                    continue
+
+                linestyle = '--' if oracle == "Estocastico" else '-'
+                marker = 's' if oracle == "Estocastico" else 'o'
+
+                ax.plot(
+                    subset["Budget"],
+                    subset["NDCG@10"],
+                    marker=marker,
+                    markersize=7,
+                    linewidth=2.5,
+                    linestyle=linestyle,
+                    label=f"{ranker} [{oracle}]",
+                    color=colors_map.get(ranker, '#000000'),
+                    alpha=0.9,
+                    markeredgewidth=1.5,
+                    markeredgecolor='white'
+                )
+
+        ax.set_xlabel("Inference Budget")
+        ax.set_ylabel("Average NDCG@10")
+        ax.set_xlim(0, 750)
+        ax.grid(True, alpha=0.6, linestyle='-', linewidth=0.8)
+        ax.legend(frameon=True, shadow=True, fancybox=True, loc='best', ncol=2)
+
         plt.tight_layout()
         out_all_oracle_classic = OUTPUT_DIR / "limit_comparisons_oracles_all_classic.png"
-        plt.savefig(out_all_oracle_classic)
+        plt.savefig(out_all_oracle_classic, dpi=300, bbox_inches='tight')
         print(f"Saved {out_all_oracle_classic}")
         plt.close()
 
