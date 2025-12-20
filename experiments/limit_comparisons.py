@@ -11,18 +11,12 @@ from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
 def run_experiment():
     # All datasets from config
     datasets = [
-        "webis-touche2020",
-        "trec-covid",
-        "scifact",
-        "fiqa",
-        "dbpedia-entity",
         "dl-2019",
         "dl-2020",
-        "robust04"
     ]
 
     # Doubled step size for faster completion
-    budgets = [50, 100, 200, 400, 800]
+    budgets = [50, 100, 200, 400, 500, 600, 700, 800]
     rankers = [
         "mohajer (ir)",
         "mohajer + bubble",

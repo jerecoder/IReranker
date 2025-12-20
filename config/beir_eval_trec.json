@@ -1,0 +1,19 @@
+{
+    "datasets": [
+        "dl-2019",
+        "dl-2020"
+    ],
+    "split": "test",
+    "output_dir": "beir-metrics-trec",
+    "k_values": [
+        10
+    ],
+    "rankers": [
+        "all"
+    ],
+    "matrix_models": [
+        "flan-t5-large",
+        "flan-t5-xl",
+        "flan-t5-xxl"
+    ]
+}

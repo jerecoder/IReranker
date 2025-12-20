@@ -1,10 +1,25 @@
-
+import argparse
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pathlib import Path
 
-def main():
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Visualize limit comparisons experiment results.")
+    parser.add_argument(
+        "--agg-datasets",
+        type=str,
+        default=None,
+        help=(
+            "Comma-separated dataset names to use for aggregated plots only "
+            "(defaults to all datasets)."
+        ),
+    )
+    args = parser.parse_args()
+    agg_datasets = None
+    if args.agg_datasets:
+        agg_datasets = [d.strip() for d in args.agg_datasets.split(",") if d.strip()]
+
     # Config
     DATA_PATH = Path("reports/limit_comparisons_experiment.csv")
     OUTPUT_DIR = Path("reports/figures")
@@ -239,9 +254,20 @@ def main():
             plt.close()
 
     # ---------------------------------------------------------
-    # Aggregated plots across all datasets (average NDCG@10)
+    # Aggregated plots across datasets (average NDCG@10)
     # ---------------------------------------------------------
-    agg_main = df[_mask_for_pairs(df, main_comparison_pairs)]
+    agg_df = df
+    if agg_datasets:
+        agg_df = df[df["Dataset"].isin(agg_datasets)].copy()
+        if agg_df.empty:
+            print(
+                "No rows found for aggregated datasets: "
+                + ", ".join(agg_datasets)
+                + ". Skipping aggregated plots."
+            )
+            agg_df = pd.DataFrame(columns=df.columns)
+
+    agg_main = agg_df[_mask_for_pairs(agg_df, main_comparison_pairs)]
     if not agg_main.empty:
         grouped = (
             agg_main.groupby(["Ranker", "Oracle", "OracleDisplay", "Budget"], as_index=False)[
@@ -281,7 +307,7 @@ def main():
         plt.close()
 
     # Aggregated oracle comparisons (split AL vs Classic)
-    agg_oracle_al = df[df["Ranker"].isin(al_rankers)]
+    agg_oracle_al = agg_df[agg_df["Ranker"].isin(al_rankers)]
     if not agg_oracle_al.empty:
         grouped = (
             agg_oracle_al.groupby(["Ranker", "Oracle", "OracleDisplay", "Budget"], as_index=False)[
@@ -328,7 +354,7 @@ def main():
         print(f"Saved {out_all_oracle_al}")
         plt.close()
 
-    agg_oracle_classic = df[df["Ranker"].isin(classic_rankers)]
+    agg_oracle_classic = agg_df[agg_df["Ranker"].isin(classic_rankers)]
     if not agg_oracle_classic.empty:
         grouped = (
             agg_oracle_classic.groupby(

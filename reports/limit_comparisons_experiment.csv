@@ -623,3 +623,99 @@ prp sort (classic),Sampling,prp sort (classic) [Sampling],robust04,12450,0.06977
 prp sort (classic),Sampling,prp sort (classic) [Sampling],robust04,24900,0.0751,100
 prp sort (classic),Sampling,prp sort (classic) [Sampling],robust04,49800,0.32214,200
 prp sort (classic),Sampling,prp sort (classic) [Sampling],robust04,99600,0.38079,400
+mohajer (ir),Bidirectional,mohajer (ir) [Bidirectional],dl-2019,17090,0.62647,500
+mohajer (ir),Bidirectional,mohajer (ir) [Bidirectional],dl-2019,17090,0.62647,600
+mohajer (ir),Bidirectional,mohajer (ir) [Bidirectional],dl-2019,17090,0.62647,700
+mohajer (ir),Bidirectional,mohajer (ir) [Bidirectional],dl-2019,17090,0.62647,800
+mohajer (ir),Sampling,mohajer (ir) [Sampling],dl-2019,9980,0.60643,500
+mohajer (ir),Sampling,mohajer (ir) [Sampling],dl-2019,9980,0.60643,600
+mohajer (ir),Sampling,mohajer (ir) [Sampling],dl-2019,9980,0.60643,700
+mohajer (ir),Sampling,mohajer (ir) [Sampling],dl-2019,9980,0.60643,800
+mohajer + bubble,Bidirectional,mohajer + bubble [Bidirectional],dl-2019,18134,0.62964,500
+mohajer + bubble,Bidirectional,mohajer + bubble [Bidirectional],dl-2019,18134,0.62964,600
+mohajer + bubble,Bidirectional,mohajer + bubble [Bidirectional],dl-2019,18134,0.62964,700
+mohajer + bubble,Bidirectional,mohajer + bubble [Bidirectional],dl-2019,18134,0.62964,800
+mohajer + bubble,Sampling,mohajer + bubble [Sampling],dl-2019,15248,0.61751,500
+mohajer + bubble,Sampling,mohajer + bubble [Sampling],dl-2019,15248,0.61751,600
+mohajer + bubble,Sampling,mohajer + bubble [Sampling],dl-2019,15248,0.61751,700
+mohajer + bubble,Sampling,mohajer + bubble [Sampling],dl-2019,15248,0.61751,800
+pac + bubble,Bidirectional,pac + bubble [Bidirectional],dl-2019,13930,0.61739,500
+pac + bubble,Bidirectional,pac + bubble [Bidirectional],dl-2019,13930,0.61739,600
+pac + bubble,Bidirectional,pac + bubble [Bidirectional],dl-2019,13930,0.61739,700
+pac + bubble,Bidirectional,pac + bubble [Bidirectional],dl-2019,13930,0.61739,800
+pac + bubble,Sampling,pac + bubble [Sampling],dl-2019,7884,0.59983,500
+pac + bubble,Sampling,pac + bubble [Sampling],dl-2019,7884,0.59983,600
+pac + bubble,Sampling,pac + bubble [Sampling],dl-2019,7884,0.59983,700
+pac + bubble,Sampling,pac + bubble [Sampling],dl-2019,7884,0.59983,800
+bubble sort (classic),Bidirectional,bubble sort (classic) [Bidirectional],dl-2019,20930,0.59249,500
+bubble sort (classic),Bidirectional,bubble sort (classic) [Bidirectional],dl-2019,24266,0.60286,600
+bubble sort (classic),Bidirectional,bubble sort (classic) [Bidirectional],dl-2019,27130,0.60941,700
+bubble sort (classic),Bidirectional,bubble sort (classic) [Bidirectional],dl-2019,29836,0.62201,800
+bubble sort (classic),Sampling,bubble sort (classic) [Sampling],dl-2019,21500,0.6298,500
+bubble sort (classic),Sampling,bubble sort (classic) [Sampling],dl-2019,25800,0.63882,600
+bubble sort (classic),Sampling,bubble sort (classic) [Sampling],dl-2019,30100,0.65026,700
+bubble sort (classic),Sampling,bubble sort (classic) [Sampling],dl-2019,34400,0.64003,800
+quick sort (classic),Bidirectional,quick sort (classic) [Bidirectional],dl-2019,21500,0.60691,500
+quick sort (classic),Bidirectional,quick sort (classic) [Bidirectional],dl-2019,25800,0.60461,600
+quick sort (classic),Bidirectional,quick sort (classic) [Bidirectional],dl-2019,30100,0.60557,700
+quick sort (classic),Bidirectional,quick sort (classic) [Bidirectional],dl-2019,34400,0.6134,800
+quick sort (classic),Sampling,quick sort (classic) [Sampling],dl-2019,21500,0.59292,500
+quick sort (classic),Sampling,quick sort (classic) [Sampling],dl-2019,24011,0.63356,600
+quick sort (classic),Sampling,quick sort (classic) [Sampling],dl-2019,24412,0.61754,700
+quick sort (classic),Sampling,quick sort (classic) [Sampling],dl-2019,24412,0.61754,800
+prp sort (classic),Bidirectional,prp sort (classic) [Bidirectional],dl-2019,21500,0.64622,500
+prp sort (classic),Bidirectional,prp sort (classic) [Bidirectional],dl-2019,25800,0.65007,600
+prp sort (classic),Bidirectional,prp sort (classic) [Bidirectional],dl-2019,30100,0.65007,700
+prp sort (classic),Bidirectional,prp sort (classic) [Bidirectional],dl-2019,34400,0.65007,800
+prp sort (classic),Sampling,prp sort (classic) [Sampling],dl-2019,21500,0.64322,500
+prp sort (classic),Sampling,prp sort (classic) [Sampling],dl-2019,25800,0.64909,600
+prp sort (classic),Sampling,prp sort (classic) [Sampling],dl-2019,30100,0.63807,700
+prp sort (classic),Sampling,prp sort (classic) [Sampling],dl-2019,34344,0.64266,800
+mohajer (ir),Bidirectional,mohajer (ir) [Bidirectional],dl-2020,80420,0.56059,500
+mohajer (ir),Bidirectional,mohajer (ir) [Bidirectional],dl-2020,80420,0.56059,600
+mohajer (ir),Bidirectional,mohajer (ir) [Bidirectional],dl-2020,80420,0.56059,700
+mohajer (ir),Bidirectional,mohajer (ir) [Bidirectional],dl-2020,80420,0.56059,800
+mohajer (ir),Sampling,mohajer (ir) [Sampling],dl-2020,46440,0.57228,500
+mohajer (ir),Sampling,mohajer (ir) [Sampling],dl-2020,46440,0.57228,600
+mohajer (ir),Sampling,mohajer (ir) [Sampling],dl-2020,46440,0.57228,700
+mohajer (ir),Sampling,mohajer (ir) [Sampling],dl-2020,46440,0.57228,800
+mohajer + bubble,Bidirectional,mohajer + bubble [Bidirectional],dl-2020,85194,0.56366,500
+mohajer + bubble,Bidirectional,mohajer + bubble [Bidirectional],dl-2020,85194,0.56366,600
+mohajer + bubble,Bidirectional,mohajer + bubble [Bidirectional],dl-2020,85194,0.56366,700
+mohajer + bubble,Bidirectional,mohajer + bubble [Bidirectional],dl-2020,85194,0.56366,800
+mohajer + bubble,Sampling,mohajer + bubble [Sampling],dl-2020,70849,0.58816,500
+mohajer + bubble,Sampling,mohajer + bubble [Sampling],dl-2020,70849,0.58816,600
+mohajer + bubble,Sampling,mohajer + bubble [Sampling],dl-2020,70849,0.58816,700
+mohajer + bubble,Sampling,mohajer + bubble [Sampling],dl-2020,70849,0.58816,800
+pac + bubble,Bidirectional,pac + bubble [Bidirectional],dl-2020,65202,0.57191,500
+pac + bubble,Bidirectional,pac + bubble [Bidirectional],dl-2020,65202,0.57191,600
+pac + bubble,Bidirectional,pac + bubble [Bidirectional],dl-2020,65202,0.57191,700
+pac + bubble,Bidirectional,pac + bubble [Bidirectional],dl-2020,65202,0.57191,800
+pac + bubble,Sampling,pac + bubble [Sampling],dl-2020,36798,0.57296,500
+pac + bubble,Sampling,pac + bubble [Sampling],dl-2020,36798,0.57296,600
+pac + bubble,Sampling,pac + bubble [Sampling],dl-2020,36798,0.57296,700
+pac + bubble,Sampling,pac + bubble [Sampling],dl-2020,36798,0.57296,800
+bubble sort (classic),Bidirectional,bubble sort (classic) [Bidirectional],dl-2020,94982,0.55604,500
+bubble sort (classic),Bidirectional,bubble sort (classic) [Bidirectional],dl-2020,109398,0.56355,600
+bubble sort (classic),Bidirectional,bubble sort (classic) [Bidirectional],dl-2020,121730,0.56975,700
+bubble sort (classic),Bidirectional,bubble sort (classic) [Bidirectional],dl-2020,131928,0.57455,800
+bubble sort (classic),Sampling,bubble sort (classic) [Sampling],dl-2020,100000,0.59973,500
+bubble sort (classic),Sampling,bubble sort (classic) [Sampling],dl-2020,120000,0.60043,600
+bubble sort (classic),Sampling,bubble sort (classic) [Sampling],dl-2020,140000,0.61067,700
+bubble sort (classic),Sampling,bubble sort (classic) [Sampling],dl-2020,160000,0.62744,800
+quick sort (classic),Bidirectional,quick sort (classic) [Bidirectional],dl-2020,100000,0.52314,500
+quick sort (classic),Bidirectional,quick sort (classic) [Bidirectional],dl-2020,120000,0.52685,600
+quick sort (classic),Bidirectional,quick sort (classic) [Bidirectional],dl-2020,140000,0.52761,700
+quick sort (classic),Bidirectional,quick sort (classic) [Bidirectional],dl-2020,160000,0.53428,800
+quick sort (classic),Sampling,quick sort (classic) [Sampling],dl-2020,100000,0.54497,500
+quick sort (classic),Sampling,quick sort (classic) [Sampling],dl-2020,111045,0.57492,600
+quick sort (classic),Sampling,quick sort (classic) [Sampling],dl-2020,112388,0.57877,700
+quick sort (classic),Sampling,quick sort (classic) [Sampling],dl-2020,112630,0.58111,800
+prp sort (classic),Bidirectional,prp sort (classic) [Bidirectional],dl-2020,100000,0.62061,500
+prp sort (classic),Bidirectional,prp sort (classic) [Bidirectional],dl-2020,120000,0.62637,600
+prp sort (classic),Bidirectional,prp sort (classic) [Bidirectional],dl-2020,139776,0.62637,700
+prp sort (classic),Bidirectional,prp sort (classic) [Bidirectional],dl-2020,158932,0.62637,800
+prp sort (classic),Sampling,prp sort (classic) [Sampling],dl-2020,100000,0.59506,500
+prp sort (classic),Sampling,prp sort (classic) [Sampling],dl-2020,120000,0.59587,600
+prp sort (classic),Sampling,prp sort (classic) [Sampling],dl-2020,139869,0.59838,700
+prp sort (classic),Sampling,prp sort (classic) [Sampling],dl-2020,158321,0.60423,800
