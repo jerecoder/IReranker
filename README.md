@@ -128,43 +128,49 @@ Tables auto-updated after each BEIR evaluation.
 
 <!-- BEGIN_BEIR_RESULTS -->
 ### flan-t5-large
-| Ranker | dl-2019 | dl-2020 | Average | Avg #Inference | Avg Cache Hits |
-| --- | --- | --- | --- | --- | --- |
-| prp sort (classic) [bidirectional] | **0.6501** | **0.6264** | **0.6382** | 156870 | 3770 |
-| quick sort (classic) [bidirectional] | 0.6454 | 0.5847 | 0.6151 | 227787 | **0** |
-| bubble sort (classic) [bidirectional] | 0.6342 | 0.5859 | 0.6100 | 104291 | 117990 |
-| mohajer (ir) [sampling] | 0.6330 | 0.5823 | 0.6076 | 28214 | **0** |
-| mohajer + bubble [sampling] | 0.6154 | 0.5810 | 0.5982 | 42774 | **0** |
-| pac + bubble [sampling] | 0.6052 | 0.5609 | 0.5831 | 22334 | **0** |
-| jingle bells [sampling] | 0.5947 | 0.5437 | 0.5692 | 8216 | **0** |
-| christmas tree [sampling] | 0.5540 | 0.5206 | 0.5373 | 25073 | **0** |
-| bm25 [bidirectional] | 0.5058 | 0.4796 | 0.4927 | **0** | **0** |
+| Ranker | dbpedia-entity | dl-2019 | dl-2020 | fiqa | nfcorpus | robust04 | scifact | trec-covid | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bubble sort (classic) [bidirectional] | **0.4158** | 0.6342 | 0.5859 | 0.2945 | n/a | **0.4416** | **0.6925** | 0.7177 | **0.4473** | **0.5287** | 158736 | 199027 |
+| prp sort (classic) [bidirectional] | 0.4128 | **0.6501** | **0.6264** | **0.3127** | n/a | 0.4043 | 0.6747 | 0.7530 | 0.3321 | 0.5208 | 275580 | 6332 |
+| pac + bubble [sampling] | 0.3794 | 0.5998 | 0.5730 | 0.2719 | n/a | 0.4104 | 0.6699 | 0.7002 | 0.3823 | 0.4984 | 44610 | **0** |
+| quick sort (classic) [bidirectional] | 0.4114 | 0.6454 | 0.5847 | 0.2684 | n/a | 0.4100 | 0.6008 | 0.7661 | 0.2736 | 0.4951 | 510656 | **0** |
+| mohajer + bubble [sampling] | 0.3995 | 0.6175 | 0.5882 | 0.2619 | n/a | 0.3779 | 0.5880 | **0.7708** | 0.2570 | 0.4826 | 86132 | **0** |
+| jingle bells [sampling] | 0.3694 | 0.5892 | 0.5398 | 0.2478 | n/a | 0.4050 | 0.6452 | 0.6688 | 0.3784 | 0.4804 | 16447 | **0** |
+| mohajer (ir) [sampling] | 0.3837 | 0.6064 | 0.5723 | 0.2485 | n/a | 0.3624 | 0.5754 | 0.7611 | 0.2445 | 0.4693 | 56343 | **0** |
+| christmas tree [sampling] | 0.3347 | 0.5411 | 0.5165 | 0.2463 | n/a | 0.4052 | 0.6579 | 0.6180 | 0.3878 | 0.4634 | 50168 | **0** |
+| bm25 [bidirectional] | 0.3185 | 0.5058 | 0.4796 | 0.2361 | n/a | 0.4070 | 0.6789 | 0.5947 | 0.4422 | 0.4578 | **0** | **0** |
+| sliding window prp (classic) | n/a | n/a | n/a | n/a | **0.4146** | n/a | n/a | n/a | n/a | 0.4146 | 105810 | **0** |
+| nothing | n/a | n/a | n/a | n/a | 0.3982 | n/a | n/a | n/a | n/a | 0.3982 | **0** | **0** |
+| random | n/a | n/a | n/a | n/a | 0.3702 | n/a | n/a | n/a | n/a | 0.3702 | **0** | **0** |
 
 ### flan-t5-xl
-| Ranker | dl-2019 | dl-2020 | Average | Avg #Inference | Avg Cache Hits |
-| --- | --- | --- | --- | --- | --- |
-| prp sort (classic) [bidirectional] | **0.7058** | **0.6892** | **0.6975** | 192475 | 5225 |
-| quick sort (classic) [bidirectional] | 0.7036 | 0.6719 | 0.6877 | 175402 | **0** |
-| mohajer + bubble [sampling] | 0.6933 | 0.6713 | 0.6823 | 41450 | **0** |
-| bubble sort (classic) [bidirectional] | 0.6844 | 0.6697 | 0.6770 | 196949 | 179765 |
-| mohajer (ir) [sampling] | 0.6807 | 0.6657 | 0.6732 | 28102 | **0** |
-| pac + bubble [sampling] | 0.6210 | 0.5902 | 0.6056 | 22330 | **0** |
-| jingle bells [sampling] | 0.6151 | 0.5691 | 0.5921 | 8054 | **0** |
-| christmas tree [sampling] | 0.5380 | 0.5288 | 0.5334 | 24806 | **0** |
-| bm25 [bidirectional] | 0.5058 | 0.4796 | 0.4927 | **0** | **0** |
+| Ranker | dbpedia-entity | dl-2019 | dl-2020 | fiqa | nfcorpus | robust04 | scifact | trec-covid | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| bubble sort (classic) [bidirectional] | n/a | 0.6844 | 0.6697 | n/a | n/a | n/a | **0.7131** | 0.7482 | 0.4282 | **0.6487** | 131182 | 128504 |
+| prp sort (classic) [bidirectional] | n/a | **0.7058** | **0.6892** | n/a | n/a | n/a | 0.7057 | 0.7825 | 0.2843 | 0.6335 | 165520 | 3994 |
+| mohajer + bubble [sampling] | n/a | 0.6947 | 0.6630 | n/a | n/a | n/a | 0.6354 | **0.7855** | 0.2794 | 0.6116 | 44556 | **0** |
+| mohajer (ir) [sampling] | n/a | 0.6873 | 0.6763 | n/a | n/a | n/a | 0.6276 | 0.7761 | 0.2720 | 0.6079 | 29798 | **0** |
+| quick sort (classic) [bidirectional] | n/a | 0.7036 | 0.6719 | n/a | n/a | n/a | 0.6139 | 0.7717 | 0.2581 | 0.6038 | 220001 | **0** |
+| pac + bubble [sampling] | n/a | 0.6105 | 0.5851 | n/a | n/a | n/a | 0.6857 | 0.7130 | 0.3877 | 0.5964 | 23577 | **0** |
+| jingle bells [sampling] | n/a | 0.6226 | 0.5777 | n/a | n/a | n/a | 0.6523 | 0.6886 | 0.3908 | 0.5864 | 8595 | **0** |
+| christmas tree [sampling] | n/a | 0.5481 | 0.5287 | n/a | n/a | n/a | 0.6520 | 0.6259 | 0.3953 | 0.5500 | 26452 | **0** |
+| bm25 [bidirectional] | n/a | 0.5058 | 0.4796 | n/a | n/a | n/a | 0.6789 | 0.5947 | **0.4422** | 0.5403 | **0** | **0** |
+| sliding window prp (classic) | n/a | n/a | n/a | n/a | **0.4294** | n/a | n/a | n/a | n/a | 0.4294 | 86975 | **0** |
+| nothing | n/a | n/a | n/a | n/a | 0.3982 | n/a | n/a | n/a | n/a | 0.3982 | **0** | **0** |
+| random | n/a | n/a | n/a | n/a | 0.3702 | n/a | n/a | n/a | n/a | 0.3702 | **0** | **0** |
 
 ### flan-t5-xxl
-| Ranker | dl-2019 | dl-2020 | Average | Avg #Inference | Avg Cache Hits |
-| --- | --- | --- | --- | --- | --- |
-| prp sort (classic) [bidirectional] | **0.7021** | **0.6882** | **0.6951** | 180390 | 4764 |
-| mohajer (ir) [sampling] | 0.6847 | 0.6753 | 0.6800 | 28123 | **0** |
-| mohajer + bubble [sampling] | 0.6777 | 0.6812 | 0.6794 | 42100 | **0** |
-| bubble sort (classic) [bidirectional] | 0.6785 | 0.6798 | 0.6792 | 157092 | 143453 |
-| quick sort (classic) [bidirectional] | 0.6902 | 0.6657 | 0.6779 | 185644 | **0** |
-| pac + bubble [sampling] | 0.6165 | 0.6079 | 0.6122 | 22314 | **0** |
-| jingle bells [sampling] | 0.6033 | 0.5868 | 0.5950 | 8086 | **0** |
-| christmas tree [sampling] | 0.5538 | 0.5323 | 0.5430 | 24846 | **0** |
-| bm25 [bidirectional] | 0.5058 | 0.4796 | 0.4927 | **0** | **0** |
+| Ranker | dbpedia-entity | dl-2019 | dl-2020 | fiqa | robust04 | scifact | trec-covid | webis-touche2020 | Average | Avg #Inference | Avg Cache Hits |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| prp sort (classic) [bidirectional] | n/a | **0.7021** | 0.6882 | n/a | n/a | n/a | n/a | n/a | **0.6951** | 180390 | 4764 |
+| mohajer + bubble [sampling] | n/a | 0.6854 | **0.6896** | n/a | n/a | n/a | n/a | n/a | 0.6875 | 41766 | **0** |
+| bubble sort (classic) [bidirectional] | n/a | 0.6785 | 0.6798 | n/a | n/a | n/a | n/a | n/a | 0.6792 | 157092 | 143453 |
+| quick sort (classic) [bidirectional] | n/a | 0.6902 | 0.6657 | n/a | n/a | n/a | n/a | n/a | 0.6779 | 185644 | **0** |
+| mohajer (ir) [sampling] | n/a | 0.6816 | 0.6673 | n/a | n/a | n/a | n/a | n/a | 0.6745 | 28097 | **0** |
+| pac + bubble [sampling] | n/a | 0.6093 | 0.6072 | n/a | n/a | n/a | n/a | n/a | 0.6082 | 22304 | **0** |
+| jingle bells [sampling] | n/a | 0.6052 | 0.5807 | n/a | n/a | n/a | n/a | n/a | 0.5929 | 8070 | **0** |
+| christmas tree [sampling] | n/a | 0.5384 | 0.5374 | n/a | n/a | n/a | n/a | n/a | 0.5379 | 24907 | **0** |
+| bm25 [bidirectional] | n/a | 0.5058 | 0.4796 | n/a | n/a | n/a | n/a | n/a | 0.4927 | **0** | **0** |
 <!-- END_BEIR_RESULTS -->
 
 ## Limit Comparisons Experiment

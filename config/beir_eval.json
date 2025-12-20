@@ -1,13 +1,7 @@
 {
   "datasets": [
-    "webis-touche2020",
-    "trec-covid",
-    "scifact",
-    "fiqa",
-    "dbpedia-entity",
     "dl-2019",
-    "dl-2020",
-    "robust04"
+    "dl-2020"
   ],
   "split": "test",
   "max_queries": null,

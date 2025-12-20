@@ -76,10 +76,12 @@ def evaluate_rankers_beir(
 ) -> List[Dict[str, float | int | str]]:
     """Evaluate rankers using BEIR metrics and return flattened rows for CSV.
 
-    Returns a list of rows with keys: ranker, k, NDCG, MAP, Recall, Precision, Comparisons, NDCG_per_comp.
+    Returns a list of rows with keys: ranker, k, NDCG, MAP, Recall, Precision, Comparisons,
+    Comparisons_per_task, CacheHits, NDCG_per_comp.
     """
     qrels = dataset_to_beir_qrels(dataset)
     rows: List[Dict[str, float | int | str]] = []
+    task_count = len(dataset.tasks)
     base_seed = seed if seed is not None else 0
     iter_rankers = _progress(rankers, desc="Evaluating rankers", leave=True)
     for r in iter_rankers:
@@ -93,6 +95,7 @@ def evaluate_rankers_beir(
         ndcg, _map, recall, precision = EvaluateRetrieval.evaluate(qrels, res, k_values)
         total_comparisons = int(r.comparisons)
         total_cache_hits = int(getattr(r, "cache_hits", 0))
+        avg_comparisons = float(total_comparisons / task_count) if task_count else 0.0
         for k in k_values:
             ndcg_k = float(ndcg.get(f"NDCG@{k}", 0.0))
             rows.append(
@@ -105,6 +108,7 @@ def evaluate_rankers_beir(
                     "Recall": float(recall.get(f"Recall@{k}", 0.0)),
                     "Precision": float(precision.get(f"P@{k}", 0.0)),
                     "Comparisons": total_comparisons,
+                    "Comparisons_per_task": avg_comparisons,
                     "CacheHits": total_cache_hits,
                     "NDCG_per_comp": (
                         float(ndcg_k / total_comparisons) if total_comparisons else 0.0
