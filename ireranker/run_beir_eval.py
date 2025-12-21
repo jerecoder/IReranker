@@ -545,6 +545,7 @@ def run_from_config(
                     "Recall",
                     "Precision",
                     "Comparisons",
+                    "Comparisons_per_task",
                     "CacheHits",
                     "NDCG_per_comp",
                 ]

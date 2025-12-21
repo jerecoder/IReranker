@@ -30,3 +30,9 @@ python -m pyserini.search.lucene --threads 16 --batch-size 128 \
   --topics beir-v1.0.0-webis-touche2020-test \
   --output "$RUN_DIR/run.beir.bm25-flat.webis-touche2020.txt" \
   --output-format trec --hits 1000 --bm25 --remove-query
+
+python -m pyserini.search.lucene --threads 16 --batch-size 128 \
+  --index beir-v1.0.0-dbpedia-entity.flat \
+  --topics beir-v1.0.0-dbpedia-entity-test \
+  --output "$RUN_DIR/run.beir.bm25-flat.dbpedia-entity.txt" \
+  --output-format trec --hits 1000 --bm25 --remove-query

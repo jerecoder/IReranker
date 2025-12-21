@@ -3,12 +3,9 @@ from __future__ import annotations
 from typing import List
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
     BudgetExceeded,
-    CachedSamplingMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
-    WeirdSamplingMatrixOracle,
 )
 
 from .bubble_ranker import BubbleRanker
@@ -20,12 +17,6 @@ from .registry import register_ranker
     "Mohajer + Bubble",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
-        (
-            "weird $(1.5)$",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
     ],
 )
 class MohajerBubbleRanker(BubbleRanker):

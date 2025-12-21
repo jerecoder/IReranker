@@ -5,30 +5,25 @@ import random
 from typing import List
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
     BudgetExceeded,
-    CachedSamplingMatrixOracle,
     Oracle,
-    SamplingMatrixOracle,
-    WeirdSamplingMatrixOracle,
 )
 
 from .ranker import Ranker
-from .registry import register_ranker
 
 
-@register_ranker(
-    "PAC Top-k (3-round)",
-    oracle_factories=[
-        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
-        (
-            "weird $(1.5)$",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
-    ],
-)
+# @register_ranker(
+#     "PAC Top-k (3-round)",
+#     oracle_factories=[
+#         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+#         ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
+#         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+#         (
+#             "weird $(1.5)$",
+#             lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
+#         ),
+#     ],
+# )
 class PACRanker(Ranker):
     """PAC Top-k Identification following Agarwal et al.
 
@@ -237,18 +232,18 @@ class PACRanker(Ranker):
         return self.gt(i, j)
 
 
-@register_ranker(
-    "PAC Top-k (2-round)",
-    oracle_factories=[
-        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
-        (
-            "weird $(1.5)$",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
-    ],
-)
+# @register_ranker(
+#     "PAC Top-k (2-round)",
+#     oracle_factories=[
+#         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+#         ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
+#         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+#         (
+#             "weird $(1.5)$",
+#             lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
+#         ),
+#     ],
+# )
 class PAC2RoundRanker(Ranker):
     """Simplified 2-round PAC Top-k algorithm.
 

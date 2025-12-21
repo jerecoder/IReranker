@@ -2,23 +2,28 @@
 import pandas as pd
 import numpy as np
 from pathlib import Path
+from tqdm import tqdm
 from ireranker.data.loaders import load_beir_dataset
 from ireranker.evaluation.beir import evaluate_rankers_beir
 from ireranker.rankers import get_ranker
 from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
 
 def run_experiment():
-    datasets = ["trec-covid", "dbpedia-entity", "fiqa", "webis-touche2020", "scifact"]
-    
-    # Single Unified Experiment
-    budgets = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700]
+    # All datasets from config
+    datasets = [
+        "dl-2019",
+        "dl-2020",
+    ]
+
+    # Doubled step size for faster completion
+    budgets = [50, 100, 200, 400, 500, 600, 700, 800]
     rankers = [
-        "Mohajer (IR)", 
-        "PAC + Bubble", 
-        "Bubble Sort (Classic)", 
-        "Quick Sort (Classic)", 
-        "PRP Sort (classic)",
-        "Jingle Bells"
+        "mohajer (ir)",
+        "mohajer + bubble",
+        "pac + bubble",
+        "bubble sort (classic)",
+        "quick sort (classic)",
+        "prp sort (classic)"
     ]
 
     seeds = [42]
@@ -52,8 +57,22 @@ def run_experiment():
                 return True
         return False
 
+    # Calculate total experiments for progress bar
+    total_experiments = 0
     for dataset_name in datasets:
-        print(f"Processing dataset: {dataset_name}")
+        for ranker_name in rankers:
+            for budget in budgets:
+                if not result_exists(dataset_name, ranker_name, budget, "Bidirectional"):
+                    total_experiments += 1
+                if not result_exists(dataset_name, ranker_name, budget, "Sampling"):
+                    total_experiments += 1
+
+    print(f"Total experiments to run: {total_experiments}")
+
+    pbar = tqdm(total=total_experiments, desc="Running experiments")
+
+    for dataset_name in datasets:
+        print(f"\nProcessing dataset: {dataset_name}")
         dataset = load_beir_dataset(dataset_name, split="test", matrix_model=matrix_model)
         task_qids = [t.query_id for t in dataset.tasks]
 
@@ -63,10 +82,9 @@ def run_experiment():
                 for budget in budgets:
                     ranker_label = f"{ranker_name} [Bidirectional]"
                     if result_exists(dataset_name, ranker_name, budget, "Bidirectional"):
-                        # print(f"Skipping {ranker_label}, budget {budget}: already exists.")
                         continue
 
-                    print(f"  {ranker_name}, Bidirectional, Budget: {budget}")
+                    pbar.set_description(f"{dataset_name} | {ranker_name} | Bidirectional | Budget: {budget}")
                     oracle = BidirectionalMatrixOracle(comparison_limit=budget, comparison_limit_per_task=True)
                     ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
                     ranker.set_dataset(
@@ -75,9 +93,9 @@ def run_experiment():
                         query_ids=task_qids,
                         matrix_model=matrix_model,
                     )
-                    
+
                     metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
-                    
+
                     results.append({
                         "Ranker": ranker_name,
                         "Oracle": "Bidirectional",
@@ -87,6 +105,7 @@ def run_experiment():
                         "NDCG@10": metrics["NDCG"],
                         "Budget": budget
                     })
+                    pbar.update(1)
 
                 # 2. Sampling Oracle
                 for budget in budgets:
@@ -94,7 +113,7 @@ def run_experiment():
                     if result_exists(dataset_name, ranker_name, budget, "Sampling"):
                         continue
 
-                    print(f"  {ranker_name}, Sampling, Budget: {budget}")
+                    pbar.set_description(f"{dataset_name} | {ranker_name} | Sampling | Budget: {budget}")
                     oracle = SamplingMatrixOracle(seed=seed, comparison_limit=budget, comparison_limit_per_task=True)
                     ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
                     ranker.set_dataset(
@@ -103,9 +122,9 @@ def run_experiment():
                         query_ids=task_qids,
                         matrix_model=matrix_model,
                     )
-                    
+
                     metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
-                    
+
                     results.append({
                         "Ranker": ranker_name,
                         "Oracle": "Sampling",
@@ -115,6 +134,9 @@ def run_experiment():
                         "NDCG@10": metrics["NDCG"],
                         "Budget": budget
                     })
+                    pbar.update(1)
+
+    pbar.close()
 
     # Save Results
     df = pd.DataFrame(results)

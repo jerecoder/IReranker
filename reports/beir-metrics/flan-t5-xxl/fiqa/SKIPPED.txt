@@ -1,0 +1,2 @@
+Zip: /Users/jeremias.paschmann/Documents/IReranker/data/external/beir/fiqa.zip
+Reason: Rerank matrix not found for fiqa/test. Skipping dataset.

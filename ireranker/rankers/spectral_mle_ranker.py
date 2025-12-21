@@ -6,30 +6,25 @@ import numpy as np
 from scipy.optimize import brentq
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
     BudgetExceeded,
-    CachedSamplingMatrixOracle,
     Oracle,
-    SamplingMatrixOracle,
-    WeirdSamplingMatrixOracle,
 )
 
 from .ranker import Ranker
-from .registry import register_ranker
 
 
-@register_ranker(
-    "Spectral MLE (Refinement)",
-    oracle_factories=[
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
-        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
-        ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        (
-            "weird $(1.5)$",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
-    ],
-)
+# @register_ranker(
+#     "Spectral MLE (Refinement)",
+#     oracle_factories=[
+#         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+#         ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
+#         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+#         (
+#             "weird $(1.5)$",
+#             lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
+#         ),
+#     ],
+# )
 class SpectralMLERanker(Ranker):
     """
     Implements the Refinement stage of Spectral MLE.

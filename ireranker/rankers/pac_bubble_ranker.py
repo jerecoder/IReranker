@@ -1,11 +1,8 @@
 from __future__ import annotations
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
-    CachedSamplingMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
-    WeirdSamplingMatrixOracle,
 )
 
 from .pac_optimized import PACOptimizedRanker
@@ -16,12 +13,6 @@ from .registry import register_ranker
     "PAC + Bubble",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        ("cached-sampling", lambda seed: CachedSamplingMatrixOracle(seed=seed)),
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
-        (
-            "weird $(1.5)$",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
     ],
 )
 class PACBubbleRanker(PACOptimizedRanker):
