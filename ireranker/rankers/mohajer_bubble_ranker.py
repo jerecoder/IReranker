@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import List
 
 from ireranker.oracles import (
+    BidirectionalMatrixOracle,
     BudgetExceeded,
     Oracle,
     SamplingMatrixOracle,
@@ -16,6 +17,7 @@ from .registry import register_ranker
 @register_ranker(
     "Mohajer + Bubble",
     oracle_factories=[
+        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
     ],
 )

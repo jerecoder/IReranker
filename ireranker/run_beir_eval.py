@@ -379,6 +379,7 @@ def run_from_config(
     profile_sort: str = "cumulative",
     skip_readme_update: bool = False,
     matrix_models_override: Optional[List[str]] = None,
+    oracle_filter: Optional[str] = None,
 ) -> None:
     cfg_path = config_path or (PROJ_ROOT / "config" / "beir_eval.json")
 
@@ -457,6 +458,10 @@ def run_from_config(
     seed = int(cfg.get("seed") or 123)
 
     rs = build_rankers_for_eval(eff_rankers, seed=seed)
+    if oracle_filter:
+        before_count = len(rs)
+        rs = [r for r in rs if oracle_filter.lower() in (r.oracle_label or "").lower()]
+        logger.info(f"Filtered rankers by oracle '{oracle_filter}': kept {len(rs)}/{before_count}")
 
     cfg_kvals = cfg.get("k_values") if isinstance(cfg.get("k_values"), list) else None
     k_values = list(cfg_kvals) if cfg_kvals else [1, 3, 5, 10, 100]
@@ -733,6 +738,12 @@ def main() -> None:
             "Required unless provided in config; falls back to auto-discovery."
         ),
     )
+    parser.add_argument(
+        "--oracle",
+        type=str,
+        default=None,
+        help="Filter to run only rankers with this oracle label (case-insensitive substring match).",
+    )
     args = parser.parse_args()
 
     cfg_path = Path(args.config) if args.config else None
@@ -754,6 +765,7 @@ def main() -> None:
         profile_sort=args.profile_sort,
         skip_readme_update=args.skip_readme_update,
         matrix_models_override=matrix_models_override,
+        oracle_filter=args.oracle,
     )
 
 

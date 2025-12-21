@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from ireranker.oracles import (
+    BidirectionalMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
 )
@@ -12,6 +13,7 @@ from .registry import register_ranker
 @register_ranker(
     "PAC + Bubble",
     oracle_factories=[
+        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
     ],
 )

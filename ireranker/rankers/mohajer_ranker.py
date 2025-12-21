@@ -6,6 +6,7 @@ import random
 from typing import List
 
 from ireranker.oracles import (
+    BidirectionalMatrixOracle,
     BudgetExceeded,
     Oracle,
     SamplingMatrixOracle,
@@ -18,6 +19,7 @@ from .registry import register_ranker
 @register_ranker(
     "Mohajer (IR)",
     oracle_factories=[
+        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
     ],
 )
