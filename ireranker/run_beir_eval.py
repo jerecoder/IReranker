@@ -462,14 +462,8 @@ def run_from_config(
         before_count = len(rs)
         # Allow comma-separated filters (OR logic)
         filters = [f.strip().lower() for f in oracle_filter.split(",") if f.strip()]
-        rs = [
-            r
-            for r in rs
-            if any(f in (r.oracle_label or "").lower() for f in filters)
-        ]
-        logger.info(
-            f"Filtered rankers by oracle '{oracle_filter}': kept {len(rs)}/{before_count}"
-        )
+        rs = [r for r in rs if any(f in (r.oracle_label or "").lower() for f in filters)]
+        logger.info(f"Filtered rankers by oracle '{oracle_filter}': kept {len(rs)}/{before_count}")
     cfg_kvals = cfg.get("k_values") if isinstance(cfg.get("k_values"), list) else None
     k_values = list(cfg_kvals) if cfg_kvals else [1, 3, 5, 10, 100]
 
