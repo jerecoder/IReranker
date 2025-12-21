@@ -7,6 +7,7 @@ from ireranker.oracles import (
     BudgetExceeded,
     Oracle,
     SamplingMatrixOracle,
+    WeirdSamplingMatrixOracle,
 )
 
 from .bubble_ranker import BubbleRanker
@@ -19,6 +20,10 @@ from .registry import register_ranker
     oracle_factories=[
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        (
+            "mixed",
+            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
+        ),
     ],
 )
 class MohajerBubbleRanker(BubbleRanker):
