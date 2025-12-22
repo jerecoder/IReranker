@@ -5,6 +5,7 @@ from .sampling_matrix_oracles import (
     SamplingMatrixOracle,
     WeirdSamplingMatrixOracle,
 )
+from .transformer_oracle import TransformerOracle
 
 __all__ = [
     "Oracle",
@@ -14,4 +15,5 @@ __all__ = [
     "SamplingMatrixOracle",
     "CachedSamplingMatrixOracle",
     "WeirdSamplingMatrixOracle",
+    "TransformerOracle",
 ]

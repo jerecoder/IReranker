@@ -1,0 +1,47 @@
+{
+  "models": {
+    "llama-8b": {
+      "name": "meta-llama/Llama-3.1-8B-Instruct",
+      "quantization": "8bit",
+      "description": "Llama 3.1 8B Instruct - fits on V100 with 8-bit quantization",
+      "recommended_gpu": "V100, A100, T4",
+      "min_vram_gb": 12
+    },
+    "llama-70b": {
+      "name": "meta-llama/Llama-3.1-70B-Instruct",
+      "quantization": "4bit",
+      "description": "Llama 3.1 70B Instruct - requires 4-bit quantization for V100",
+      "recommended_gpu": "V100, A100",
+      "min_vram_gb": 16
+    },
+    "llama-3.3-70b": {
+      "name": "meta-llama/Llama-3.3-70B-Instruct",
+      "quantization": "4bit",
+      "description": "Llama 3.3 70B Instruct - latest 70B model",
+      "recommended_gpu": "V100, A100",
+      "min_vram_gb": 16
+    },
+    "llama-405b": {
+      "name": "meta-llama/Llama-3.1-405B-Instruct",
+      "quantization": "4bit",
+      "description": "Llama 3.1 405B Instruct - requires multiple GPUs or aggressive quantization",
+      "recommended_gpu": "Multiple A100s",
+      "min_vram_gb": 80,
+      "note": "May not fit on single V100, use with caution"
+    }
+  },
+  "datasets": {
+    "small": ["scifact", "nfcorpus"],
+    "medium": ["trec-covid", "fiqa", "webis-touche2020"],
+    "large": ["dl-2019", "dl-2020"],
+    "very_large": ["signal1m", "robust04", "dbpedia-entity", "trec-news"]
+  },
+  "generation_settings": {
+    "checkpoint_interval": 1000,
+    "max_doc_length": 512,
+    "max_prompt_length": 2048,
+    "max_new_tokens": 10,
+    "do_sample": false
+  },
+  "prompt_template": "Given a query and two passages, determine which passage is more relevant to the query.\n\nQuery: {query}\n\nPassage A: {doc_a}\n\nPassage B: {doc_b}\n\nWhich passage is more relevant to the query? Answer only with 'A' or 'B'.\n\nAnswer:"
+}
