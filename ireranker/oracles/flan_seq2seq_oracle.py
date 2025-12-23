@@ -56,6 +56,7 @@ class FlanSeq2SeqOracle(Oracle):
         self._corpus: Dict[str, str] = {}
         self._matrix: Dict[MatrixKey, Mapping[str, Any]] = {}
         self._dataset: Optional[str] = None
+        self._comparison_count: int = 0
 
         self.enable_cache(True)
 
@@ -96,6 +97,7 @@ class FlanSeq2SeqOracle(Oracle):
         logger.info(f"Loaded {len(self._queries)} queries, {len(self._corpus)} docs")
         self._dataset = dataset
         self._matrix.clear()
+        self._comparison_count = 0
         self.reset_comparisons()
 
     def _ensure_model(self) -> None:
@@ -211,6 +213,9 @@ class FlanSeq2SeqOracle(Oracle):
                 "scores": [("A", score_b), ("B", score_a)],
                 "text": f"Passage {rev_pref}",
             }
+            self._comparison_count += 1
+            if self._comparison_count % 10 == 0:
+                logger.info(f"Completed {self._comparison_count} comparisons (latest: query={qid}, winner={pref}, latency={meta['latency_ms']:.1f}ms)")
         return self._matrix[key]
 
     def sample_lt(self, i: int, j: int) -> bool:
@@ -229,7 +234,7 @@ class FlanSeq2SeqOracle(Oracle):
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "wb") as f:
             pickle.dump(self._matrix, f)
-        logger.info(f"Saved matrix with {len(self._matrix)} entries to {path}")
+        logger.info(f"Saved matrix with {len(self._matrix)} entries ({self._comparison_count} comparisons) to {path}")
 
     def load_matrix(self, path: Path) -> None:
         path = Path(path)
