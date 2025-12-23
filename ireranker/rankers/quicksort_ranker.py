@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import os
 from typing import List
 
 from ireranker.oracles import (
     BidirectionalMatrixOracle,
     BudgetExceeded,
+    FlanSeq2SeqOracle,
     Oracle,
 )
 
@@ -15,7 +17,7 @@ from .registry import register_ranker
 @register_ranker(
     "quick sort (classic)",
     oracle_factories=[
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+        ("bidirectional", lambda seed: BidirectionalMatrixOracle())
     ],
 )
 class QuicksortTopKRanker(Ranker):

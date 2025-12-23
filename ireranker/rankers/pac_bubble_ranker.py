@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import os
 from ireranker.oracles import (
     Oracle,
     SamplingMatrixOracle,
+    FlanSeq2SeqOracle
 )
 
 from .pac_optimized import PACOptimizedRanker
@@ -13,6 +15,14 @@ from .registry import register_ranker
     "PAC + Bubble",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        (
+            "flan-live",
+            lambda seed: FlanSeq2SeqOracle(
+                model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
+                quantization=os.environ.get("FLAN_QUANT", "8bit"),
+                device=os.environ.get("FLAN_DEVICE", "cuda"),
+            ),
+        ),
     ],
 )
 class PACBubbleRanker(PACOptimizedRanker):
