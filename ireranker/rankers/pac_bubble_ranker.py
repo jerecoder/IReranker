@@ -4,7 +4,7 @@ import os
 from ireranker.oracles import (
     Oracle,
     SamplingMatrixOracle,
-    FlanSeq2SeqOracle
+    BidirectionalFlanSeq2SeqOracle
 )
 
 from .pac_optimized import PACOptimizedRanker
@@ -17,7 +17,7 @@ from .registry import register_ranker
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
         (
             "flan-live",
-            lambda seed: FlanSeq2SeqOracle(
+            lambda seed: BidirectionalFlanSeq2SeqOracle(
                 model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
                 quantization=os.environ.get("FLAN_QUANT", "8bit"),
                 device=os.environ.get("FLAN_DEVICE", "cuda"),

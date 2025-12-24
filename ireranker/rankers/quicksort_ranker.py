@@ -4,9 +4,8 @@ import os
 from typing import List
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
+    BidirectionalFlanSeq2SeqOracle,
     BudgetExceeded,
-    FlanSeq2SeqOracle,
     Oracle,
 )
 
@@ -17,7 +16,14 @@ from .registry import register_ranker
 @register_ranker(
     "quick sort (classic)",
     oracle_factories=[
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle())
+        (
+            "flan-live",
+            lambda seed: BidirectionalFlanSeq2SeqOracle(
+                model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
+                quantization=os.environ.get("FLAN_QUANT", "8bit"),
+                device=os.environ.get("FLAN_DEVICE", "cuda"),
+            ),
+        )
     ],
 )
 class QuicksortTopKRanker(Ranker):

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import os
 from typing import List
 
 from ireranker.oracles import (
     BudgetExceeded,
+    BidirectionalFlanSeq2SeqOracle,
     Oracle,
     SamplingMatrixOracle,
 )
@@ -17,6 +19,14 @@ from .registry import register_ranker
     "Mohajer + Bubble",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
+        (
+            "flan-live",
+            lambda seed: BidirectionalFlanSeq2SeqOracle(
+                model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
+                quantization=os.environ.get("FLAN_QUANT", "8bit"),
+                device=os.environ.get("FLAN_DEVICE", "cuda"),
+            ),
+        ),
     ],
 )
 class MohajerBubbleRanker(BubbleRanker):

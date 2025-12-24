@@ -1,5 +1,5 @@
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
+    BidirectionalFlanSeq2SeqOracle,
     SamplingMatrixOracle,
     WeirdSamplingMatrixOracle,
 )
@@ -43,7 +43,7 @@ def test_default_oracle_mapping():
     assert oracle.seed == 11
 
     fallback = default_oracle_for("bm25", seed=5)
-    assert isinstance(fallback, BidirectionalMatrixOracle)
+    assert isinstance(fallback, BidirectionalFlanSeq2SeqOracle)
     assert fallback.seed == 5
 
 
