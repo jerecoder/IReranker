@@ -1,5 +1,11 @@
 from .bidirectional_matrix_oracle import BidirectionalMatrixOracle
-from .flan_seq2seq_oracle import FlanSeq2SeqOracle
+from .flan_seq2seq_oracle import (
+    BidirectionalFlanSeq2SeqOracle,
+    DirectionalFlanSeq2SeqOracle,
+    FlanBatcher,
+    FlanComparisonStore,
+    FlanSeq2SeqOracle,
+)
 from .oracle import BudgetExceeded, MatrixKey, Oracle
 from .sampling_matrix_oracles import (
     CachedSamplingMatrixOracle,
@@ -18,4 +24,8 @@ __all__ = [
     "WeirdSamplingMatrixOracle",
     "TransformerOracle",
     "FlanSeq2SeqOracle",
+    "FlanComparisonStore",
+    "FlanBatcher",
+    "DirectionalFlanSeq2SeqOracle",
+    "BidirectionalFlanSeq2SeqOracle",
 ]

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import lru_cache
 from pathlib import Path
 import random
@@ -8,6 +9,7 @@ from typing import Dict, Iterable, List
 from beir.retrieval.evaluation import EvaluateRetrieval  # type: ignore
 from tqdm import tqdm
 
+from ireranker.config import logger
 from ireranker.rankers.ranker import Ranker
 from ireranker.types import RankingDataset, RankingTask
 
@@ -67,12 +69,51 @@ def ranker_results_to_beir(
     return results
 
 
+def _evaluate_single_ranker(
+    ranker: Ranker,
+    dataset: RankingDataset,
+    qrels: Dict[str, Dict[str, int]],
+    k_values: List[int],
+    *,
+    seed: int,
+) -> List[Dict[str, float | int | str]]:
+    ranker.set_seed(seed)
+    ranker.reset_comparisons()
+    ranker_name = getattr(ranker, "display_name", ranker.name)
+    oracle_label = getattr(ranker, "oracle_label", getattr(ranker.oracle, "name", None))
+    ranker_base = getattr(ranker, "name", ranker_name)
+    rng = random.Random(seed)
+    res = ranker_results_to_beir(ranker, dataset, rng)
+    ndcg, _map, recall, precision = EvaluateRetrieval.evaluate(qrels, res, k_values)
+    total_comparisons = int(ranker.comparisons)
+    total_cache_hits = int(getattr(ranker, "cache_hits", 0))
+    rows: List[Dict[str, float | int | str]] = []
+    for k in k_values:
+        ndcg_k = float(ndcg.get(f"NDCG@{k}", 0.0))
+        rows.append(
+            {
+                "ranker": ranker_base,
+                "oracle": oracle_label,
+                "k": int(k),
+                "NDCG": ndcg_k,
+                "MAP": float(_map.get(f"MAP@{k}", 0.0)),
+                "Recall": float(recall.get(f"Recall@{k}", 0.0)),
+                "Precision": float(precision.get(f"P@{k}", 0.0)),
+                "Comparisons": total_comparisons,
+                "CacheHits": total_cache_hits,
+                "NDCG_per_comp": float(ndcg_k / total_comparisons) if total_comparisons else 0.0,
+            }
+        )
+    return rows
+
+
 def evaluate_rankers_beir(
     rankers: List[Ranker],
     dataset: RankingDataset,
     k_values: List[int],
     *,
     seed: int | None = None,
+    max_workers: int | None = None,
 ) -> List[Dict[str, float | int | str]]:
     """Evaluate rankers using BEIR metrics and return flattened rows for CSV.
 
@@ -81,36 +122,65 @@ def evaluate_rankers_beir(
     qrels = dataset_to_beir_qrels(dataset)
     rows: List[Dict[str, float | int | str]] = []
     base_seed = seed if seed is not None else 0
-    iter_rankers = _progress(rankers, desc="Evaluating rankers", leave=True)
-    for r in iter_rankers:
-        r.set_seed(base_seed)
-        r.reset_comparisons()
-        ranker_name = getattr(r, "display_name", r.name)
-        oracle_label = getattr(r, "oracle_label", getattr(r.oracle, "name", None))
-        ranker_base = getattr(r, "name", ranker_name)
-        rng = random.Random(base_seed)
-        res = ranker_results_to_beir(r, dataset, rng)
-        ndcg, _map, recall, precision = EvaluateRetrieval.evaluate(qrels, res, k_values)
-        total_comparisons = int(r.comparisons)
-        total_cache_hits = int(getattr(r, "cache_hits", 0))
-        for k in k_values:
-            ndcg_k = float(ndcg.get(f"NDCG@{k}", 0.0))
-            rows.append(
-                {
-                    "ranker": ranker_base,
-                    "oracle": oracle_label,
-                    "k": int(k),
-                    "NDCG": ndcg_k,
-                    "MAP": float(_map.get(f"MAP@{k}", 0.0)),
-                    "Recall": float(recall.get(f"Recall@{k}", 0.0)),
-                    "Precision": float(precision.get(f"P@{k}", 0.0)),
-                    "Comparisons": total_comparisons,
-                    "CacheHits": total_cache_hits,
-                    "NDCG_per_comp": (
-                        float(ndcg_k / total_comparisons) if total_comparisons else 0.0
-                    ),
-                }
+
+    if max_workers is None or max_workers <= 1:
+        iter_rankers = _progress(rankers, desc="Evaluating rankers", leave=True)
+        for r in iter_rankers:
+            rows.extend(
+                _evaluate_single_ranker(
+                    r,
+                    dataset,
+                    qrels,
+                    k_values,
+                    seed=base_seed,
+                )
             )
+        return rows
+
+    oracle_ids = [id(r.oracle) for r in rankers if hasattr(r, "oracle")]
+    if len(oracle_ids) != len(set(oracle_ids)):
+        logger.warning(
+            "Parallel evaluation disabled because rankers share oracle instances; "
+            "run with distinct oracles to enable max_workers."
+        )
+        iter_rankers = _progress(rankers, desc="Evaluating rankers", leave=True)
+        for r in iter_rankers:
+            rows.extend(
+                _evaluate_single_ranker(
+                    r,
+                    dataset,
+                    qrels,
+                    k_values,
+                    seed=base_seed,
+                )
+            )
+        return rows
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = {
+            executor.submit(
+                _evaluate_single_ranker,
+                r,
+                dataset,
+                qrels,
+                k_values,
+                seed=base_seed,
+            ): idx
+            for idx, r in enumerate(rankers)
+        }
+        results: list[List[Dict[str, float | int | str]] | None] = [None] * len(rankers)
+        iterator = _progress(
+            as_completed(futures),
+            total=len(futures),
+            desc="Evaluating rankers (parallel)",
+            leave=True,
+        )
+        for fut in iterator:
+            idx = futures[fut]
+            results[idx] = fut.result()
+        for chunk in results:
+            if chunk:
+                rows.extend(chunk)
     return rows
 
 

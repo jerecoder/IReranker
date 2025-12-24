@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import os
 from typing import List
 
 from ireranker.oracles import (
-    BidirectionalMatrixOracle,
+    BidirectionalFlanSeq2SeqOracle,
     BudgetExceeded,
     Oracle,
 )
@@ -15,7 +16,14 @@ from .registry import register_ranker
 @register_ranker(
     "prp sort (classic)",
     oracle_factories=[
-        ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
+        (
+            "flan-live",
+            lambda seed: BidirectionalFlanSeq2SeqOracle(
+                model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
+                quantization=os.environ.get("FLAN_QUANT", "8bit"),
+                device=os.environ.get("FLAN_DEVICE", "cuda"),
+            ),
+        ),
     ],
 )
 class PRPSortingRanker(Ranker):
