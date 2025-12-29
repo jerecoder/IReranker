@@ -7,6 +7,7 @@ from ireranker.oracles import (
     BidirectionalFlanSeq2SeqOracle,
     BudgetExceeded,
     Oracle,
+    SamplingMatrixOracle,
 )
 
 from .ranker import Ranker
@@ -23,7 +24,14 @@ from .registry import register_ranker
                 quantization=os.environ.get("FLAN_QUANT", "8bit"),
                 device=os.environ.get("FLAN_DEVICE", "cuda"),
             ),
-        )
+        ),
+        (
+            "sampling",
+            lambda seed: SamplingMatrixOracle(
+                seed=seed,
+                comparison_limit_per_task=True,
+            ),
+        ),
     ],
 )
 class QuicksortTopKRanker(Ranker):

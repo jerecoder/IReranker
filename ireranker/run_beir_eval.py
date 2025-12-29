@@ -373,6 +373,7 @@ def run_from_config(
     dataset_override: Optional[str] = None,
     light_mode: bool = False,
     rankers_override: Optional[List[str]] = None,
+    oracle_override: Optional[str] = None,
     max_queries_override: Optional[int] = None,
     profile_output: Optional[Path] = None,
     profile_limit: int = 30,
@@ -457,6 +458,13 @@ def run_from_config(
     seed = int(cfg.get("seed") or 123)
 
     rs = build_rankers_for_eval(eff_rankers, seed=seed)
+    if oracle_override:
+        rs = [r for r in rs if r.oracle_label == oracle_override]
+        if not rs:
+            logger.warning(
+                f"No rankers matched oracle '{oracle_override}'. "
+                f"Available: {set(r.oracle_label for r in build_rankers_for_eval(eff_rankers, seed=seed))}"
+            )
 
     cfg_kvals = cfg.get("k_values") if isinstance(cfg.get("k_values"), list) else None
     k_values = list(cfg_kvals) if cfg_kvals else [1, 3, 5, 10, 100]
@@ -545,6 +553,7 @@ def run_from_config(
                     "Recall",
                     "Precision",
                     "Comparisons",
+                    "Avg_Comparisons",
                     "CacheHits",
                     "NDCG_per_comp",
                 ]
@@ -688,6 +697,12 @@ def main() -> None:
         help="Skip datasets listed in config/light_exclude.",
     )
     parser.add_argument(
+        "--oracle",
+        type=str,
+        default=None,
+        help="Filter run to only rankers with this oracle label (e.g. 'sampling').",
+    )
+    parser.add_argument(
         "--rankers",
         type=str,
         default=None,
@@ -745,6 +760,7 @@ def main() -> None:
     run_from_config(
         cfg_path,
         dataset_override=args.dataset,
+        oracle_override=args.oracle,
         light_mode=args.light,
         rankers_override=rankers_override,
         max_queries_override=args.max_queries,

@@ -7,6 +7,7 @@ from ireranker.oracles import (
     BidirectionalFlanSeq2SeqOracle,
     BudgetExceeded,
     Oracle,
+    SamplingMatrixOracle,
 )
 
 from .ranker import Ranker
@@ -22,6 +23,13 @@ from .registry import register_ranker
                 model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
                 quantization=os.environ.get("FLAN_QUANT", "8bit"),
                 device=os.environ.get("FLAN_DEVICE", "cuda"),
+            ),
+        ),
+        (
+            "sampling",
+            lambda seed: SamplingMatrixOracle(
+                seed=seed,
+                comparison_limit_per_task=True,
             ),
         ),
     ],

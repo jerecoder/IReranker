@@ -101,6 +101,7 @@ def _evaluate_single_ranker(
                 "Precision": float(precision.get(f"P@{k}", 0.0)),
                 "Comparisons": total_comparisons,
                 "CacheHits": total_cache_hits,
+                "Avg_Comparisons": float(total_comparisons / len(dataset.tasks)) if dataset.tasks else 0.0,
                 "NDCG_per_comp": float(ndcg_k / total_comparisons) if total_comparisons else 0.0,
             }
         )
