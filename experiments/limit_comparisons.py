@@ -9,6 +9,10 @@ from ireranker.rankers import get_ranker
 from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
 
 def run_experiment():
+    # Experiment Configuration
+    RUN_BIDIRECTIONAL = True
+    RUN_SAMPLING = True
+
     # All datasets from config
     datasets = [
         "dl-2019",
@@ -16,7 +20,7 @@ def run_experiment():
     ]
 
     # Doubled step size for faster completion
-    budgets = [50, 100, 200, 400, 500, 600, 700, 800]
+    budgets = [100, 150, 200, 250, 300, 350, 400, 450, 500]
     rankers = [
         "mohajer (ir)",
         "mohajer + bubble",
@@ -27,7 +31,7 @@ def run_experiment():
     ]
 
     seeds = [42]
-    matrix_model = "flan-t5-large"
+    matrix_model = "flan-t5-xl"
     k_values = [10]
     
     results = []
@@ -62,9 +66,9 @@ def run_experiment():
     for dataset_name in datasets:
         for ranker_name in rankers:
             for budget in budgets:
-                if not result_exists(dataset_name, ranker_name, budget, "Bidirectional"):
+                if RUN_BIDIRECTIONAL and not result_exists(dataset_name, ranker_name, budget, "Bidirectional"):
                     total_experiments += 1
-                if not result_exists(dataset_name, ranker_name, budget, "Sampling"):
+                if RUN_SAMPLING and not result_exists(dataset_name, ranker_name, budget, "Sampling"):
                     total_experiments += 1
 
     print(f"Total experiments to run: {total_experiments}")
@@ -79,62 +83,64 @@ def run_experiment():
         for seed in seeds:
             for ranker_name in rankers:
                 # 1. Bidirectional Oracle
-                for budget in budgets:
-                    ranker_label = f"{ranker_name} [Bidirectional]"
-                    if result_exists(dataset_name, ranker_name, budget, "Bidirectional"):
-                        continue
+                if RUN_BIDIRECTIONAL:
+                    for budget in budgets:
+                        ranker_label = f"{ranker_name} [Bidirectional]"
+                        if result_exists(dataset_name, ranker_name, budget, "Bidirectional"):
+                            continue
 
-                    pbar.set_description(f"{dataset_name} | {ranker_name} | Bidirectional | Budget: {budget}")
-                    oracle = BidirectionalMatrixOracle(comparison_limit=budget, comparison_limit_per_task=True)
-                    ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
-                    ranker.set_dataset(
-                        dataset_name,
-                        split="test",
-                        query_ids=task_qids,
-                        matrix_model=matrix_model,
-                    )
+                        pbar.set_description(f"{dataset_name} | {ranker_name} | Bidirectional | Budget: {budget}")
+                        oracle = BidirectionalMatrixOracle(comparison_limit=budget, comparison_limit_per_task=True)
+                        ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
+                        ranker.set_dataset(
+                            dataset_name,
+                            split="test",
+                            query_ids=task_qids,
+                            matrix_model=matrix_model,
+                        )
 
-                    metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
+                        metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
 
-                    results.append({
-                        "Ranker": ranker_name,
-                        "Oracle": "Bidirectional",
-                        "DisplayRanker": f"{ranker_name} [Bidirectional]",
-                        "Dataset": dataset_name,
-                        "Comparisons": metrics["Comparisons"],
-                        "NDCG@10": metrics["NDCG"],
-                        "Budget": budget
-                    })
-                    pbar.update(1)
+                        results.append({
+                            "Ranker": ranker_name,
+                            "Oracle": "Bidirectional",
+                            "DisplayRanker": f"{ranker_name} [Bidirectional]",
+                            "Dataset": dataset_name,
+                            "Comparisons": metrics["Comparisons"],
+                            "NDCG@10": metrics["NDCG"],
+                            "Budget": budget
+                        })
+                        pbar.update(1)
 
                 # 2. Sampling Oracle
-                for budget in budgets:
-                    ranker_label = f"{ranker_name} [Sampling]"
-                    if result_exists(dataset_name, ranker_name, budget, "Sampling"):
-                        continue
+                if RUN_SAMPLING:
+                    for budget in budgets:
+                        ranker_label = f"{ranker_name} [Sampling]"
+                        if result_exists(dataset_name, ranker_name, budget, "Sampling"):
+                            continue
 
-                    pbar.set_description(f"{dataset_name} | {ranker_name} | Sampling | Budget: {budget}")
-                    oracle = SamplingMatrixOracle(seed=seed, comparison_limit=budget, comparison_limit_per_task=True)
-                    ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
-                    ranker.set_dataset(
-                        dataset_name,
-                        split="test",
-                        query_ids=task_qids,
-                        matrix_model=matrix_model,
-                    )
+                        pbar.set_description(f"{dataset_name} | {ranker_name} | Sampling | Budget: {budget}")
+                        oracle = SamplingMatrixOracle(seed=seed, comparison_limit=budget, comparison_limit_per_task=True)
+                        ranker = get_ranker(ranker_name, oracle=oracle, seed=seed)
+                        ranker.set_dataset(
+                            dataset_name,
+                            split="test",
+                            query_ids=task_qids,
+                            matrix_model=matrix_model,
+                        )
 
-                    metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
+                        metrics = evaluate_rankers_beir([ranker], dataset, k_values, seed=seed)[0]
 
-                    results.append({
-                        "Ranker": ranker_name,
-                        "Oracle": "Sampling",
-                        "DisplayRanker": f"{ranker_name} [Sampling]",
-                        "Dataset": dataset_name,
-                        "Comparisons": metrics["Comparisons"],
-                        "NDCG@10": metrics["NDCG"],
-                        "Budget": budget
-                    })
-                    pbar.update(1)
+                        results.append({
+                            "Ranker": ranker_name,
+                            "Oracle": "Sampling",
+                            "DisplayRanker": f"{ranker_name} [Sampling]",
+                            "Dataset": dataset_name,
+                            "Comparisons": metrics["Comparisons"],
+                            "NDCG@10": metrics["NDCG"],
+                            "Budget": budget
+                        })
+                        pbar.update(1)
 
     pbar.close()
 
