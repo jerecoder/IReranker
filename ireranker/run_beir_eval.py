@@ -395,7 +395,11 @@ def run_from_config(
 
     raw_ds = cfg.get("datasets") if isinstance(cfg.get("datasets"), list) else None
     if dataset_override:
-        raw_ds = [dataset_override]
+        # Support comma-separated dataset names
+        if isinstance(dataset_override, list):
+            raw_ds = dataset_override
+        else:
+            raw_ds = [d.strip() for d in dataset_override.split(",") if d.strip()]
     if not raw_ds:
         raise ValueError("Config is missing 'datasets' list")
     ds_names = [_beir_supported_name(d) for d in raw_ds]
@@ -687,7 +691,7 @@ def main() -> None:
         "--dataset",
         type=str,
         default=None,
-        help="Run evaluation only on this dataset name.",
+        help="Run evaluation only on these dataset names (comma-separated, e.g. trec-covid,scifact).",
     )
     parser.add_argument(
         "--light",

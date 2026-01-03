@@ -1,9 +1,6 @@
 from __future__ import annotations
 
-import os
-
 from ireranker.oracles import (
-    BidirectionalFlanSeq2SeqOracle,
     BidirectionalMatrixOracle,
     Oracle,
     SamplingMatrixOracle,
@@ -19,18 +16,6 @@ from .registry import register_ranker
     oracle_factories=[
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        (
-            "mixed",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
-        (
-            "flan-live",
-            lambda seed: BidirectionalFlanSeq2SeqOracle(
-                model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
-                quantization=os.environ.get("FLAN_QUANT", "8bit"),
-                device=os.environ.get("FLAN_DEVICE", "cuda"),
-            ),
-        ),
     ],
 )
 class PACBubbleRanker(PACOptimizedRanker):

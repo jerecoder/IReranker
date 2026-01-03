@@ -2,12 +2,10 @@ from __future__ import annotations
 
 import heapq
 import math
-import os
 import random
 from typing import List
 
 from ireranker.oracles import (
-    BidirectionalFlanSeq2SeqOracle,
     BidirectionalMatrixOracle,
     BudgetExceeded,
     Oracle,
@@ -24,18 +22,6 @@ from .registry import register_ranker
     oracle_factories=[
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        (
-            "mixed",
-            lambda seed: WeirdSamplingMatrixOracle(seed=seed, expected_samples=1.5),
-        ),
-        (
-            "flan-live",
-            lambda seed: BidirectionalFlanSeq2SeqOracle(
-                model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
-                quantization=os.environ.get("FLAN_QUANT", "8bit"),
-                device=os.environ.get("FLAN_DEVICE", "cuda"),
-            ),
-        ),
     ],
 )
 class MohajerRanker(Ranker):
@@ -187,14 +173,7 @@ class MohajerRanker(Ranker):
     "Jingle Bells",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        (
-            "flan-live",
-            lambda seed: BidirectionalFlanSeq2SeqOracle(
-                model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
-                quantization=os.environ.get("FLAN_QUANT", "8bit"),
-                device=os.environ.get("FLAN_DEVICE", "cuda"),
-            ),
-        ),
+
     ],
 )
 class MohajerBM25Ranker(MohajerRanker):
@@ -297,14 +276,7 @@ class MohajerBM25Ranker(MohajerRanker):
     "Christmas Tree",
     oracle_factories=[
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),
-        (
-            "flan-live",
-            lambda seed: BidirectionalFlanSeq2SeqOracle(
-                model_name=os.environ.get("FLAN_MODEL_NAME", "google/flan-t5-xl"),
-                quantization=os.environ.get("FLAN_QUANT", "8bit"),
-                device=os.environ.get("FLAN_DEVICE", "cuda"),
-            ),
-        ),
+
     ],
 )
 class ChristmasTreeRanker(MohajerRanker):
