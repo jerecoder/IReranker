@@ -79,6 +79,21 @@ def run_experiment():
         print(f"\nProcessing dataset: {dataset_name}")
         dataset = load_beir_dataset(dataset_name, split="test", matrix_model=matrix_model)
         task_qids = [t.query_id for t in dataset.tasks]
+        task_count = len(dataset.tasks)
+
+        # Backfill new columns for existing rows in this dataset.
+        for row in results:
+            if row.get("Dataset") != dataset_name:
+                continue
+            if "average_comparison_per_task" not in row:
+                comps = row.get("Comparisons", 0) or 0
+                try:
+                    comps_val = float(comps)
+                except (TypeError, ValueError):
+                    comps_val = 0.0
+                row["average_comparison_per_task"] = (
+                    comps_val / task_count if task_count else 0.0
+                )
 
         for seed in seeds:
             for ranker_name in rankers:
@@ -107,8 +122,9 @@ def run_experiment():
                             "DisplayRanker": f"{ranker_name} [Bidirectional]",
                             "Dataset": dataset_name,
                             "Comparisons": metrics["Comparisons"],
+                            "average_comparison_per_task": metrics["Comparisons_per_task"],
                             "NDCG@10": metrics["NDCG"],
-                            "Budget": budget
+                            "Budget": budget,
                         })
                         pbar.update(1)
 
@@ -137,8 +153,9 @@ def run_experiment():
                             "DisplayRanker": f"{ranker_name} [Sampling]",
                             "Dataset": dataset_name,
                             "Comparisons": metrics["Comparisons"],
+                            "average_comparison_per_task": metrics["Comparisons_per_task"],
                             "NDCG@10": metrics["NDCG"],
-                            "Budget": budget
+                            "Budget": budget,
                         })
                         pbar.update(1)
 

@@ -29,7 +29,7 @@ class BubbleRanker(Ranker):
         seed: int | None = None,
         *,
         num_child: int = 1,
-        top_k: int | None = None,
+        top_k: int | None = 10,
     ):
         super().__init__(oracle, seed)
         self.num_child = max(1, num_child)

@@ -56,7 +56,18 @@ class QwenPickleOracle(Oracle):
             self._prompt_tokens[key] = entry.get('ptks', 0)
 
     def sample_lt(self, i: int, j: int) -> bool:
-        """Return True if doc i < doc j (j is better)."""
+        """Return True if doc i < doc j (j is better).
+        
+        Qwen stores comparisons as (qid, doc_a, doc_b) → {scores: [('A', score_a), ('B', score_b)], ...}
+        where A refers to the first argument and B to the second.
+        Higher score indicates preference by the LLM.
+        
+        For bidirectional mode, we check:
+        - Forward (doc_a vs doc_b): does score_b > score_a? (B beats A)
+        - Reverse (doc_b vs doc_a): does score_a > score_b? (A beats B in reverse, which is the first arg beating the second)
+        
+        We return True (i < j) if BOTH conditions hold, indicating an intransitivity that helps ranking.
+        """
         if self.current_task is None or self._matrix is None:
             return False
 
@@ -65,7 +76,7 @@ class QwenPickleOracle(Oracle):
         doc_b = self.current_task.candidate_ids[j]
 
         if self.bidirectional:
-            # Bidirectional: both (A,B) and (B,A) must agree
+            # Bidirectional: check for the intransitive pattern
             forward_key = (qid, doc_a, doc_b)
             reverse_key = (qid, doc_b, doc_a)
 
@@ -75,11 +86,24 @@ class QwenPickleOracle(Oracle):
             if forward_entry is None or reverse_entry is None:
                 return False
 
-            forward_result = forward_entry['text']  # e.g., "Passage B" or "Passage A"
-            reverse_result = reverse_entry['text']
+            # Extract scores
+            fwd_scores = dict(forward_entry.get('scores', []))
+            fwd_score_a = fwd_scores.get('A')
+            fwd_score_b = fwd_scores.get('B')
 
-            # i < j means j is better, so we want forward="Passage B" and reverse="Passage A"
-            return forward_result == "Passage B" and reverse_result == "Passage A"
+            rev_scores = dict(reverse_entry.get('scores', []))
+            rev_score_a = rev_scores.get('A')  # In reverse, A is doc_b
+            rev_score_b = rev_scores.get('B')  # In reverse, B is doc_a
+
+            if None in (fwd_score_a, fwd_score_b, rev_score_a, rev_score_b):
+                return False
+
+            # Bidirectional pattern: B beats A in forward AND A beats B in reverse
+            # (i.e., an intransitivity where doc_b > doc_a in forward, but doc_b < doc_a in reverse)
+            forward_prefers_b = fwd_score_b > fwd_score_a
+            reverse_prefers_a = rev_score_a > rev_score_b  # A in reverse is doc_b
+
+            return forward_prefers_b and reverse_prefers_a
         else:
             # Sampling: just use forward comparison
             forward_key = (qid, doc_a, doc_b)
@@ -88,9 +112,15 @@ class QwenPickleOracle(Oracle):
             if forward_entry is None:
                 return False
 
-            forward_result = forward_entry['text']
-            # i < j means j is better, so we want "Passage B"
-            return forward_result == "Passage B"
+            fwd_scores = dict(forward_entry.get('scores', []))
+            fwd_score_a = fwd_scores.get('A')
+            fwd_score_b = fwd_scores.get('B')
+
+            if None in (fwd_score_a, fwd_score_b):
+                return False
+
+            # Return True if doc_b (B) has higher score than doc_a (A)
+            return fwd_score_b > fwd_score_a
 
     def get_prompt_tokens(self, i: int, j: int) -> int:
         """Get prompt tokens for a specific comparison."""
@@ -103,6 +133,19 @@ class QwenPickleOracle(Oracle):
 
         key = (qid, doc_a, doc_b)
         return self._prompt_tokens.get(key, 0)
+
+    def has_query(self, qid) -> bool:
+        """Return True if the loaded pickle contains any comparisons for `qid`."""
+        if self._prompt_tokens is None:
+            return False
+        qid_s = str(qid)
+        for k in self._prompt_tokens.keys():
+            try:
+                if str(k[0]) == qid_s:
+                    return True
+            except Exception:
+                continue
+        return False
 
 
 def evaluate_single_query(ranker, task: RankingTask, oracle: QwenPickleOracle, k: int = 10) -> Dict[str, Any]:
@@ -159,12 +202,16 @@ def evaluate_single_query(ranker, task: RankingTask, oracle: QwenPickleOracle, k
             if rel and rel > 0:
                 qrels[doc_id] = int(rel)
 
-    # Evaluate using BEIR
-    qrels_dict = {task.query_id: qrels}
-    results_dict = {task.query_id: results}
+    # Skip evaluation if no qrels (query has no relevant documents)
+    if not qrels:
+        ndcg_at_k = 0.0
+    else:
+        # Evaluate using BEIR
+        qrels_dict = {task.query_id: qrels}
+        results_dict = {task.query_id: results}
 
-    ndcg, _, _, _ = EvaluateRetrieval.evaluate(qrels_dict, results_dict, [k])
-    ndcg_at_k = ndcg.get(f"NDCG@{k}", 0.0)
+        ndcg, _, _, _ = EvaluateRetrieval.evaluate(qrels_dict, results_dict, [k])
+        ndcg_at_k = ndcg.get(f"NDCG@{k}", 0.0)
 
     # Calculate average prompt tokens for comparisons actually made
     if comparisons_made:
@@ -236,11 +283,9 @@ def load_bm25_baseline(dataset_name: str) -> Dict[str, float]:
 
 def run_experiment():
     # Qwen models and their pickle files
+    # NOTE: Using 4B instruct model (has 38%+ intransitivities with proper variance)
+    # The 0.6B model is broken with 100% doc_a wins (no ranking signal)
     QWEN_MODELS = {
-        "qwen3-0.6b": {
-            "dl-2019": Path("data/external/qwen/qwen3-0.6b_dl19-passage.pkl"),
-            "dl-2020": Path("data/external/qwen/qwen3-0.6b_dl20-passage.pkl"),
-        },
         "qwen3-4b-instruct": {
             "dl-2019": Path("data/external/qwen/qwen3-4b-instruct-2507_dl19-passage.pkl"),
             "dl-2020": Path("data/external/qwen/qwen3-4b-instruct-2507_dl20-passage.pkl"),
@@ -408,7 +453,13 @@ def run_experiment():
 
                     # Evaluate each query
                     for task in dataset.tasks:
-                        # Check cache
+                        # Skip queries that are not present in the pickle (no comparisons available)
+                        if not oracle.has_query(task.query_id):
+                            # do not record a result for this query; just skip
+                            pbar.update(1)
+                            continue
+
+                        # Check cache (don't re-run completed queries)
                         if result_exists(model_name, dataset_name, ranker_name,
                                        oracle_type, task.query_id):
                             continue
