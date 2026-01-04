@@ -1,2 +1,0 @@
-Zip: /Users/jeremias.paschmann/Documents/IReranker/data/external/beir/robust04.zip
-Reason: Rerank matrix not found for robust04/test. Skipping dataset.

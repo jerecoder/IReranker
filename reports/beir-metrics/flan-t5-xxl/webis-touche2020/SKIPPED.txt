@@ -1,2 +1,0 @@
-Zip: /Users/jeremias.paschmann/Documents/IReranker/data/external/beir/webis-touche2020.zip
-Reason: Rerank matrix not found for webis-touche2020/test. Skipping dataset.
