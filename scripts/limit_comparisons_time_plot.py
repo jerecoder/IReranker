@@ -11,6 +11,21 @@ OUTPUT_DIR = Path("reports/figures/limit_comparisons_time")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 SHOW_PLOTS = False
 
+ORACLE_DISPLAY = {
+    "Sampling": "Randomized",
+    "Bidirectional": "Bidirectional",
+}
+ORACLE_FILTERS = [
+    ("both", None, "Both oracles"),
+    ("bidirectional", ["Bidirectional"], "Bidirectional"),
+    ("randomized", ["Sampling"], "Randomized"),
+]
+GPU_CONFIGS = [
+    ("a100", "A100"),
+    ("h100", "H100"),
+    ("h200", "H200"),
+]
+
 df = pd.read_csv(INPUT_CSV)
 
 style_map = {
@@ -30,6 +45,7 @@ def _prepare_df(
     *,
     dataset_filter: list[str] | None,
     aggregate: bool,
+    oracle_filter: list[str] | None,
 ) -> pd.DataFrame:
     if time_col not in frame.columns:
         raise ValueError(
@@ -39,6 +55,8 @@ def _prepare_df(
     local = frame
     if dataset_filter:
         local = local[local["Dataset"].isin(dataset_filter)].copy()
+    if oracle_filter:
+        local = local[local["Oracle"].isin(oracle_filter)].copy()
 
     if aggregate:
         local = (
@@ -48,13 +66,15 @@ def _prepare_df(
             .mean()
             .rename(columns={time_col: "time_ms"})
         )
-        local["label"] = local["Ranker"] + " [" + local["Oracle"] + "]"
+        local["oracle_display"] = local["Oracle"].map(ORACLE_DISPLAY).fillna(local["Oracle"])
+        local["label"] = local["Ranker"] + " [" + local["oracle_display"] + "]"
     else:
         local = local.rename(columns={time_col: "time_ms"})
+        local["oracle_display"] = local["Oracle"].map(ORACLE_DISPLAY).fillna(local["Oracle"])
         local["label"] = (
             local["Ranker"]
             + " ["
-            + local["Oracle"]
+            + local["oracle_display"]
             + "] | "
             + local["Dataset"].astype(str)
         )
@@ -69,12 +89,12 @@ def _prepare_df(
 def _plot(
     frame: pd.DataFrame,
     *,
-    title: str,
+    label: str,
     x_label: str,
     output_path: Path,
 ) -> None:
     if frame.empty:
-        print(f"Skipping empty plot: {title}")
+        print(f"Skipping empty plot: {label}")
         return
 
     sns.set_style("whitegrid")
@@ -117,37 +137,46 @@ def _plot(
             linewidths=0.6,
             zorder=3,
         )
-        ax.scatter(
-            [peak_row["time"] + offset],
-            [peak_row["NDCG@10"]],
-            marker="x",
-            s=80,
-            color=color,
-            zorder=4,
-        )
+        if "mohajer" in ranker.lower() or "pac" in ranker.lower():
+            ax.scatter(
+                [peak_row["time"] + offset],
+                [peak_row["NDCG@10"]],
+                marker="x",
+                s=80,
+                color=color,
+                zorder=4,
+            )
 
     ax.set_xlabel(x_label)
     ax.set_ylabel("NDCG@10")
-    ax.set_title(title)
 
-    style_handles = [
-        Line2D(
-            [0],
-            [0],
-            color="black",
-            linestyle=style_map["Sampling"]["linestyle"],
-            label="solid = sampling",
-        ),
-        Line2D(
-            [0],
-            [0],
-            color="black",
-            linestyle=style_map["Bidirectional"]["linestyle"],
-            label="dotted = bidirectional",
-        ),
-    ]
+    oracles_present = set(frame["Oracle"].unique())
+    style_handles = []
+    if "Sampling" in oracles_present:
+        style_handles.append(
+            Line2D(
+                [0],
+                [0],
+                color="black",
+                linestyle=style_map["Sampling"]["linestyle"],
+                label="solid = randomized",
+            )
+        )
+    if "Bidirectional" in oracles_present:
+        style_handles.append(
+            Line2D(
+                [0],
+                [0],
+                color="black",
+                linestyle=style_map["Bidirectional"]["linestyle"],
+                label="dotted = bidirectional",
+            )
+        )
+
+    rankers_present = sorted(frame["Ranker"].unique())
     color_handles = [
-        Line2D([0], [0], color=color_map[r], linestyle="-", label=r) for r in rankers_all
+        Line2D([0], [0], color=color_map[r], linestyle="-", label=r)
+        for r in rankers_present
     ]
 
     legend1 = ax.legend(
@@ -175,67 +204,74 @@ def _plot(
 
 plots = [
     {
-        "name": "all_flan_a100",
-        "time_col": "estimated_ms_a100_flan_t5_xl",
+        "name": "all_flan",
+        "model_time_key": "flan_t5_xl",
         "dataset_filter": None,
         "aggregate": True,
         "model_label": "flan-t5-xl",
-        "title_suffix": "All datasets",
+        "label_suffix": "All datasets",
     },
     {
-        "name": "all_qwen_a100",
-        "time_col": "estimated_ms_a100_qwen_instruct",
+        "name": "all_qwen",
+        "model_time_key": "qwen_instruct",
         "dataset_filter": None,
         "aggregate": True,
         "model_label": "qwen-instruct",
-        "title_suffix": "All datasets",
+        "label_suffix": "All datasets",
     },
     {
-        "name": "dl19_flan_a100",
-        "time_col": "estimated_ms_a100_flan_t5_xl",
+        "name": "dl19_flan",
+        "model_time_key": "flan_t5_xl",
         "dataset_filter": ["dl-2019"],
         "aggregate": True,
         "model_label": "flan-t5-xl",
-        "title_suffix": "DL2019",
+        "label_suffix": "DL2019",
     },
     {
-        "name": "dl19_qwen_a100",
-        "time_col": "estimated_ms_a100_qwen_instruct",
+        "name": "dl19_qwen",
+        "model_time_key": "qwen_instruct",
         "dataset_filter": ["dl-2019"],
         "aggregate": True,
         "model_label": "qwen-instruct",
-        "title_suffix": "DL2019",
+        "label_suffix": "DL2019",
     },
     {
-        "name": "dl20_flan_a100",
-        "time_col": "estimated_ms_a100_flan_t5_xl",
+        "name": "dl20_flan",
+        "model_time_key": "flan_t5_xl",
         "dataset_filter": ["dl-2020"],
         "aggregate": True,
         "model_label": "flan-t5-xl",
-        "title_suffix": "DL2020",
+        "label_suffix": "DL2020",
     },
     {
-        "name": "dl20_qwen_a100",
-        "time_col": "estimated_ms_a100_qwen_instruct",
+        "name": "dl20_qwen",
+        "model_time_key": "qwen_instruct",
         "dataset_filter": ["dl-2020"],
         "aggregate": True,
         "model_label": "qwen-instruct",
-        "title_suffix": "DL2020",
+        "label_suffix": "DL2020",
     },
 ]
 
 for cfg in plots:
-    frame = _prepare_df(
-        df,
-        cfg["time_col"],
-        dataset_filter=cfg["dataset_filter"],
-        aggregate=cfg["aggregate"],
-    )
-    unit = "s" if TIME_UNIT == "s" else "ms"
-    x_label = f"Estimated time per task ({unit}) [A100, {cfg['model_label']}]"
-    title = (
-        "Limit Comparisons: NDCG@10 vs time "
-        f"({cfg['title_suffix']}, {cfg['model_label']})"
-    )
-    out_path = OUTPUT_DIR / f"limit_comparisons_time_{cfg['name']}.png"
-    _plot(frame, title=title, x_label=x_label, output_path=out_path)
+    for gpu_suffix, gpu_label in GPU_CONFIGS:
+        time_col = f"estimated_ms_{gpu_suffix}_{cfg['model_time_key']}"
+        for oracle_suffix, oracle_filter, oracle_label in ORACLE_FILTERS:
+            frame = _prepare_df(
+                df,
+                time_col,
+                dataset_filter=cfg["dataset_filter"],
+                aggregate=cfg["aggregate"],
+                oracle_filter=oracle_filter,
+            )
+            unit = "s" if TIME_UNIT == "s" else "ms"
+            x_label = (
+                f"Estimated time per task ({unit}) [{gpu_label}, {cfg['model_label']}]"
+            )
+            label = (
+                f"{cfg['label_suffix']} | {cfg['model_label']} | {gpu_label} | {oracle_label}"
+            )
+            out_path = OUTPUT_DIR / (
+                f"limit_comparisons_time_{cfg['name']}_{gpu_suffix}_{oracle_suffix}.png"
+            )
+            _plot(frame, label=label, x_label=x_label, output_path=out_path)

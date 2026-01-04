@@ -50,20 +50,25 @@
 %We study efficient LLM based reranking for Retrieval Augmented Generation (RAG) and argue that standard Pairwise Ranking Prompting (PRP) pipelines are ill-suited to LLM pairwise judgments. PRP methods typically plug LLM comparisons into classical sorting routines, but LLM preferences can depend on order and may violate transitivity, undermining the assumptions that sorting relies on and potentially increasing the number of LLM calls. We instead cast LLM reranking as active ranking under noisy pairwise comparisons and adopt algorithms designed for stochastic feedback. Across Information Retrieval (IR) benchmarks, these methods achieve competitive NDCG@10 with substantially fewer comparisons. To further reduce cost, we introduce a \emph{randomized direction oracle} that uses a single LLM call per comparison by uniformly randomizing prompt order, aligning the comparison process with the noisy active ranking setting. This oracle reduces LLM calls by about half relative to bidirectional PRP for both active and sorting based rankers, sometimes with a small drop in NDCG@10.
 %\end{abstract}
 
-\begin{abstract}
-LLM pairwise ranking prompting (PRP) composes comparisons via classical sorting.
-This is mismatched to practice: LLM pairwise judgments are noisy, order-sensitive, and can be intransitive, while deployments care about top-$K$ quality under a call budget.
-We reframe reranking as active learning from noisy pairwise comparisons and benchmark active rankers as
-drop-in replacements for sorting-based PRP, improving NDCG@10 per call in the call-constrained regime.
-In addition, leveraging this noise-robust framing, we introduce a randomized-direction oracle that uses one
-LLM call per pair by randomizing prompt order and canonicalizing outcomes, inducing direction-consistent win
-probabilities despite order effects.
-\end{abstract}
+% \begin{abstract}
+% LLM pairwise ranking prompting (PRP) composes comparisons via classical sorting.
+% This is mismatched to practice: LLM pairwise judgments are noisy, order-sensitive, and can be intransitive, while deployments care about top-$K$ quality under a call budget.
+% We reframe reranking as active learning from noisy pairwise comparisons and benchmark active rankers as
+% drop-in replacements for sorting-based PRP, improving NDCG@10 per call in the call-constrained regime.
+% In addition, leveraging this noise-robust framing, we introduce a randomized-direction oracle that uses one
+% LLM call per pair by randomizing prompt order and canonicalizing outcomes, inducing direction-consistent win
+% probabilities despite order effects.
+% \end{abstract}
+%\begin{abstract}
+%Pairwise Ranking Prompting (PRP) elicits pairwise preference judgments from LLMs, which are typically aggregated using classical sorting algorithms.
+%This is mismatched to practice: LLM preferences are noisy, order-sensitive, and can be intransitive, while deployments care about top $K$ quality under a call budget. We reframe reranking as active learning from noisy pairwise comparisons and benchmark active rankers as
+%drop-in replacements for PRP sorting algorithms, improving NDCG@10 per call in the call-constrained regime. Additionally, leveraging this noise-robust framework, we introduce a randomized-direction oracle that uses a single LLM call per pair by randomizing the prompt order, ensuring order consistency despite inherent call bias
+%\end{abstract}
+
+\begin{abstract} Pairwise Ranking Prompting (PRP) elicits pairwise preference judgments from LLMs, which are typically aggregated using classical sorting algorithms. This is mismatched to practice: LLM preferences are noisy, order-sensitive, and can be intransitive, while deployments care about top $K$ quality under a call budget. We reframe reranking as active learning from noisy pairwise comparisons and benchmark active rankers as drop-in replacements for PRP sorting algorithms, improving NDCG@10 per call in the call-constrained regime. Additionally, leveraging this noise-robust framework, we introduce a randomized-direction oracle that uses a single LLM call per pair by randomizing the prompt order, ensuring order consistency despite inherent call bias. \end{abstract}
 
 
-
-
-% NO SE SI VALE LA PENA MENCIONAR AL MIXTO EN EL ABSTRACT, PERO LO DEJO ACA POR LAS DUDAS: We further introduce a \emph{mixture oracle} parameterized by $p\in[0,1]$ that interpolates between bidirectional and randomized direction oracles, enabling a tunable tradeoff between LLM call budget and comparison reliability.
+% NO SE SI VALE LA PENA MENCIONAR AL MIXTO EN EL ABSTRACT, PERO LO DEJO ACA POR LAS DUDAS: We further introduce a \emph{mixture oracle} parameterized by $p\in[0,1]$ that interpolates between bidirectional and randomized direction oracles, enabling a tunable tradeoff between LLM call budget and comparison reliability. Respuesta (jere): para mi no vale la pena 
 
 
 \section{Introduction}
@@ -86,22 +91,16 @@ To mitigate this, PRP often queries both prompt directions and aggregates, rough
 Yet even after bidirectional prompting, preference cycles can persist, so additional calls are often spent managing noise under a fixed budget.
 
 We therefore reframe reranking as active learning from noisy pairwise comparisons rather than sorting:
-each LLM call is a label query, and the systems question becomes which pairs to query to recover a strong top-$K$ within a budget.
+each LLM call is a label query, and the system's question becomes which pairs to query to recover a strong top-$K$ within a budget.
 This aligns reranking with active ranking / best-$K$ identification under noisy comparisons, where algorithms adaptively select informative pairs under stochastic feedback
 \citep{mohajer2017active,heckel2016activeranking,shah2018simplerobust,ren2020bestk}.
 Related PRP methods already hint at this view via adaptive pairing schedules \citep{luo-etal-2024-prp}.
 
-Concretely, we ask whether replacing sorting-based PRP with active ranking yields practical efficiency gains in LLM reranking.
+Concretely, we ask whether replacing PRP-based sorting with active ranking yields practical efficiency gains in LLM reranking.
 Since active rankers are designed to tolerate noisy pairwise feedback, our framing also enables a cheaper oracle:
-we introduce a randomized-direction oracle that uses a single LLM call per pair by randomizing prompt order and canonicalizing outcomes, yielding direction-consistent win probabilities despite order sensitivity.
+we introduce a randomized-direction oracle that uses a single LLM call per pair by randomizing prompt order, yielding direction-consistent win probabilities despite order sensitivity.
 On TREC DL2019/2020 with Flan-T5-XL, Mohajer with randomized-direction reaches 68.18 NDCG@10 by $B{=}200$ calls,
 while the best sorting baseline matches this quality only at substantially larger budgets ($B{=}350$--$400$).
-
-
-
-
-
-
 
 
 %\section{Introduction}
@@ -249,20 +248,20 @@ while the best sorting baseline matches this quality only at substantially large
 \section{Related Work}
 
 \noindent\textbf{Pairwise LLM reranking (PRP).}
-Pairwise Ranking Prompting (PRP) uses an LLM comparator and composes pairwise judgments into a ranking \citep{sun2023chatgptsearch,qin2024pairwise}.
-Most PRP pipelines plug comparator into classical sorting, targeting a full order rather than a top-$K$ prefix under a call budget.
+Pairwise Ranking Prompting (PRP) sorting procedures use an LLM comparator and compose pairwise judgments into a ranking \citep{sun2023chatgptsearch,qin2024pairwise}.
+Most pipelines plug the PRP unit as a comparator into classical sorting, targeting a full order rather than a top-$K$ prefix under a call budget.
 This creates a structural mismatch. Because LLM comparisons are noisy and can be intransitive, extra comparisons may refine an ill-posed global order rather than improve the prefix.
 
 \noindent\textbf{Order effects and bidirectional prompting.}
 LLM comparisons can be direction-sensitive \citep{shi2024judges,yin2025fragile,jeong2025comparativetrap}, so PRP often queries both prompt orders, roughly doubling cost \citep{qin2024pairwise,wu2025realtimeprp}.
-We instead leverage a noise-robust framing to define a randomized-direction oracle that uses one call per pair by randomizing order and canonicalizing outcomes, inducing direction-consistent win probabilities despite order sensitivity.
+We instead leverage a noise-robust framing to define a randomized-direction oracle that uses one call per pair by randomizing comparison order, inducing direction-independent win probabilities, despite order sensitivity.
 
 \noindent\textbf{Beyond sorting: graphs, tournaments, and active ranking.}
-Some PRP variants depart from sorting, e.g., PRP-Graph aggregates a weighted comparison graph and uses adaptive pairings (Swiss-style scheduling) \citep{luo-etal-2024-prp}; tournament-style designs similarly structure comparisons for efficiency \citep{chen2024tourrank}. Our work makes this scheduling question explicit by reframing reranking as active learning from noisy pairwise comparisons and evaluating active top-$K$ identification methods as drop-in replacements for sorting-based PRP \citep{heckel2016activeranking,shah2018simplerobust,ren2020bestk,mohajer2017active}.
+Some PRP variants depart from sorting, e.g., PRP-Graph aggregates a weighted comparison graph and uses adaptive pairings (Swiss-style scheduling) \citep{luo-etal-2024-prp}; tournament-style designs similarly structure comparisons for efficiency \citep{chen2024tourrank}. Our work makes this scheduling question explicit by reframing reranking as active learning from noisy pairwise comparisons and evaluating active top-$K$ identification methods as drop-in replacements for PRP-based sorting \citep{heckel2016activeranking,shah2018simplerobust,ren2020bestk,mohajer2017active}.
 
 \noindent\textbf{Orthogonal efficiency.}
 Other work reduces cost by changing the prompting primitive (setwise/listwise) or allocating inference by uncertainty \citep{zhuang2024setwise,huang2025tssetrank,wang2025realm}.
-Our focus is orthogonal: within pairwise PRP, we study (i) noise-aware comparison scheduling (active ranking) and (ii) a cheaper single-call oracle.
+Our focus is orthogonal: for pairwise ranking, we study (i) noise-aware comparison scheduling (active ranking) and (ii) a cheaper single-call oracle.
 
 
 %\section{Related Work}
@@ -387,7 +386,7 @@ Given a query $q$, a first-stage retriever returns $N$ candidates
 $\mathcal{D}(q)=\{d_1,\dots,d_N\}$ ($N\ge K$). The reranker outputs an ordered
 top-$K$ list $\mathcal{R}_K(q)=(r_1,\dots,r_K)$ with $r_\ell \in \mathcal{D}(q)$.
 
-\noindent\textbf{Pairwise-oracle interface.}
+\noindent\textbf{Pairwise Oracle interface.}
 Algorithms access candidates only through noisy pairwise queries: for each unordered
 pair $\{i,j\}$, an oracle call returns $X_{ij}(q)\in\{0,1\}$ where $X_{ij}(q)=1$
 denotes $d_i \succ d_j$, with win probability $p_{ij}(q):=\Pr[X_{ij}(q)=1]$.
@@ -398,19 +397,33 @@ for $i\neq j$ (no global transitivity required).
 We measure cost in LLM inference calls: bidirectional prompting uses two calls per
 compared pair (one per order), while randomized-direction uses one. This call-centric
 accounting in PRP can determine which routines
-are cost-optimal \citep{wisznia2025batchingcaching}.
+are optimal \citep{wisznia2025batchingcaching}.
 
 \paragraph{Oracles for order sensitivity.}
-LLM judgments can depend on which passage is shown first. For $\{i,j\}$ define
-$\alpha_{ij}:=\Pr[i\succ j \mid (d_i,d_j)]$ and $\beta_{ij}:=\Pr[i\succ j \mid (d_j,d_i)]$.
+LLM judgments often depend on the order in which passages are presented. Let $\text{LLM}(d_a, d_b) \in \{1, 0\}$ denote the outcome of a single call comparing two documents, where $1$ indicates that the first document in the pair $(d_a, d_b)$ is preferred.
 
 \noindent\textbf{Bidirectional (two calls).}
-Query both orders, canonicalize to ``$i$ vs.\ $j$'' (invert the second), and aggregate symmetrically.
+Both orders are queried and the final verdict $V_{ij}$ is defined as:
+\[
+V_{ij} = \begin{cases} 
+1 & \text{if } \text{LLM}(d_i, d_j) = 1 \text{ and } \text{LLM}(d_j, d_i) = 0 \\
+0 & \text{otherwise} 
+\end{cases}
+\]
 
 \noindent\textbf{Randomized-direction (one call).}
-Sample the order uniformly and canonicalize, inducing $p_{ij}=\tfrac12\alpha_{ij}+\tfrac12\beta_{ij}$ and hence $p_{ij}=1-p_{ji}$.
-
-
+We randomize the presentation order and define the verdict $V_{ij}$ by:
+\[
+V_{ij} = \begin{cases} 
+\text{LLM}(d_i, d_j) & \text{with probability } 1/2 \\
+1 - \text{LLM}(d_j, d_i) & \text{with probability } 1/2
+\end{cases}
+\]
+The preference probability $p_{ij} = \Pr[V_{ij} = 1]$ corresponds to the average preference across both orderings:
+\[
+p_{ij} = \frac{1}{2} \left( \Pr[y(d_i, d_j) = 1] + \Pr[y(d_j, d_i) = 0] \right)
+\]
+This formulation ensures reciprocity, where $p_{ji} = 1 - p_{ij}$.
 
 %\section{Reranking from Noisy Comparisons}
 %\label{sec:setup}
@@ -675,7 +688,7 @@ We report NDCG@10  of the current top-$K$ per $B$ oracle calls; sweep $B\in\{100
 
 \noindent\textbf{Oracles and models.}
 We use pairwise comparison matrices from FLAN-T5-L and FLAN-T5-XL.
-Bidirectional memoizes one canonical outcome per unordered pair (2 calls/pair), while randomized-direction samples one prompt order per call.
+Bidirectional memoizes one outcome per unordered pair (2 calls/pair), while randomized-direction samples one prompt order per call.
 
 \noindent\textbf{Baselines.}
 All pairwise methods share the same candidate set and oracle interface.
@@ -786,7 +799,7 @@ We compare methods within each oracle block at matched $B$.
 
 \paragraph{Main findings.}
 \emph{(i)} In the call-constrained regime ($B \approx 200$--$450$), the best active ranker (Mohajer) delivers substantially higher NDCG@10 than sorting-based PRP under the same oracle.
-\emph{(ii)} Randomized-direction prompting compresses the ``time-to-quality'' for active ranking: Mohajer reaches near-peak quality by $B{=}200$ calls.
+\emph{(ii)} Randomized-direction prompting compresses the ``time-to-quality'' for active ranking: Mohajer reaches peak quality by $B{=}200$ calls.
 \emph{(iii)} At high budgets, sorting-based composition can catch up and slightly overtake, consistent with its ability to spend additional calls refining a global order.
 
 \paragraph{Active reranking vs.\ sorting under bidirectional prompting}
@@ -827,13 +840,14 @@ At $B{=}500$, HeapSort becomes best (68.21), narrowly exceeding Mohajer (67.02),
 
 \paragraph{Randomized-direction oracle: better alignment with active ranking} \label{sec:stochastic-oracle-vs-sorting}
 
-We now switch to randomized-direction prompting (one call per pair via random order + canonicalization) (Table~\ref{tab:budget_ndcg10_oracles_flan_xl}).
+We now switch to randomized-direction prompting (Table~\ref{tab:budget_ndcg10_oracles_flan_xl}).
 
-\noindent\textbf{Twice the pairs, same budget.} A key advantage of randomized-direction prompting is its query efficiency: because it issues a single LLM call per pair (versus two symmetric calls under bidirectional prompting), a budget of $B$ comparisons can reach $B$ distinct pairs, compared to only $B/2$ under bidirectional prompting. Consequently, for any fixed budget, randomized-direction gathers twice as much pairwise information, explaining its consistent gains across all rankers under budget constraints.
+\noindent\textbf{Twice the pairs, same budget.} A key advantage of randomized-direction prompting is its query efficiency: because it issues a single LLM call per pair (versus two calls under bidirectional prompting), a budget of $B$ comparisons can reach $B$ distinct pairs, compared to only $B/2$ under bidirectional prompting. 
 
 \noindent\textbf{Active ranking converges much faster.} This efficiency particularly benefits active-learning methods that prioritize breadth over redundancy. Mohajer is already strong at $B{=}100$ (60.68) and reaches 68.18 by $B{=}200$—a regime where bidirectional prompting would have only explored half as many pairs. This suggests that, under a fixed call budget, allocating calls to more distinct pairs outweighs spending two calls per pair to reduce order effects.
 
-\noindent\textbf{Sorting improves too, but only overtakes at high budgets.} HeapSort reaches comparable quality later (68.33 at $B{=}350$) and becomes best only from $B{=}400$ (68.54 vs.\ 68.18), with a small margin (0.36 at $B{=}400$; 68.71 at $B{=}500$). Overall, randomized-direction shifts ``time-to-quality'' earlier for active ranking while leaving sorting preferable only at sufficiently large budgets where the 2× pair-coverage advantage becomes less decisive.
+\noindent\textbf{Sorting improves too, but only overtakes at high budgets.} HeapSort reaches comparable quality later (68.33 at $B{=}350$) and becomes best only from $B{=}400$ (68.54 vs.\ 68.18), with a small margin (0.36 at $B{=}400$; 68.71 at $B{=}500$). However, unlike the active-ranker gains, the benefit of randomized-direction for sorting is less consistent in the unconstrained regime: with large (effectively unbounded) budgets, performance can be mixed, sometimes improving NDCG@10 and sometimes not. Overall, randomized-direction shifts “time-to-quality” earlier for active ranking while leaving sorting preferable only at sufficiently large budgets, where the 2× pair-coverage advantage becomes less decisive. % !! Agregue una oracion en el medio.
+% \noindent\textbf{Sorting improves too, but only overtakes at high budgets.} HeapSort reaches comparable quality later (68.33 at $B{=}350$) and becomes best only from $B{=}400$ (68.54 vs.\ 68.18), with a small margin (0.36 at $B{=}400$; 68.71 at $B{=}500$). Overall, randomized-direction shifts ``time-to-quality'' earlier for active ranking while leaving sorting preferable only at sufficiently large budgets where the 2× pair-coverage advantage becomes less decisive.
 
 %\subsection{Randomized-direction oracle: better alignment with active ranking}
 %\label{sec:stochastic-oracle-vs-sorting}
@@ -860,15 +874,23 @@ We now switch to randomized-direction prompting (one call per pair via random or
 Table~\ref{tab:beir_main} reports end-to-end reranking on $N{=}100$ candidates ($K{=}10$), including average LLM calls per query.
 Across BEIR-style datasets, active rankers achieve competitive NDCG@10 with far fewer calls than bidirectional sorting baselines.
 For Flan-T5-XL, sorting-based PRP uses 1176--1706 calls/task (Avg.\ NDCG@10 56.8--60.4), while Mohajer and PAC use 181--337 calls/task (Avg.\ 55.0--57.3), a $\sim$4--9$\times$ reduction in LLM calls.
-Table~\ref{tab:oracle_ablation_ar} further shows that randomized-direction reduces calls for active methods (e.g., Mohajer: 397$\rightarrow$232) while preserving NDCG@10, reinforcing that adaptive scheduling + single-call comparisons is an effective low-cost design point for top-$K$ reranking.
+Table~\ref{tab:beir_main} further shows that randomized-direction reduces calls for active methods (e.g., Mohajer: 399$\rightarrow$232) while preserving NDCG@10, reinforcing that adaptive scheduling + single-call comparisons is an effective low-cost design point for top-$K$ reranking.
+% Table~\ref{tab:oracle_ablation_ar} further shows that randomized-direction reduces calls for active methods (e.g., Mohajer: 397$\rightarrow$232) while preserving NDCG@10, reinforcing that adaptive scheduling + single-call comparisons is an effective low-cost design point for top-$K$ reranking.
+% !! ^^^^^^^ empty reference to table
 
 
 \subsection{Latency}
 \label{sec:latency}
 
 We measure wall-clock latency on TREC DL2019/2020 by running the reranking pipeline on A100, H100, and H200 GPUs.
-Figure~\textcolor{red}{[X]} plots NDCG@10 vs.\ elapsed time for the same methods/oracles as Table~\ref{tab:budget_ndcg10_oracles_flan_xl}.
-The trend matches the budgeted view: active ranking reaches strong top-$K$ quality earlier (Mohajer plateaus by \textcolor{red}{[t\_plateau\_A100/H100/H200]}s), while sorting improves more gradually and may overtake only at long runtimes.
+Figure~\ref{fig:limit_time_all_flan_a100} plots NDCG@10 vs.\ elapsed time for the same methods/oracles as Table~\ref{tab:budget_ndcg10_oracles_flan_xl}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{reports/figures/limit_comparisons_time/limit_comparisons_time_all_flan_a100_both.png}
+    \caption{TREC DL 2019 and DL 2020 (Flan-T5-XL, A100): NDCG@10 vs average time per task. Colors denote rankers; solid lines are randomized and dotted lines are bidirectional. Peak markers (X) are shown for Mohajer/PAC variants.}
+    \label{fig:limit_time_all_flan_a100}
+\end{figure}
+The trend matches the budgeted view: active ranking reaches strong top-$K$ quality earlier (Mohajer fully converges by 23.3s, PAC by 10.1s), while sorting improves more gradually and may overtake only at longer runtimes.
 
 
 %\section{Conclusion}
@@ -1060,7 +1082,7 @@ We thank [\;] for discussions and feedback.
 % ------------------------------------------------------------
 % (A1) Budgeted NDCG@10 over DL2019 and DL2020 (single table, subtables)
 % ------------------------------------------------------------
-\begin{table}[!hbp]
+\begin{table}[H]
 \centering
 
 \begin{subtable}{\textwidth}
@@ -1130,13 +1152,11 @@ Budgeted NDCG@10 (\%) on TREC DL2019 and DL2020 using Flan-T5-XL under bidirecti
 Budgets denote the number of pairwise comparisons. Within each oracle block, bold/underline indicate best/second-best per budget column among the listed rankers.
 }
 \label{tab:budget_ndcg10_oracles_flan_xl_by_dataset}
-\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Add a 1--2 sentence takeaway summarizing the trend across both years.
 \end{table}
-
 % ------------------------------------------------------------
 % (A2) Top-k sweep under randomized-direction prompting (Flan-T5-XL)
 % ------------------------------------------------------------
-\begin{table}[!hbp]
+\begin{table}[H]
 \centering
 \small
 \begin{adjustbox}{max width=\textwidth}
@@ -1179,13 +1199,12 @@ Budgets denote the number of pairwise comparisons. For each $(k,\text{budget})$,
 \textsuperscript{\textdagger} indicates the first budget where the method is treated as converged; subsequent budgets are de-emphasized.
 }
 \label{tab:k_budget_sweep_randomized}
-\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Mohajer dominates BubbleSort when $k$ and the budget are low. As $k$ increases, the crossover point where BubbleSort overtakes Mohajer arrives sooner.
+\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Mohajer dominates BubbleSort when $k$ and the budget are low. As $k$ increases, the crossover point where BubbleSort overtakes Mohajer arrives sooner in terms of number of comparisons.
 \end{table}
-
 % ------------------------------------------------------------
 % (A3) PRP-Graph comparison
 % ------------------------------------------------------------
-\begin{table}[!hbp]
+\begin{table}[H]
 \centering
 \small
 \begin{adjustbox}{max width=\textwidth}
@@ -1200,17 +1219,17 @@ Budgets denote the number of pairwise comparisons. For each $(k,\text{budget})$,
 NA & BM25 & 50.6 & -- & 48.0 & -- \\
 \midrule
 \multirow{3}{*}{Flan-T5-L}
-& PRP-Graph     & \best{65.8}    & 492.7  & \best{61.8}    & 492.5  \\
+& PRP-Graph-10     & \best{65.8}    & 492.7  & \best{61.8}    & 492.5  \\
 & Mohajer + Bu. & \second{61.75} & 354.60 & \second{58.8}  & 354.245 \\
 & PAC + Bu.     & 59.9           & 183.34 & 57.29          & 183.99 \\
 \midrule
 \multirow{3}{*}{Flan-T5-XL}
-& PRP-Graph     & \second{67.6}  & 492.6  & \second{66.1}  & 492.5 \\
+& PRP-Graph-10     & \second{67.6}  & 492.6  & \second{66.1}  & 492.5 \\
 & Mohajer + Bu. & \best{69.47}   & 338.11 & \best{66.3}    & 338.74 \\
 & PAC + Bu.     & 61.05          & 184.16 & 58.51          & 183.72 \\
 \midrule
 \multirow{3}{*}{Flan-T5-XXL}
-& PRP-Graph     & \second{66.6}  & 492.6  & \second{66.1}  & 492.6 \\
+& PRP-Graph-10     & \second{66.6}  & 492.6  & \second{66.1}  & 492.6 \\
 & Mohajer + Bu. & \best{68.54}   & 341.81 & \best{68.96}   & 344.17 \\
 & PAC + Bu.     & 60.92          & 183.46 & 60.71          & 183.59 \\
 \bottomrule
@@ -1222,13 +1241,12 @@ Comparison to PRP-Graph on TREC DL2019/2020. NDCG@10 is reported in percent.
 Bold/underline indicate best/second-best NDCG@10 within each (DL year, LLM) block.
 }
 \label{tab:trec_prpgraph_comp}
-\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Add a 1--2 sentence takeaway.
+\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Our results show that with larger Flan models, Mohajer + Bubble has increasingly better results than PRP-Graph with less comparisons. PAC + Bubble falls behind in performance but has significantly less comparisons. 
 \end{table}
-
 % ------------------------------------------------------------
 % (A4) End-to-end table (single-column; keep as table, not table*)
 % ------------------------------------------------------------
-\begin{table}[!hbp]
+\begin{table}[H]
 \centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
@@ -1279,17 +1297,18 @@ Bold/underline indicate best/second-best NDCG@10 within each (DL year, LLM) bloc
 \end{adjustbox}
 \caption{
 End-to-end NDCG@10 (\%) and average pairwise-comparison calls per task. For each reranker and column, \textbf{bold} indicates the better oracle variant (higher NDCG; lower calls).
-If the two oracle variants tie after rounding, both are bolded.
+If the two oracle variants tie after rounding, both are bolded. % !!Modelo?
 }
 \label{tab:reranker_oracle_compare}
-\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Active-learning rankers are more robust to noisy comparisons and profit most from randomized-direction sampling. Classic sorting baselines either lose effectiveness (QuickSort, HeapSort) or require many more comparisons as cycles emerge under noise. A curious pattern is that sampling in BubbleSort improves performance: with cycles, borderline documents can swap stochastically, and when they meet a clearly stronger neighbor they get pushed downward, letting the latent transitive ordering surface more than with a deterministic oracle.
+\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Active-learning rankers are more robust to noisy comparisons and profit most from randomized-direction sampling. Bubblesort requires many more comparisons as cycles emerge, but said cycles allow the latent transitive ordering to surface more than with a deterministic oracle, yielding higher NDCG@10.
+
 \end{table}
 
 % ------------------------------------------------------------
 % Bidirectional flip-rate sanity check (order effects)
 % Paste this in the Appendix where you want the tables to appear.
 % ------------------------------------------------------------
-\begin{table*}[t]
+\begin{table*}[H]
 \centering
 \small
 \renewcommand{\arraystretch}{1.15}
@@ -1327,55 +1346,164 @@ $>20$   & 20.36\% & 862,804 & 175,629 \\
 \label{tab:flip_rate_order_effects}
 \end{table*}
 
-% ------------------------------------------------------------
-% (AX) Qwen3-4B-Instruct: DL19/DL20 summary (ranker + oracle)
-% Notes:
-%  - "Sampling" is reported as "Randomized"
-%  - "PRP" corresponds to HeapSort (shown as HeapSort below)
-% ------------------------------------------------------------
-\begin{table}[!hbp]
+\begin{table*}[H]
 \centering
-\small
 \begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{lcccc}
+\scriptsize
+\begin{tabular}{c l rrrrrrrrr}
 \toprule
-\textbf{Ranker (Oracle)} &
-\textbf{DL19 NDCG@10 (\%)} &
-\textbf{DL20 NDCG@10 (\%)} &
-\textbf{Avg. NDCG@10 (\%)} &
-\textbf{Avg. Calls/Task} \\
+& & \multicolumn{9}{c}{Number of comparisons (budget)} \\
+\cmidrule(lr){3-11}
+Oracle & Ranker & 100 & 150 & 200 & 250 & 300 & 350 & 400 & 450 & 500 \\
 \midrule
-BubbleSort (Bidirectional) & 67.4 & \second{70.4} & 69.0 & 1,063 \\
-BubbleSort (Randomized) & \best{71.6} & \best{72.5} & \best{72.1} & 3,669 \\
+
+\multirow{6}{*}{\rotatebox[origin=c]{90}{Bidirectional}}
+& BubbleSort        & \underline{50.58} & \underline{50.58} & 57.04 & 57.04 & 57.18 & 58.73 & 60.98 & 61.30 & 61.90 \\
+& HeapSort          & 8.64 & 8.16 & 7.99 & 10.48 & 25.65 & 42.42 & 55.85 & 64.24 & \underline{69.14} \\
+& QuickSort         & \textbf{58.28} & \textbf{58.11} & 58.04 & 58.63 & 58.71 & 58.71 & 58.71 & 59.09 & 59.67 \\
+& PAC + Bubble      & \underline{50.58} & \underline{50.58} & 50.58 & 50.58 & \underline{60.74} & \conv{\underline{64.25}} & \postconv{64.25} & \postconv{64.25} & \postconv{64.25} \\
+& Mohajer + Bubble  & 32.76 & 32.76 & \textbf{62.97} & \textbf{66.69} & \textbf{68.60} & \textbf{69.39} & \textbf{70.08} & \conv{\textbf{70.49}} & \postconv{\textbf{70.49}} \\
+& Mohajer           & 32.76 & 32.76 & \textbf{62.97} & \textbf{66.69} & \textbf{68.60} & \textbf{69.39} & \textbf{70.08} & \conv{\underline{70.43}} & \postconv{\underline{70.43}} \\
+
 \midrule
-HeapSort (Bidirectional) & 70.3 & 69.5 & 69.9 & 1,383 \\
-HeapSort (Randomized) & 70.7 & 69.8 & \second{70.2} & 884 \\
-\midrule
-QuickSort (Bidirectional) & 70.7 & 68.8 & 69.8 & 1,567 \\
-QuickSort (Randomized) & 69.7 & 69.2 & 69.5 & 571 \\
-\midrule
-Mohajer (Bidirectional) & 70.4 & 66.9 & 68.7 & 398 \\
-Mohajer (Randomized) & \second{71.0} & 65.4 & 68.2 & \second{232} \\
-\midrule
-Mohajer + Bubble (Bidirectional) & 70.5 & 66.9 & 68.7 & 426 \\
-Mohajer + Bubble (Randomized) & 70.3 & 67.6 & 68.9 & 347 \\
-\midrule
-PAC + Bubble (Bidirectional) & 64.2 & 67.1 & 65.7 & 333 \\
-PAC + Bubble (Randomized) & 63.0 & 66.0 & 64.5 & \best{183} \\
+
+\multirow{6}{*}{\rotatebox[origin=c]{90}{Randomized}}
+& BubbleSort        & \underline{57.49} & 57.79 & 61.11 & 61.45 & 64.32 & 64.24 & 66.44 & 66.27 & 67.12 \\
+& HeapSort          & 8.20 & 16.13 & 53.18 & \underline{68.15} & \textbf{71.52} & \underline{69.61} & \textbf{70.73} & \textbf{71.14} & \underline{70.70} \\
+& QuickSort         & 54.94 & 56.56 & 58.25 & 57.03 & 59.96 & 60.92 & 62.13 & 61.92 & 64.81 \\
+& PAC + Bubble      & 50.58 & \underline{57.00} & \conv{\underline{63.02}} & \postconv{63.02} & \postconv{63.02} & \postconv{63.02} & \postconv{63.02} & \postconv{63.02} & \postconv{63.02} \\
+& Mohajer + Bubble  & \textbf{63.37} & \textbf{66.49} & \textbf{69.37} & \textbf{68.82} & \underline{70.33} & \textbf{70.44} & \conv{\underline{70.26}} & \postconv{\underline{70.26}} & \postconv{\underline{70.26}} \\
+& Mohajer           & \textbf{63.37} & \textbf{66.49} & \underline{69.37} & \conv{\underline{70.98}} & \postconv{\textbf{70.98}} & \postconv{\textbf{70.98}} & \postconv{\textbf{70.98}} & \postconv{\textbf{70.98}} & \postconv{\textbf{70.98}} \\
+
 \bottomrule
-\end{tabular}
+\end{tabular}%
 \end{adjustbox}
-\caption{
-TREC DL2019/2020 results using \textbf{Qwen3-4B-Instruct}. “Randomized” corresponds to the sampling-direction oracle.
-HeapSort corresponds to the PRP sorting baseline. Bold/underline indicate best/second-best per column (higher NDCG; lower calls).
+\caption{Average NDCG@10 (\%) on TREC DL 2019 with Qwen3-4B-Instruct across comparison budgets. Bold = best per column; underline = second-best per column (within each oracle block). \textsuperscript{\textdagger} indicates the smallest budget at which a method completes; results at larger budgets are visually de-emphasized.}
+\label{tab:budget_ndcg10_oracles_qwen3_4b_dl2019}
+\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Though not always the best in performance, active ranking algorithms reach competitive NDCG@10 to the classic algorithms, with drastic improvements in terms of average calls per task.
+
+
+\end{table*}
+
+
+% ------------------------------------------------------------
+% (AX) Qwen3-4B-Instruct end-to-end table (compact; DL19/DL20 only)
+%  - "Sampling" -> "Randomized"
+%  - "PRP" corresponds to HeapSort (shown as HeapSort below)
+%  - Only our methods include both oracles (PAC+Bubble, Mohajer variants)
+% ------------------------------------------------------------
+\begin{table*}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.0pt}
+\renewcommand{\arraystretch}{1.00}
+\resizebox{0.90\textwidth}{!}{%
+\begin{tabular}{llrrrr}
+\toprule
+\multicolumn{2}{c}{\textbf{Method}} &
+\multicolumn{2}{c}{\textbf{Dataset (NDCG@10 \%)}} &
+\textbf{Avg. NDCG@10} & \textbf{Avg. Calls/Task} \\
+\cmidrule(lr){1-2}\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+& \textbf{Ranker (Oracle)} & \textbf{DL19} & \textbf{DL20} & & \\
+\midrule
+& \textbf{BM25} & 50.60 & 48.00 & 49.30 & -- \\
+\midrule
+
+\multirow{9}{*}{\rotatebox{90}{\textbf{Qwen3-4B-Instruct}}}
+& BubbleSort (Bidirectional) & 67.44 & \textbf{70.45} & 68.95 & 1062.69 \\
+& HeapSort (Bidirectional)   & 70.26 & \underline{69.46} & \textbf{69.86} & 1383.02 \\
+& QuickSort (Bidirectional)  & \underline{70.70} & 68.83 & \underline{69.77} & 1567.02 \\
+% --- gray/dampened separator between baselines and ours
+\arrayrulecolor{black!35}
+\cmidrule(lr){2-6}
+\arrayrulecolor{black}
+& PAC + Bubble (Bidirectional) & 64.25 & 67.09 & 65.67 & 332.55 \\
+& PAC + Bubble (Randomized)    & 63.02 & 66.05 & 64.54 & \textbf{183.42} \\
+& Mohajer + Bubble (Bidirectional) & 70.49 & 66.92 & 68.70 & 425.67 \\
+& Mohajer + Bubble (Randomized)    & 70.26 & 67.58 & 68.92 & 346.54 \\
+& Mohajer (Bidirectional)          & 70.43 & 66.92 & 68.67 & 398.26 \\
+& Mohajer (Randomized)             & \textbf{70.98} & 65.43 & 68.20 & \underline{232.01} \\
+\bottomrule
+\end{tabular}%
 }
-\label{tab:qwen3_4b_dl19_dl20_summary}
-\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Add a 1--2 sentence takeaway (e.g., best effectiveness vs.\ best efficiency trade-off).
-\end{table}
+\caption{
+TREC DL2019/2020 end-to-end NDCG@10 (\%) and average pairwise-comparison calls per task using \textbf{Qwen3-4B-Instruct}.
+Baselines are reported with a bidirectional oracle; our methods (PAC+Bubble and Mohajer variants) include both bidirectional and randomized comparisons.
+Within the Qwen block, best is bold and second-best is underlined per column (higher NDCG; lower calls).
+}
+\label{tab:qwen3_4b_end2end}
+
+\par\vspace{2pt}\footnotesize\noindent\textit{Note.} Though not always the best in performance, active ranking algorithms reach competitive NDCG@10 to the classic algorithms, with drastic improvements in terms of average calls per task.
+
+\end{table*}
 
 
-
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.23\textheight,keepaspectratio]{reports/figures/limit_comparisons_time/limit_comparisons_time_all_flan_a100_both.png}
+        \caption{A100}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.23\textheight,keepaspectratio]{reports/figures/limit_comparisons_time/limit_comparisons_time_all_flan_h100_both.png}
+        \caption{H100}
+    \end{subfigure}\hfill
+    \vspace{0.2em}
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.23\textheight,keepaspectratio]{reports/figures/limit_comparisons_time/limit_comparisons_time_all_flan_h200_both.png}
+        \caption{H200}
+    \end{subfigure}
+    \caption{All datasets (Flan-T5-XL): NDCG@10 vs estimated time per task across GPUs, with both oracles shown. Colors denote rankers; solid lines are randomized and dotted lines are bidirectional. Peak markers (X) are shown for Mohajer/PAC variants.}
+    \label{fig:limit_time_all_flan_all_gpus}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.23\textheight,keepaspectratio]{reports/figures/limit_comparisons_time/limit_comparisons_time_all_qwen_a100_both.png}
+        \caption{A100}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.23\textheight,keepaspectratio]{reports/figures/limit_comparisons_time/limit_comparisons_time_all_qwen_h100_both.png}
+        \caption{H100}
+    \end{subfigure}\hfill
+    \vspace{0.2em}
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.23\textheight,keepaspectratio]{reports/figures/limit_comparisons_time/limit_comparisons_time_all_qwen_h200_both.png}
+        \caption{H200}
+    \end{subfigure}
+    \caption{All datasets (Qwen-Instruct): NDCG@10 vs estimated time per task across GPUs, with both oracles shown. Colors denote rankers; solid lines are randomized and dotted lines are bidirectional. Peak markers (X) are shown for Mohajer/PAC variants.}
+    \label{fig:limit_time_all_qwen_all_gpus}
+\end{figure}
 \FloatBarrier
 \endgroup
+
+% ------------------------------------------------------------
+% Parallelization Opportunities
+% ------------------------------------------------------------
+\section{Parallelization Opportunities}
+\label{sec:parallelization}
+
+Both our proposed active ranking algorithms exhibit substantial parallelization potential that could significantly reduce wall-clock latency in practice.
+
+\paragraph{Mohajer.}
+The Mohajer algorithm's structure naturally lends itself to parallel execution at all levels.
+First, the $K$ independent tournaments used for champion selection can be executed concurrently, as each tournament operates on a disjoint subset of candidates with no inter-group dependencies.
+Second, the heapify operation itself is amenable to parallel construction techniques, allowing the initial heap formation to proceed in $O(\log n)$ depth rather than sequential $O(n)$ time.
+Finally, within each tournament, pairwise comparisons at the same tree depth are independent and can be batched for simultaneous LLM inference.
+
+\paragraph{Optimized PAC.}
+Our optimized PAC algorithm also presents parallelization opportunities, where comparisons of candidates against the selected anchors are entirely independent.
+With $K/2$ anchors and a candidate pool of size $K \times \text{pool\_mult}$, these $O(K^2)$ comparisons can be executed in parallel, subject only to the LLM inference throughput.
+The subsequent winner-set construction and greedy accumulation require only lightweight aggregation, which remains negligible compared to comparison costs.
+
+\paragraph{Latency implications.}
+Assuming an LLM inference API with high throughput (e.g., batched GPU inference or distributed serving), parallelization could theoretically reduce Mohajer's latency from $O(n \log K)$ sequential comparisons to $O(\log Q \cdot \log K)$ parallel rounds, and PAC's latency from $O(K \sqrt{n})$ comparisons to $O(\sqrt{n})$ rounds with batch size $K$.
+In our TREC DL experiments, where Mohajer performs $\sim$350 comparisons and PAC $\sim$185 comparisons, parallelization with batch size 10 could reduce round counts to $\sim$35 and $\sim$19 respectively, yielding substantial speedups on systems where comparison latency dominates over LLM throughput.
 
 \end{document}
