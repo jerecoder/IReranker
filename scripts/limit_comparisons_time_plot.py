@@ -28,6 +28,11 @@ GPU_CONFIGS = [
 
 df = pd.read_csv(INPUT_CSV)
 
+# Replace "prp sort" with "heap sort" in all relevant columns
+df["Ranker"] = df["Ranker"].str.replace("prp sort", "heap sort", case=False, regex=False)
+if "label" in df.columns:
+    df["label"] = df["label"].str.replace("prp sort", "heap sort", case=False, regex=False)
+
 style_map = {
     "Bidirectional": {"linestyle": (0, (1, 2)), "marker": "o"},
     "Sampling": {"linestyle": "-", "marker": "s"},

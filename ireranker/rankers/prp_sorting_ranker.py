@@ -14,7 +14,7 @@ from .registry import register_ranker
 
 
 @register_ranker(
-    "prp sort (classic)",
+    "heap sort (classic)",
     oracle_factories=[
         ("bidirectional", lambda seed: BidirectionalMatrixOracle()),
         ("sampling", lambda seed: SamplingMatrixOracle(seed=seed)),

@@ -1,0 +1,2 @@
+Zip: /Users/jeremias.paschmann/Documents/IReranker/data/external/beir/scifact.zip
+Reason: Rerank matrix not found for scifact/test. Skipping dataset.
