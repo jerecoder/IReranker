@@ -1,0 +1,1729 @@
+Dataset,Ranker,Oracle,Budget,Seed,NDCG@10,Comparisons,average_comparison_per_task
+dl-2019,bubble sort (classic),Bidirectional,100,42,0.50583,4300.0,100.0
+dl-2019,bubble sort (classic),Bidirectional,100,43,0.50583,4300.0,100.0
+dl-2019,bubble sort (classic),Bidirectional,100,44,0.50583,4300.0,100.0
+dl-2019,bubble sort (classic),Bidirectional,100,45,0.50583,4300.0,100.0
+dl-2019,bubble sort (classic),Bidirectional,100,46,0.50583,4300.0,100.0
+dl-2019,bubble sort (classic),Bidirectional,100,47,0.50583,4300.0,100.0
+dl-2019,bubble sort (classic),Bidirectional,100,48,0.50583,4300.0,100.0
+dl-2019,bubble sort (classic),Bidirectional,100,49,0.50583,4300.0,100.0
+dl-2019,bubble sort (classic),Bidirectional,150,42,0.50583,6450.0,150.0
+dl-2019,bubble sort (classic),Bidirectional,150,43,0.50583,6450.0,150.0
+dl-2019,bubble sort (classic),Bidirectional,150,44,0.50583,6450.0,150.0
+dl-2019,bubble sort (classic),Bidirectional,150,45,0.50583,6450.0,150.0
+dl-2019,bubble sort (classic),Bidirectional,150,46,0.50583,6450.0,150.0
+dl-2019,bubble sort (classic),Bidirectional,150,47,0.50583,6450.0,150.0
+dl-2019,bubble sort (classic),Bidirectional,150,48,0.50583,6450.0,150.0
+dl-2019,bubble sort (classic),Bidirectional,150,49,0.50583,6450.0,150.0
+dl-2019,bubble sort (classic),Bidirectional,200,42,0.57129,8600.0,200.0
+dl-2019,bubble sort (classic),Bidirectional,200,43,0.57129,8600.0,200.0
+dl-2019,bubble sort (classic),Bidirectional,200,44,0.57129,8600.0,200.0
+dl-2019,bubble sort (classic),Bidirectional,200,45,0.57129,8600.0,200.0
+dl-2019,bubble sort (classic),Bidirectional,200,46,0.57129,8600.0,200.0
+dl-2019,bubble sort (classic),Bidirectional,200,47,0.57129,8600.0,200.0
+dl-2019,bubble sort (classic),Bidirectional,200,48,0.57129,8600.0,200.0
+dl-2019,bubble sort (classic),Bidirectional,200,49,0.57129,8600.0,200.0
+dl-2019,bubble sort (classic),Bidirectional,250,42,0.57129,10750.0,250.0
+dl-2019,bubble sort (classic),Bidirectional,250,43,0.57129,10750.0,250.0
+dl-2019,bubble sort (classic),Bidirectional,250,44,0.57129,10750.0,250.0
+dl-2019,bubble sort (classic),Bidirectional,250,45,0.57129,10750.0,250.0
+dl-2019,bubble sort (classic),Bidirectional,250,46,0.57129,10750.0,250.0
+dl-2019,bubble sort (classic),Bidirectional,250,47,0.57129,10750.0,250.0
+dl-2019,bubble sort (classic),Bidirectional,250,48,0.57129,10750.0,250.0
+dl-2019,bubble sort (classic),Bidirectional,250,49,0.57129,10750.0,250.0
+dl-2019,bubble sort (classic),Bidirectional,300,42,0.57129,12900.0,300.0
+dl-2019,bubble sort (classic),Bidirectional,300,43,0.57129,12900.0,300.0
+dl-2019,bubble sort (classic),Bidirectional,300,44,0.57129,12900.0,300.0
+dl-2019,bubble sort (classic),Bidirectional,300,45,0.57129,12900.0,300.0
+dl-2019,bubble sort (classic),Bidirectional,300,46,0.57129,12900.0,300.0
+dl-2019,bubble sort (classic),Bidirectional,300,47,0.57129,12900.0,300.0
+dl-2019,bubble sort (classic),Bidirectional,300,48,0.57129,12900.0,300.0
+dl-2019,bubble sort (classic),Bidirectional,300,49,0.57129,12900.0,300.0
+dl-2019,bubble sort (classic),Bidirectional,350,42,0.57781,15050.0,350.0
+dl-2019,bubble sort (classic),Bidirectional,350,43,0.57781,15050.0,350.0
+dl-2019,bubble sort (classic),Bidirectional,350,44,0.57781,15050.0,350.0
+dl-2019,bubble sort (classic),Bidirectional,350,45,0.57781,15050.0,350.0
+dl-2019,bubble sort (classic),Bidirectional,350,46,0.57781,15050.0,350.0
+dl-2019,bubble sort (classic),Bidirectional,350,47,0.57781,15050.0,350.0
+dl-2019,bubble sort (classic),Bidirectional,350,48,0.57781,15050.0,350.0
+dl-2019,bubble sort (classic),Bidirectional,350,49,0.57781,15050.0,350.0
+dl-2019,bubble sort (classic),Bidirectional,400,42,0.60636,17200.0,400.0
+dl-2019,bubble sort (classic),Bidirectional,400,43,0.60636,17200.0,400.0
+dl-2019,bubble sort (classic),Bidirectional,400,44,0.60636,17200.0,400.0
+dl-2019,bubble sort (classic),Bidirectional,400,45,0.60636,17200.0,400.0
+dl-2019,bubble sort (classic),Bidirectional,400,46,0.60636,17200.0,400.0
+dl-2019,bubble sort (classic),Bidirectional,400,47,0.60636,17200.0,400.0
+dl-2019,bubble sort (classic),Bidirectional,400,48,0.60636,17200.0,400.0
+dl-2019,bubble sort (classic),Bidirectional,400,49,0.60636,17200.0,400.0
+dl-2019,bubble sort (classic),Bidirectional,450,42,0.60688,19350.0,450.0
+dl-2019,bubble sort (classic),Bidirectional,450,43,0.60688,19350.0,450.0
+dl-2019,bubble sort (classic),Bidirectional,450,44,0.60688,19350.0,450.0
+dl-2019,bubble sort (classic),Bidirectional,450,45,0.60688,19350.0,450.0
+dl-2019,bubble sort (classic),Bidirectional,450,46,0.60688,19350.0,450.0
+dl-2019,bubble sort (classic),Bidirectional,450,47,0.60688,19350.0,450.0
+dl-2019,bubble sort (classic),Bidirectional,450,48,0.60688,19350.0,450.0
+dl-2019,bubble sort (classic),Bidirectional,450,49,0.60688,19350.0,450.0
+dl-2019,bubble sort (classic),Bidirectional,500,42,0.60948,21466.0,499.2093023255814
+dl-2019,bubble sort (classic),Bidirectional,500,43,0.60948,21466.0,499.2093023255814
+dl-2019,bubble sort (classic),Bidirectional,500,44,0.60948,21466.0,499.2093023255814
+dl-2019,bubble sort (classic),Bidirectional,500,45,0.60948,21466.0,499.2093023255814
+dl-2019,bubble sort (classic),Bidirectional,500,46,0.60948,21466.0,499.2093023255814
+dl-2019,bubble sort (classic),Bidirectional,500,47,0.60948,21466.0,499.2093023255814
+dl-2019,bubble sort (classic),Bidirectional,500,48,0.60948,21466.0,499.2093023255814
+dl-2019,bubble sort (classic),Bidirectional,500,49,0.60948,21466.0,499.2093023255814
+dl-2020,bubble sort (classic),Bidirectional,100,42,0.47964,20000.0,100.0
+dl-2020,bubble sort (classic),Bidirectional,100,43,0.47964,20000.0,100.0
+dl-2020,bubble sort (classic),Bidirectional,100,44,0.47964,20000.0,100.0
+dl-2020,bubble sort (classic),Bidirectional,100,45,0.47964,20000.0,100.0
+dl-2020,bubble sort (classic),Bidirectional,100,46,0.47964,20000.0,100.0
+dl-2020,bubble sort (classic),Bidirectional,100,47,0.47964,20000.0,100.0
+dl-2020,bubble sort (classic),Bidirectional,100,48,0.47964,20000.0,100.0
+dl-2020,bubble sort (classic),Bidirectional,100,49,0.47964,20000.0,100.0
+dl-2020,bubble sort (classic),Bidirectional,150,42,0.47964,30000.0,150.0
+dl-2020,bubble sort (classic),Bidirectional,150,43,0.47964,30000.0,150.0
+dl-2020,bubble sort (classic),Bidirectional,150,44,0.47964,30000.0,150.0
+dl-2020,bubble sort (classic),Bidirectional,150,45,0.47964,30000.0,150.0
+dl-2020,bubble sort (classic),Bidirectional,150,46,0.47964,30000.0,150.0
+dl-2020,bubble sort (classic),Bidirectional,150,47,0.47964,30000.0,150.0
+dl-2020,bubble sort (classic),Bidirectional,150,48,0.47964,30000.0,150.0
+dl-2020,bubble sort (classic),Bidirectional,150,49,0.47964,30000.0,150.0
+dl-2020,bubble sort (classic),Bidirectional,200,42,0.55724,40000.0,200.0
+dl-2020,bubble sort (classic),Bidirectional,200,43,0.55724,40000.0,200.0
+dl-2020,bubble sort (classic),Bidirectional,200,44,0.55724,40000.0,200.0
+dl-2020,bubble sort (classic),Bidirectional,200,45,0.55724,40000.0,200.0
+dl-2020,bubble sort (classic),Bidirectional,200,46,0.55724,40000.0,200.0
+dl-2020,bubble sort (classic),Bidirectional,200,47,0.55724,40000.0,200.0
+dl-2020,bubble sort (classic),Bidirectional,200,48,0.55724,40000.0,200.0
+dl-2020,bubble sort (classic),Bidirectional,200,49,0.55724,40000.0,200.0
+dl-2020,bubble sort (classic),Bidirectional,250,42,0.55724,50000.0,250.0
+dl-2020,bubble sort (classic),Bidirectional,250,43,0.55724,50000.0,250.0
+dl-2020,bubble sort (classic),Bidirectional,250,44,0.55724,50000.0,250.0
+dl-2020,bubble sort (classic),Bidirectional,250,45,0.55724,50000.0,250.0
+dl-2020,bubble sort (classic),Bidirectional,250,46,0.55724,50000.0,250.0
+dl-2020,bubble sort (classic),Bidirectional,250,47,0.55724,50000.0,250.0
+dl-2020,bubble sort (classic),Bidirectional,250,48,0.55724,50000.0,250.0
+dl-2020,bubble sort (classic),Bidirectional,250,49,0.55724,50000.0,250.0
+dl-2020,bubble sort (classic),Bidirectional,300,42,0.55721,60000.0,300.0
+dl-2020,bubble sort (classic),Bidirectional,300,43,0.55721,60000.0,300.0
+dl-2020,bubble sort (classic),Bidirectional,300,44,0.55721,60000.0,300.0
+dl-2020,bubble sort (classic),Bidirectional,300,45,0.55721,60000.0,300.0
+dl-2020,bubble sort (classic),Bidirectional,300,46,0.55721,60000.0,300.0
+dl-2020,bubble sort (classic),Bidirectional,300,47,0.55721,60000.0,300.0
+dl-2020,bubble sort (classic),Bidirectional,300,48,0.55721,60000.0,300.0
+dl-2020,bubble sort (classic),Bidirectional,300,49,0.55721,60000.0,300.0
+dl-2020,bubble sort (classic),Bidirectional,350,42,0.56183,70000.0,350.0
+dl-2020,bubble sort (classic),Bidirectional,350,43,0.56183,70000.0,350.0
+dl-2020,bubble sort (classic),Bidirectional,350,44,0.56183,70000.0,350.0
+dl-2020,bubble sort (classic),Bidirectional,350,45,0.56183,70000.0,350.0
+dl-2020,bubble sort (classic),Bidirectional,350,46,0.56183,70000.0,350.0
+dl-2020,bubble sort (classic),Bidirectional,350,47,0.56183,70000.0,350.0
+dl-2020,bubble sort (classic),Bidirectional,350,48,0.56183,70000.0,350.0
+dl-2020,bubble sort (classic),Bidirectional,350,49,0.56183,70000.0,350.0
+dl-2020,bubble sort (classic),Bidirectional,400,42,0.59864,79966.0,399.83
+dl-2020,bubble sort (classic),Bidirectional,400,43,0.59864,79966.0,399.83
+dl-2020,bubble sort (classic),Bidirectional,400,44,0.59864,79966.0,399.83
+dl-2020,bubble sort (classic),Bidirectional,400,45,0.59864,79966.0,399.83
+dl-2020,bubble sort (classic),Bidirectional,400,46,0.59864,79966.0,399.83
+dl-2020,bubble sort (classic),Bidirectional,400,47,0.59864,79966.0,399.83
+dl-2020,bubble sort (classic),Bidirectional,400,48,0.59864,79966.0,399.83
+dl-2020,bubble sort (classic),Bidirectional,400,49,0.59864,79966.0,399.83
+dl-2020,bubble sort (classic),Bidirectional,450,42,0.59903,89814.0,449.07
+dl-2020,bubble sort (classic),Bidirectional,450,43,0.59903,89814.0,449.07
+dl-2020,bubble sort (classic),Bidirectional,450,44,0.59903,89814.0,449.07
+dl-2020,bubble sort (classic),Bidirectional,450,45,0.59903,89814.0,449.07
+dl-2020,bubble sort (classic),Bidirectional,450,46,0.59903,89814.0,449.07
+dl-2020,bubble sort (classic),Bidirectional,450,47,0.59903,89814.0,449.07
+dl-2020,bubble sort (classic),Bidirectional,450,48,0.59903,89814.0,449.07
+dl-2020,bubble sort (classic),Bidirectional,450,49,0.59903,89814.0,449.07
+dl-2020,bubble sort (classic),Bidirectional,500,42,0.60072,99524.0,497.62
+dl-2020,bubble sort (classic),Bidirectional,500,43,0.60072,99524.0,497.62
+dl-2020,bubble sort (classic),Bidirectional,500,44,0.60072,99524.0,497.62
+dl-2020,bubble sort (classic),Bidirectional,500,45,0.60072,99524.0,497.62
+dl-2020,bubble sort (classic),Bidirectional,500,46,0.60072,99524.0,497.62
+dl-2020,bubble sort (classic),Bidirectional,500,47,0.60072,99524.0,497.62
+dl-2020,bubble sort (classic),Bidirectional,500,48,0.60072,99524.0,497.62
+dl-2020,bubble sort (classic),Bidirectional,500,49,0.60072,99524.0,497.62
+dl-2019,heap sort (classic),Bidirectional,100,42,0.09145,4300.0,100.0
+dl-2019,heap sort (classic),Bidirectional,100,43,0.09145,4300.0,100.0
+dl-2019,heap sort (classic),Bidirectional,100,44,0.09145,4300.0,100.0
+dl-2019,heap sort (classic),Bidirectional,100,45,0.09145,4300.0,100.0
+dl-2019,heap sort (classic),Bidirectional,100,46,0.09145,4300.0,100.0
+dl-2019,heap sort (classic),Bidirectional,100,47,0.09145,4300.0,100.0
+dl-2019,heap sort (classic),Bidirectional,100,48,0.09145,4300.0,100.0
+dl-2019,heap sort (classic),Bidirectional,100,49,0.09145,4300.0,100.0
+dl-2019,heap sort (classic),Bidirectional,150,42,0.08491,6450.0,150.0
+dl-2019,heap sort (classic),Bidirectional,150,43,0.08491,6450.0,150.0
+dl-2019,heap sort (classic),Bidirectional,150,44,0.08491,6450.0,150.0
+dl-2019,heap sort (classic),Bidirectional,150,45,0.08491,6450.0,150.0
+dl-2019,heap sort (classic),Bidirectional,150,46,0.08491,6450.0,150.0
+dl-2019,heap sort (classic),Bidirectional,150,47,0.08491,6450.0,150.0
+dl-2019,heap sort (classic),Bidirectional,150,48,0.08491,6450.0,150.0
+dl-2019,heap sort (classic),Bidirectional,150,49,0.08491,6450.0,150.0
+dl-2019,heap sort (classic),Bidirectional,200,42,0.08613,8600.0,200.0
+dl-2019,heap sort (classic),Bidirectional,200,43,0.08613,8600.0,200.0
+dl-2019,heap sort (classic),Bidirectional,200,44,0.08613,8600.0,200.0
+dl-2019,heap sort (classic),Bidirectional,200,45,0.08613,8600.0,200.0
+dl-2019,heap sort (classic),Bidirectional,200,46,0.08613,8600.0,200.0
+dl-2019,heap sort (classic),Bidirectional,200,47,0.08613,8600.0,200.0
+dl-2019,heap sort (classic),Bidirectional,200,48,0.08613,8600.0,200.0
+dl-2019,heap sort (classic),Bidirectional,200,49,0.08613,8600.0,200.0
+dl-2019,heap sort (classic),Bidirectional,250,42,0.11911,10750.0,250.0
+dl-2019,heap sort (classic),Bidirectional,250,43,0.11911,10750.0,250.0
+dl-2019,heap sort (classic),Bidirectional,250,44,0.11911,10750.0,250.0
+dl-2019,heap sort (classic),Bidirectional,250,45,0.11911,10750.0,250.0
+dl-2019,heap sort (classic),Bidirectional,250,46,0.11911,10750.0,250.0
+dl-2019,heap sort (classic),Bidirectional,250,47,0.11911,10750.0,250.0
+dl-2019,heap sort (classic),Bidirectional,250,48,0.11911,10750.0,250.0
+dl-2019,heap sort (classic),Bidirectional,250,49,0.11911,10750.0,250.0
+dl-2019,heap sort (classic),Bidirectional,300,42,0.23968,12900.0,300.0
+dl-2019,heap sort (classic),Bidirectional,300,43,0.23968,12900.0,300.0
+dl-2019,heap sort (classic),Bidirectional,300,44,0.23968,12900.0,300.0
+dl-2019,heap sort (classic),Bidirectional,300,45,0.23968,12900.0,300.0
+dl-2019,heap sort (classic),Bidirectional,300,46,0.23968,12900.0,300.0
+dl-2019,heap sort (classic),Bidirectional,300,47,0.23968,12900.0,300.0
+dl-2019,heap sort (classic),Bidirectional,300,48,0.23968,12900.0,300.0
+dl-2019,heap sort (classic),Bidirectional,300,49,0.23968,12900.0,300.0
+dl-2019,heap sort (classic),Bidirectional,350,42,0.41681,15050.0,350.0
+dl-2019,heap sort (classic),Bidirectional,350,43,0.41681,15050.0,350.0
+dl-2019,heap sort (classic),Bidirectional,350,44,0.41681,15050.0,350.0
+dl-2019,heap sort (classic),Bidirectional,350,45,0.41681,15050.0,350.0
+dl-2019,heap sort (classic),Bidirectional,350,46,0.41681,15050.0,350.0
+dl-2019,heap sort (classic),Bidirectional,350,47,0.41681,15050.0,350.0
+dl-2019,heap sort (classic),Bidirectional,350,48,0.41681,15050.0,350.0
+dl-2019,heap sort (classic),Bidirectional,350,49,0.41681,15050.0,350.0
+dl-2019,heap sort (classic),Bidirectional,400,42,0.5414,17200.0,400.0
+dl-2019,heap sort (classic),Bidirectional,400,43,0.5414,17200.0,400.0
+dl-2019,heap sort (classic),Bidirectional,400,44,0.5414,17200.0,400.0
+dl-2019,heap sort (classic),Bidirectional,400,45,0.5414,17200.0,400.0
+dl-2019,heap sort (classic),Bidirectional,400,46,0.5414,17200.0,400.0
+dl-2019,heap sort (classic),Bidirectional,400,47,0.5414,17200.0,400.0
+dl-2019,heap sort (classic),Bidirectional,400,48,0.5414,17200.0,400.0
+dl-2019,heap sort (classic),Bidirectional,400,49,0.5414,17200.0,400.0
+dl-2019,heap sort (classic),Bidirectional,450,42,0.63577,19350.0,450.0
+dl-2019,heap sort (classic),Bidirectional,450,43,0.63577,19350.0,450.0
+dl-2019,heap sort (classic),Bidirectional,450,44,0.63577,19350.0,450.0
+dl-2019,heap sort (classic),Bidirectional,450,45,0.63577,19350.0,450.0
+dl-2019,heap sort (classic),Bidirectional,450,46,0.63577,19350.0,450.0
+dl-2019,heap sort (classic),Bidirectional,450,47,0.63577,19350.0,450.0
+dl-2019,heap sort (classic),Bidirectional,450,48,0.63577,19350.0,450.0
+dl-2019,heap sort (classic),Bidirectional,450,49,0.63577,19350.0,450.0
+dl-2019,heap sort (classic),Bidirectional,500,42,0.68921,21500.0,500.0
+dl-2019,heap sort (classic),Bidirectional,500,43,0.68921,21500.0,500.0
+dl-2019,heap sort (classic),Bidirectional,500,44,0.68921,21500.0,500.0
+dl-2019,heap sort (classic),Bidirectional,500,45,0.68921,21500.0,500.0
+dl-2019,heap sort (classic),Bidirectional,500,46,0.68921,21500.0,500.0
+dl-2019,heap sort (classic),Bidirectional,500,47,0.68921,21500.0,500.0
+dl-2019,heap sort (classic),Bidirectional,500,48,0.68921,21500.0,500.0
+dl-2019,heap sort (classic),Bidirectional,500,49,0.68921,21500.0,500.0
+dl-2020,heap sort (classic),Bidirectional,100,42,0.04483,20000.0,100.0
+dl-2020,heap sort (classic),Bidirectional,100,43,0.04483,20000.0,100.0
+dl-2020,heap sort (classic),Bidirectional,100,44,0.04483,20000.0,100.0
+dl-2020,heap sort (classic),Bidirectional,100,45,0.04483,20000.0,100.0
+dl-2020,heap sort (classic),Bidirectional,100,46,0.04483,20000.0,100.0
+dl-2020,heap sort (classic),Bidirectional,100,47,0.04483,20000.0,100.0
+dl-2020,heap sort (classic),Bidirectional,100,48,0.04483,20000.0,100.0
+dl-2020,heap sort (classic),Bidirectional,100,49,0.04483,20000.0,100.0
+dl-2020,heap sort (classic),Bidirectional,150,42,0.03772,30000.0,150.0
+dl-2020,heap sort (classic),Bidirectional,150,43,0.03772,30000.0,150.0
+dl-2020,heap sort (classic),Bidirectional,150,44,0.03772,30000.0,150.0
+dl-2020,heap sort (classic),Bidirectional,150,45,0.03772,30000.0,150.0
+dl-2020,heap sort (classic),Bidirectional,150,46,0.03772,30000.0,150.0
+dl-2020,heap sort (classic),Bidirectional,150,47,0.03772,30000.0,150.0
+dl-2020,heap sort (classic),Bidirectional,150,48,0.03772,30000.0,150.0
+dl-2020,heap sort (classic),Bidirectional,150,49,0.03772,30000.0,150.0
+dl-2020,heap sort (classic),Bidirectional,200,42,0.03651,40000.0,200.0
+dl-2020,heap sort (classic),Bidirectional,200,43,0.03651,40000.0,200.0
+dl-2020,heap sort (classic),Bidirectional,200,44,0.03651,40000.0,200.0
+dl-2020,heap sort (classic),Bidirectional,200,45,0.03651,40000.0,200.0
+dl-2020,heap sort (classic),Bidirectional,200,46,0.03651,40000.0,200.0
+dl-2020,heap sort (classic),Bidirectional,200,47,0.03651,40000.0,200.0
+dl-2020,heap sort (classic),Bidirectional,200,48,0.03651,40000.0,200.0
+dl-2020,heap sort (classic),Bidirectional,200,49,0.03651,40000.0,200.0
+dl-2020,heap sort (classic),Bidirectional,250,42,0.06647,50000.0,250.0
+dl-2020,heap sort (classic),Bidirectional,250,43,0.06647,50000.0,250.0
+dl-2020,heap sort (classic),Bidirectional,250,44,0.06647,50000.0,250.0
+dl-2020,heap sort (classic),Bidirectional,250,45,0.06647,50000.0,250.0
+dl-2020,heap sort (classic),Bidirectional,250,46,0.06647,50000.0,250.0
+dl-2020,heap sort (classic),Bidirectional,250,47,0.06647,50000.0,250.0
+dl-2020,heap sort (classic),Bidirectional,250,48,0.06647,50000.0,250.0
+dl-2020,heap sort (classic),Bidirectional,250,49,0.06647,50000.0,250.0
+dl-2020,heap sort (classic),Bidirectional,300,42,0.22119,60000.0,300.0
+dl-2020,heap sort (classic),Bidirectional,300,43,0.22119,60000.0,300.0
+dl-2020,heap sort (classic),Bidirectional,300,44,0.22119,60000.0,300.0
+dl-2020,heap sort (classic),Bidirectional,300,45,0.22119,60000.0,300.0
+dl-2020,heap sort (classic),Bidirectional,300,46,0.22119,60000.0,300.0
+dl-2020,heap sort (classic),Bidirectional,300,47,0.22119,60000.0,300.0
+dl-2020,heap sort (classic),Bidirectional,300,48,0.22119,60000.0,300.0
+dl-2020,heap sort (classic),Bidirectional,300,49,0.22119,60000.0,300.0
+dl-2020,heap sort (classic),Bidirectional,350,42,0.42004,70000.0,350.0
+dl-2020,heap sort (classic),Bidirectional,350,43,0.42004,70000.0,350.0
+dl-2020,heap sort (classic),Bidirectional,350,44,0.42004,70000.0,350.0
+dl-2020,heap sort (classic),Bidirectional,350,45,0.42004,70000.0,350.0
+dl-2020,heap sort (classic),Bidirectional,350,46,0.42004,70000.0,350.0
+dl-2020,heap sort (classic),Bidirectional,350,47,0.42004,70000.0,350.0
+dl-2020,heap sort (classic),Bidirectional,350,48,0.42004,70000.0,350.0
+dl-2020,heap sort (classic),Bidirectional,350,49,0.42004,70000.0,350.0
+dl-2020,heap sort (classic),Bidirectional,400,42,0.54441,80000.0,400.0
+dl-2020,heap sort (classic),Bidirectional,400,43,0.54441,80000.0,400.0
+dl-2020,heap sort (classic),Bidirectional,400,44,0.54441,80000.0,400.0
+dl-2020,heap sort (classic),Bidirectional,400,45,0.54441,80000.0,400.0
+dl-2020,heap sort (classic),Bidirectional,400,46,0.54441,80000.0,400.0
+dl-2020,heap sort (classic),Bidirectional,400,47,0.54441,80000.0,400.0
+dl-2020,heap sort (classic),Bidirectional,400,48,0.54441,80000.0,400.0
+dl-2020,heap sort (classic),Bidirectional,400,49,0.54441,80000.0,400.0
+dl-2020,heap sort (classic),Bidirectional,450,42,0.62052,90000.0,450.0
+dl-2020,heap sort (classic),Bidirectional,450,43,0.62052,90000.0,450.0
+dl-2020,heap sort (classic),Bidirectional,450,44,0.62052,90000.0,450.0
+dl-2020,heap sort (classic),Bidirectional,450,45,0.62052,90000.0,450.0
+dl-2020,heap sort (classic),Bidirectional,450,46,0.62052,90000.0,450.0
+dl-2020,heap sort (classic),Bidirectional,450,47,0.62052,90000.0,450.0
+dl-2020,heap sort (classic),Bidirectional,450,48,0.62052,90000.0,450.0
+dl-2020,heap sort (classic),Bidirectional,450,49,0.62052,90000.0,450.0
+dl-2020,heap sort (classic),Bidirectional,500,42,0.67497,100000.0,500.0
+dl-2020,heap sort (classic),Bidirectional,500,43,0.67497,100000.0,500.0
+dl-2020,heap sort (classic),Bidirectional,500,44,0.67497,100000.0,500.0
+dl-2020,heap sort (classic),Bidirectional,500,45,0.67497,100000.0,500.0
+dl-2020,heap sort (classic),Bidirectional,500,46,0.67497,100000.0,500.0
+dl-2020,heap sort (classic),Bidirectional,500,47,0.67497,100000.0,500.0
+dl-2020,heap sort (classic),Bidirectional,500,48,0.67497,100000.0,500.0
+dl-2020,heap sort (classic),Bidirectional,500,49,0.67497,100000.0,500.0
+dl-2019,mohajer (ir),Bidirectional,100,42,0.32764,4300.0,100.0
+dl-2019,mohajer (ir),Bidirectional,100,43,0.32764,4300.0,100.0
+dl-2019,mohajer (ir),Bidirectional,100,44,0.32764,4300.0,100.0
+dl-2019,mohajer (ir),Bidirectional,100,45,0.32764,4300.0,100.0
+dl-2019,mohajer (ir),Bidirectional,100,46,0.32764,4300.0,100.0
+dl-2019,mohajer (ir),Bidirectional,100,47,0.32764,4300.0,100.0
+dl-2019,mohajer (ir),Bidirectional,100,48,0.32764,4300.0,100.0
+dl-2019,mohajer (ir),Bidirectional,100,49,0.32764,4300.0,100.0
+dl-2019,mohajer (ir),Bidirectional,150,42,0.32764,6450.0,150.0
+dl-2019,mohajer (ir),Bidirectional,150,43,0.32764,6450.0,150.0
+dl-2019,mohajer (ir),Bidirectional,150,44,0.32764,6450.0,150.0
+dl-2019,mohajer (ir),Bidirectional,150,45,0.32764,6450.0,150.0
+dl-2019,mohajer (ir),Bidirectional,150,46,0.32764,6450.0,150.0
+dl-2019,mohajer (ir),Bidirectional,150,47,0.32764,6450.0,150.0
+dl-2019,mohajer (ir),Bidirectional,150,48,0.32764,6450.0,150.0
+dl-2019,mohajer (ir),Bidirectional,150,49,0.32764,6450.0,150.0
+dl-2019,mohajer (ir),Bidirectional,200,42,0.62442,8600.0,200.0
+dl-2019,mohajer (ir),Bidirectional,200,43,0.62442,8600.0,200.0
+dl-2019,mohajer (ir),Bidirectional,200,44,0.62442,8600.0,200.0
+dl-2019,mohajer (ir),Bidirectional,200,45,0.62442,8600.0,200.0
+dl-2019,mohajer (ir),Bidirectional,200,46,0.62442,8600.0,200.0
+dl-2019,mohajer (ir),Bidirectional,200,47,0.62442,8600.0,200.0
+dl-2019,mohajer (ir),Bidirectional,200,48,0.62442,8600.0,200.0
+dl-2019,mohajer (ir),Bidirectional,200,49,0.62442,8600.0,200.0
+dl-2019,mohajer (ir),Bidirectional,250,42,0.65355,10750.0,250.0
+dl-2019,mohajer (ir),Bidirectional,250,43,0.65355,10750.0,250.0
+dl-2019,mohajer (ir),Bidirectional,250,44,0.65355,10750.0,250.0
+dl-2019,mohajer (ir),Bidirectional,250,45,0.65355,10750.0,250.0
+dl-2019,mohajer (ir),Bidirectional,250,46,0.65355,10750.0,250.0
+dl-2019,mohajer (ir),Bidirectional,250,47,0.65355,10750.0,250.0
+dl-2019,mohajer (ir),Bidirectional,250,48,0.65355,10750.0,250.0
+dl-2019,mohajer (ir),Bidirectional,250,49,0.65355,10750.0,250.0
+dl-2019,mohajer (ir),Bidirectional,300,42,0.66338,12900.0,300.0
+dl-2019,mohajer (ir),Bidirectional,300,43,0.66338,12900.0,300.0
+dl-2019,mohajer (ir),Bidirectional,300,44,0.66338,12900.0,300.0
+dl-2019,mohajer (ir),Bidirectional,300,45,0.66338,12900.0,300.0
+dl-2019,mohajer (ir),Bidirectional,300,46,0.66338,12900.0,300.0
+dl-2019,mohajer (ir),Bidirectional,300,47,0.66338,12900.0,300.0
+dl-2019,mohajer (ir),Bidirectional,300,48,0.66338,12900.0,300.0
+dl-2019,mohajer (ir),Bidirectional,300,49,0.66338,12900.0,300.0
+dl-2019,mohajer (ir),Bidirectional,350,42,0.66229,15050.0,350.0
+dl-2019,mohajer (ir),Bidirectional,350,43,0.66229,15050.0,350.0
+dl-2019,mohajer (ir),Bidirectional,350,44,0.66229,15050.0,350.0
+dl-2019,mohajer (ir),Bidirectional,350,45,0.66229,15050.0,350.0
+dl-2019,mohajer (ir),Bidirectional,350,46,0.66229,15050.0,350.0
+dl-2019,mohajer (ir),Bidirectional,350,47,0.66229,15050.0,350.0
+dl-2019,mohajer (ir),Bidirectional,350,48,0.66229,15050.0,350.0
+dl-2019,mohajer (ir),Bidirectional,350,49,0.66229,15050.0,350.0
+dl-2019,mohajer (ir),Bidirectional,400,42,0.6664,16798.0,390.6511627906977
+dl-2019,mohajer (ir),Bidirectional,400,43,0.6664,16798.0,390.6511627906977
+dl-2019,mohajer (ir),Bidirectional,400,44,0.6664,16798.0,390.6511627906977
+dl-2019,mohajer (ir),Bidirectional,400,45,0.6664,16798.0,390.6511627906977
+dl-2019,mohajer (ir),Bidirectional,400,46,0.6664,16798.0,390.6511627906977
+dl-2019,mohajer (ir),Bidirectional,400,47,0.6664,16798.0,390.6511627906977
+dl-2019,mohajer (ir),Bidirectional,400,48,0.6664,16798.0,390.6511627906977
+dl-2019,mohajer (ir),Bidirectional,400,49,0.6664,16798.0,390.6511627906977
+dl-2019,mohajer (ir),Bidirectional,450,42,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,450,43,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,450,44,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,450,45,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,450,46,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,450,47,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,450,48,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,450,49,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,500,42,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,500,43,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,500,44,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,500,45,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,500,46,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,500,47,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,500,48,0.66578,17038.0,396.2325581395349
+dl-2019,mohajer (ir),Bidirectional,500,49,0.66578,17038.0,396.2325581395349
+dl-2020,mohajer (ir),Bidirectional,100,42,0.2748,20000.0,100.0
+dl-2020,mohajer (ir),Bidirectional,100,43,0.2748,20000.0,100.0
+dl-2020,mohajer (ir),Bidirectional,100,44,0.2748,20000.0,100.0
+dl-2020,mohajer (ir),Bidirectional,100,45,0.2748,20000.0,100.0
+dl-2020,mohajer (ir),Bidirectional,100,46,0.2748,20000.0,100.0
+dl-2020,mohajer (ir),Bidirectional,100,47,0.2748,20000.0,100.0
+dl-2020,mohajer (ir),Bidirectional,100,48,0.2748,20000.0,100.0
+dl-2020,mohajer (ir),Bidirectional,100,49,0.2748,20000.0,100.0
+dl-2020,mohajer (ir),Bidirectional,150,42,0.2748,30000.0,150.0
+dl-2020,mohajer (ir),Bidirectional,150,43,0.2748,30000.0,150.0
+dl-2020,mohajer (ir),Bidirectional,150,44,0.2748,30000.0,150.0
+dl-2020,mohajer (ir),Bidirectional,150,45,0.2748,30000.0,150.0
+dl-2020,mohajer (ir),Bidirectional,150,46,0.2748,30000.0,150.0
+dl-2020,mohajer (ir),Bidirectional,150,47,0.2748,30000.0,150.0
+dl-2020,mohajer (ir),Bidirectional,150,48,0.2748,30000.0,150.0
+dl-2020,mohajer (ir),Bidirectional,150,49,0.2748,30000.0,150.0
+dl-2020,mohajer (ir),Bidirectional,200,42,0.62244,40000.0,200.0
+dl-2020,mohajer (ir),Bidirectional,200,43,0.62244,40000.0,200.0
+dl-2020,mohajer (ir),Bidirectional,200,44,0.62244,40000.0,200.0
+dl-2020,mohajer (ir),Bidirectional,200,45,0.62244,40000.0,200.0
+dl-2020,mohajer (ir),Bidirectional,200,46,0.62244,40000.0,200.0
+dl-2020,mohajer (ir),Bidirectional,200,47,0.62244,40000.0,200.0
+dl-2020,mohajer (ir),Bidirectional,200,48,0.62244,40000.0,200.0
+dl-2020,mohajer (ir),Bidirectional,200,49,0.62244,40000.0,200.0
+dl-2020,mohajer (ir),Bidirectional,250,42,0.6425,50000.0,250.0
+dl-2020,mohajer (ir),Bidirectional,250,43,0.6425,50000.0,250.0
+dl-2020,mohajer (ir),Bidirectional,250,44,0.6425,50000.0,250.0
+dl-2020,mohajer (ir),Bidirectional,250,45,0.6425,50000.0,250.0
+dl-2020,mohajer (ir),Bidirectional,250,46,0.6425,50000.0,250.0
+dl-2020,mohajer (ir),Bidirectional,250,47,0.6425,50000.0,250.0
+dl-2020,mohajer (ir),Bidirectional,250,48,0.6425,50000.0,250.0
+dl-2020,mohajer (ir),Bidirectional,250,49,0.6425,50000.0,250.0
+dl-2020,mohajer (ir),Bidirectional,300,42,0.65833,60000.0,300.0
+dl-2020,mohajer (ir),Bidirectional,300,43,0.65833,60000.0,300.0
+dl-2020,mohajer (ir),Bidirectional,300,44,0.65833,60000.0,300.0
+dl-2020,mohajer (ir),Bidirectional,300,45,0.65833,60000.0,300.0
+dl-2020,mohajer (ir),Bidirectional,300,46,0.65833,60000.0,300.0
+dl-2020,mohajer (ir),Bidirectional,300,47,0.65833,60000.0,300.0
+dl-2020,mohajer (ir),Bidirectional,300,48,0.65833,60000.0,300.0
+dl-2020,mohajer (ir),Bidirectional,300,49,0.65833,60000.0,300.0
+dl-2020,mohajer (ir),Bidirectional,350,42,0.66324,70000.0,350.0
+dl-2020,mohajer (ir),Bidirectional,350,43,0.66324,70000.0,350.0
+dl-2020,mohajer (ir),Bidirectional,350,44,0.66324,70000.0,350.0
+dl-2020,mohajer (ir),Bidirectional,350,45,0.66324,70000.0,350.0
+dl-2020,mohajer (ir),Bidirectional,350,46,0.66324,70000.0,350.0
+dl-2020,mohajer (ir),Bidirectional,350,47,0.66324,70000.0,350.0
+dl-2020,mohajer (ir),Bidirectional,350,48,0.66324,70000.0,350.0
+dl-2020,mohajer (ir),Bidirectional,350,49,0.66324,70000.0,350.0
+dl-2020,mohajer (ir),Bidirectional,400,42,0.66978,78230.0,391.15
+dl-2020,mohajer (ir),Bidirectional,400,43,0.66978,78230.0,391.15
+dl-2020,mohajer (ir),Bidirectional,400,44,0.66978,78230.0,391.15
+dl-2020,mohajer (ir),Bidirectional,400,45,0.66978,78230.0,391.15
+dl-2020,mohajer (ir),Bidirectional,400,46,0.66978,78230.0,391.15
+dl-2020,mohajer (ir),Bidirectional,400,47,0.66978,78230.0,391.15
+dl-2020,mohajer (ir),Bidirectional,400,48,0.66978,78230.0,391.15
+dl-2020,mohajer (ir),Bidirectional,400,49,0.66978,78230.0,391.15
+dl-2020,mohajer (ir),Bidirectional,450,42,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,450,43,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,450,44,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,450,45,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,450,46,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,450,47,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,450,48,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,450,49,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,500,42,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,500,43,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,500,44,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,500,45,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,500,46,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,500,47,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,500,48,0.67349,79518.0,397.59
+dl-2020,mohajer (ir),Bidirectional,500,49,0.67349,79518.0,397.59
+dl-2019,mohajer + bubble,Bidirectional,100,42,0.32764,4300.0,100.0
+dl-2019,mohajer + bubble,Bidirectional,100,43,0.32764,4300.0,100.0
+dl-2019,mohajer + bubble,Bidirectional,100,44,0.32764,4300.0,100.0
+dl-2019,mohajer + bubble,Bidirectional,100,45,0.32764,4300.0,100.0
+dl-2019,mohajer + bubble,Bidirectional,100,46,0.32764,4300.0,100.0
+dl-2019,mohajer + bubble,Bidirectional,100,47,0.32764,4300.0,100.0
+dl-2019,mohajer + bubble,Bidirectional,100,48,0.32764,4300.0,100.0
+dl-2019,mohajer + bubble,Bidirectional,100,49,0.32764,4300.0,100.0
+dl-2019,mohajer + bubble,Bidirectional,150,42,0.32764,6450.0,150.0
+dl-2019,mohajer + bubble,Bidirectional,150,43,0.32764,6450.0,150.0
+dl-2019,mohajer + bubble,Bidirectional,150,44,0.32764,6450.0,150.0
+dl-2019,mohajer + bubble,Bidirectional,150,45,0.32764,6450.0,150.0
+dl-2019,mohajer + bubble,Bidirectional,150,46,0.32764,6450.0,150.0
+dl-2019,mohajer + bubble,Bidirectional,150,47,0.32764,6450.0,150.0
+dl-2019,mohajer + bubble,Bidirectional,150,48,0.32764,6450.0,150.0
+dl-2019,mohajer + bubble,Bidirectional,150,49,0.32764,6450.0,150.0
+dl-2019,mohajer + bubble,Bidirectional,200,42,0.62442,8600.0,200.0
+dl-2019,mohajer + bubble,Bidirectional,200,43,0.62442,8600.0,200.0
+dl-2019,mohajer + bubble,Bidirectional,200,44,0.62442,8600.0,200.0
+dl-2019,mohajer + bubble,Bidirectional,200,45,0.62442,8600.0,200.0
+dl-2019,mohajer + bubble,Bidirectional,200,46,0.62442,8600.0,200.0
+dl-2019,mohajer + bubble,Bidirectional,200,47,0.62442,8600.0,200.0
+dl-2019,mohajer + bubble,Bidirectional,200,48,0.62442,8600.0,200.0
+dl-2019,mohajer + bubble,Bidirectional,200,49,0.62442,8600.0,200.0
+dl-2019,mohajer + bubble,Bidirectional,250,42,0.65355,10750.0,250.0
+dl-2019,mohajer + bubble,Bidirectional,250,43,0.65355,10750.0,250.0
+dl-2019,mohajer + bubble,Bidirectional,250,44,0.65355,10750.0,250.0
+dl-2019,mohajer + bubble,Bidirectional,250,45,0.65355,10750.0,250.0
+dl-2019,mohajer + bubble,Bidirectional,250,46,0.65355,10750.0,250.0
+dl-2019,mohajer + bubble,Bidirectional,250,47,0.65355,10750.0,250.0
+dl-2019,mohajer + bubble,Bidirectional,250,48,0.65355,10750.0,250.0
+dl-2019,mohajer + bubble,Bidirectional,250,49,0.65355,10750.0,250.0
+dl-2019,mohajer + bubble,Bidirectional,300,42,0.66338,12900.0,300.0
+dl-2019,mohajer + bubble,Bidirectional,300,43,0.66338,12900.0,300.0
+dl-2019,mohajer + bubble,Bidirectional,300,44,0.66338,12900.0,300.0
+dl-2019,mohajer + bubble,Bidirectional,300,45,0.66338,12900.0,300.0
+dl-2019,mohajer + bubble,Bidirectional,300,46,0.66338,12900.0,300.0
+dl-2019,mohajer + bubble,Bidirectional,300,47,0.66338,12900.0,300.0
+dl-2019,mohajer + bubble,Bidirectional,300,48,0.66338,12900.0,300.0
+dl-2019,mohajer + bubble,Bidirectional,300,49,0.66338,12900.0,300.0
+dl-2019,mohajer + bubble,Bidirectional,350,42,0.66229,15050.0,350.0
+dl-2019,mohajer + bubble,Bidirectional,350,43,0.66229,15050.0,350.0
+dl-2019,mohajer + bubble,Bidirectional,350,44,0.66229,15050.0,350.0
+dl-2019,mohajer + bubble,Bidirectional,350,45,0.66229,15050.0,350.0
+dl-2019,mohajer + bubble,Bidirectional,350,46,0.66229,15050.0,350.0
+dl-2019,mohajer + bubble,Bidirectional,350,47,0.66229,15050.0,350.0
+dl-2019,mohajer + bubble,Bidirectional,350,48,0.66229,15050.0,350.0
+dl-2019,mohajer + bubble,Bidirectional,350,49,0.66229,15050.0,350.0
+dl-2019,mohajer + bubble,Bidirectional,400,42,0.6664,17176.0,399.4418604651163
+dl-2019,mohajer + bubble,Bidirectional,400,43,0.6664,17176.0,399.4418604651163
+dl-2019,mohajer + bubble,Bidirectional,400,44,0.6664,17176.0,399.4418604651163
+dl-2019,mohajer + bubble,Bidirectional,400,45,0.6664,17176.0,399.4418604651163
+dl-2019,mohajer + bubble,Bidirectional,400,46,0.6664,17176.0,399.4418604651163
+dl-2019,mohajer + bubble,Bidirectional,400,47,0.6664,17176.0,399.4418604651163
+dl-2019,mohajer + bubble,Bidirectional,400,48,0.6664,17176.0,399.4418604651163
+dl-2019,mohajer + bubble,Bidirectional,400,49,0.6664,17176.0,399.4418604651163
+dl-2019,mohajer + bubble,Bidirectional,450,42,0.66585,18374.0,427.30232558139534
+dl-2019,mohajer + bubble,Bidirectional,450,43,0.66585,18374.0,427.30232558139534
+dl-2019,mohajer + bubble,Bidirectional,450,44,0.66585,18374.0,427.30232558139534
+dl-2019,mohajer + bubble,Bidirectional,450,45,0.66585,18374.0,427.30232558139534
+dl-2019,mohajer + bubble,Bidirectional,450,46,0.66585,18374.0,427.30232558139534
+dl-2019,mohajer + bubble,Bidirectional,450,47,0.66585,18374.0,427.30232558139534
+dl-2019,mohajer + bubble,Bidirectional,450,48,0.66585,18374.0,427.30232558139534
+dl-2019,mohajer + bubble,Bidirectional,450,49,0.66585,18374.0,427.30232558139534
+dl-2019,mohajer + bubble,Bidirectional,500,42,0.66585,18376.0,427.3488372093023
+dl-2019,mohajer + bubble,Bidirectional,500,43,0.66585,18376.0,427.3488372093023
+dl-2019,mohajer + bubble,Bidirectional,500,44,0.66585,18376.0,427.3488372093023
+dl-2019,mohajer + bubble,Bidirectional,500,45,0.66585,18376.0,427.3488372093023
+dl-2019,mohajer + bubble,Bidirectional,500,46,0.66585,18376.0,427.3488372093023
+dl-2019,mohajer + bubble,Bidirectional,500,47,0.66585,18376.0,427.3488372093023
+dl-2019,mohajer + bubble,Bidirectional,500,48,0.66585,18376.0,427.3488372093023
+dl-2019,mohajer + bubble,Bidirectional,500,49,0.66585,18376.0,427.3488372093023
+dl-2020,mohajer + bubble,Bidirectional,100,42,0.2748,20000.0,100.0
+dl-2020,mohajer + bubble,Bidirectional,100,43,0.2748,20000.0,100.0
+dl-2020,mohajer + bubble,Bidirectional,100,44,0.2748,20000.0,100.0
+dl-2020,mohajer + bubble,Bidirectional,100,45,0.2748,20000.0,100.0
+dl-2020,mohajer + bubble,Bidirectional,100,46,0.2748,20000.0,100.0
+dl-2020,mohajer + bubble,Bidirectional,100,47,0.2748,20000.0,100.0
+dl-2020,mohajer + bubble,Bidirectional,100,48,0.2748,20000.0,100.0
+dl-2020,mohajer + bubble,Bidirectional,100,49,0.2748,20000.0,100.0
+dl-2020,mohajer + bubble,Bidirectional,150,42,0.2748,30000.0,150.0
+dl-2020,mohajer + bubble,Bidirectional,150,43,0.2748,30000.0,150.0
+dl-2020,mohajer + bubble,Bidirectional,150,44,0.2748,30000.0,150.0
+dl-2020,mohajer + bubble,Bidirectional,150,45,0.2748,30000.0,150.0
+dl-2020,mohajer + bubble,Bidirectional,150,46,0.2748,30000.0,150.0
+dl-2020,mohajer + bubble,Bidirectional,150,47,0.2748,30000.0,150.0
+dl-2020,mohajer + bubble,Bidirectional,150,48,0.2748,30000.0,150.0
+dl-2020,mohajer + bubble,Bidirectional,150,49,0.2748,30000.0,150.0
+dl-2020,mohajer + bubble,Bidirectional,200,42,0.62244,40000.0,200.0
+dl-2020,mohajer + bubble,Bidirectional,200,43,0.62244,40000.0,200.0
+dl-2020,mohajer + bubble,Bidirectional,200,44,0.62244,40000.0,200.0
+dl-2020,mohajer + bubble,Bidirectional,200,45,0.62244,40000.0,200.0
+dl-2020,mohajer + bubble,Bidirectional,200,46,0.62244,40000.0,200.0
+dl-2020,mohajer + bubble,Bidirectional,200,47,0.62244,40000.0,200.0
+dl-2020,mohajer + bubble,Bidirectional,200,48,0.62244,40000.0,200.0
+dl-2020,mohajer + bubble,Bidirectional,200,49,0.62244,40000.0,200.0
+dl-2020,mohajer + bubble,Bidirectional,250,42,0.6425,50000.0,250.0
+dl-2020,mohajer + bubble,Bidirectional,250,43,0.6425,50000.0,250.0
+dl-2020,mohajer + bubble,Bidirectional,250,44,0.6425,50000.0,250.0
+dl-2020,mohajer + bubble,Bidirectional,250,45,0.6425,50000.0,250.0
+dl-2020,mohajer + bubble,Bidirectional,250,46,0.6425,50000.0,250.0
+dl-2020,mohajer + bubble,Bidirectional,250,47,0.6425,50000.0,250.0
+dl-2020,mohajer + bubble,Bidirectional,250,48,0.6425,50000.0,250.0
+dl-2020,mohajer + bubble,Bidirectional,250,49,0.6425,50000.0,250.0
+dl-2020,mohajer + bubble,Bidirectional,300,42,0.65833,60000.0,300.0
+dl-2020,mohajer + bubble,Bidirectional,300,43,0.65833,60000.0,300.0
+dl-2020,mohajer + bubble,Bidirectional,300,44,0.65833,60000.0,300.0
+dl-2020,mohajer + bubble,Bidirectional,300,45,0.65833,60000.0,300.0
+dl-2020,mohajer + bubble,Bidirectional,300,46,0.65833,60000.0,300.0
+dl-2020,mohajer + bubble,Bidirectional,300,47,0.65833,60000.0,300.0
+dl-2020,mohajer + bubble,Bidirectional,300,48,0.65833,60000.0,300.0
+dl-2020,mohajer + bubble,Bidirectional,300,49,0.65833,60000.0,300.0
+dl-2020,mohajer + bubble,Bidirectional,350,42,0.66324,70000.0,350.0
+dl-2020,mohajer + bubble,Bidirectional,350,43,0.66324,70000.0,350.0
+dl-2020,mohajer + bubble,Bidirectional,350,44,0.66324,70000.0,350.0
+dl-2020,mohajer + bubble,Bidirectional,350,45,0.66324,70000.0,350.0
+dl-2020,mohajer + bubble,Bidirectional,350,46,0.66324,70000.0,350.0
+dl-2020,mohajer + bubble,Bidirectional,350,47,0.66324,70000.0,350.0
+dl-2020,mohajer + bubble,Bidirectional,350,48,0.66324,70000.0,350.0
+dl-2020,mohajer + bubble,Bidirectional,350,49,0.66324,70000.0,350.0
+dl-2020,mohajer + bubble,Bidirectional,400,42,0.67021,79898.0,399.49
+dl-2020,mohajer + bubble,Bidirectional,400,43,0.67021,79898.0,399.49
+dl-2020,mohajer + bubble,Bidirectional,400,44,0.67021,79898.0,399.49
+dl-2020,mohajer + bubble,Bidirectional,400,45,0.67021,79898.0,399.49
+dl-2020,mohajer + bubble,Bidirectional,400,46,0.67021,79898.0,399.49
+dl-2020,mohajer + bubble,Bidirectional,400,47,0.67021,79898.0,399.49
+dl-2020,mohajer + bubble,Bidirectional,400,48,0.67021,79898.0,399.49
+dl-2020,mohajer + bubble,Bidirectional,400,49,0.67021,79898.0,399.49
+dl-2020,mohajer + bubble,Bidirectional,450,42,0.67448,85262.0,426.31
+dl-2020,mohajer + bubble,Bidirectional,450,43,0.67448,85262.0,426.31
+dl-2020,mohajer + bubble,Bidirectional,450,44,0.67448,85262.0,426.31
+dl-2020,mohajer + bubble,Bidirectional,450,45,0.67448,85262.0,426.31
+dl-2020,mohajer + bubble,Bidirectional,450,46,0.67448,85262.0,426.31
+dl-2020,mohajer + bubble,Bidirectional,450,47,0.67448,85262.0,426.31
+dl-2020,mohajer + bubble,Bidirectional,450,48,0.67448,85262.0,426.31
+dl-2020,mohajer + bubble,Bidirectional,450,49,0.67448,85262.0,426.31
+dl-2020,mohajer + bubble,Bidirectional,500,42,0.67448,85482.0,427.41
+dl-2020,mohajer + bubble,Bidirectional,500,43,0.67448,85482.0,427.41
+dl-2020,mohajer + bubble,Bidirectional,500,44,0.67448,85482.0,427.41
+dl-2020,mohajer + bubble,Bidirectional,500,45,0.67448,85482.0,427.41
+dl-2020,mohajer + bubble,Bidirectional,500,46,0.67448,85482.0,427.41
+dl-2020,mohajer + bubble,Bidirectional,500,47,0.67448,85482.0,427.41
+dl-2020,mohajer + bubble,Bidirectional,500,48,0.67448,85482.0,427.41
+dl-2020,mohajer + bubble,Bidirectional,500,49,0.67448,85482.0,427.41
+dl-2019,pac + bubble,Bidirectional,100,42,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Bidirectional,100,43,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Bidirectional,100,44,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Bidirectional,100,45,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Bidirectional,100,46,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Bidirectional,100,47,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Bidirectional,100,48,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Bidirectional,100,49,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Bidirectional,150,42,0.50583,6450.0,150.0
+dl-2019,pac + bubble,Bidirectional,150,43,0.50583,6450.0,150.0
+dl-2019,pac + bubble,Bidirectional,150,44,0.50583,6450.0,150.0
+dl-2019,pac + bubble,Bidirectional,150,45,0.50583,6450.0,150.0
+dl-2019,pac + bubble,Bidirectional,150,46,0.50583,6450.0,150.0
+dl-2019,pac + bubble,Bidirectional,150,47,0.50583,6450.0,150.0
+dl-2019,pac + bubble,Bidirectional,150,48,0.50583,6450.0,150.0
+dl-2019,pac + bubble,Bidirectional,150,49,0.50583,6450.0,150.0
+dl-2019,pac + bubble,Bidirectional,200,42,0.50583,8600.0,200.0
+dl-2019,pac + bubble,Bidirectional,200,43,0.50583,8600.0,200.0
+dl-2019,pac + bubble,Bidirectional,200,44,0.50583,8600.0,200.0
+dl-2019,pac + bubble,Bidirectional,200,45,0.50583,8600.0,200.0
+dl-2019,pac + bubble,Bidirectional,200,46,0.50583,8600.0,200.0
+dl-2019,pac + bubble,Bidirectional,200,47,0.50583,8600.0,200.0
+dl-2019,pac + bubble,Bidirectional,200,48,0.50583,8600.0,200.0
+dl-2019,pac + bubble,Bidirectional,200,49,0.50583,8600.0,200.0
+dl-2019,pac + bubble,Bidirectional,250,42,0.50583,10750.0,250.0
+dl-2019,pac + bubble,Bidirectional,250,43,0.50583,10750.0,250.0
+dl-2019,pac + bubble,Bidirectional,250,44,0.50583,10750.0,250.0
+dl-2019,pac + bubble,Bidirectional,250,45,0.50583,10750.0,250.0
+dl-2019,pac + bubble,Bidirectional,250,46,0.50583,10750.0,250.0
+dl-2019,pac + bubble,Bidirectional,250,47,0.50583,10750.0,250.0
+dl-2019,pac + bubble,Bidirectional,250,48,0.50583,10750.0,250.0
+dl-2019,pac + bubble,Bidirectional,250,49,0.50583,10750.0,250.0
+dl-2019,pac + bubble,Bidirectional,300,42,0.60003,12900.0,300.0
+dl-2019,pac + bubble,Bidirectional,300,43,0.60003,12900.0,300.0
+dl-2019,pac + bubble,Bidirectional,300,44,0.60003,12900.0,300.0
+dl-2019,pac + bubble,Bidirectional,300,45,0.60003,12900.0,300.0
+dl-2019,pac + bubble,Bidirectional,300,46,0.60003,12900.0,300.0
+dl-2019,pac + bubble,Bidirectional,300,47,0.60003,12900.0,300.0
+dl-2019,pac + bubble,Bidirectional,300,48,0.60003,12900.0,300.0
+dl-2019,pac + bubble,Bidirectional,300,49,0.60003,12900.0,300.0
+dl-2019,pac + bubble,Bidirectional,350,42,0.6259,14266.0,331.7674418604651
+dl-2019,pac + bubble,Bidirectional,350,43,0.6259,14266.0,331.7674418604651
+dl-2019,pac + bubble,Bidirectional,350,44,0.6259,14266.0,331.7674418604651
+dl-2019,pac + bubble,Bidirectional,350,45,0.6259,14266.0,331.7674418604651
+dl-2019,pac + bubble,Bidirectional,350,46,0.6259,14266.0,331.7674418604651
+dl-2019,pac + bubble,Bidirectional,350,47,0.6259,14266.0,331.7674418604651
+dl-2019,pac + bubble,Bidirectional,350,48,0.6259,14266.0,331.7674418604651
+dl-2019,pac + bubble,Bidirectional,350,49,0.6259,14266.0,331.7674418604651
+dl-2019,pac + bubble,Bidirectional,400,42,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,400,43,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,400,44,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,400,45,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,400,46,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,400,47,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,400,48,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,400,49,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,450,42,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,450,43,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,450,44,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,450,45,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,450,46,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,450,47,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,450,48,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,450,49,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,500,42,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,500,43,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,500,44,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,500,45,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,500,46,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,500,47,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,500,48,0.62596,14292.0,332.3720930232558
+dl-2019,pac + bubble,Bidirectional,500,49,0.62596,14292.0,332.3720930232558
+dl-2020,pac + bubble,Bidirectional,100,42,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Bidirectional,100,43,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Bidirectional,100,44,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Bidirectional,100,45,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Bidirectional,100,46,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Bidirectional,100,47,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Bidirectional,100,48,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Bidirectional,100,49,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Bidirectional,150,42,0.47964,30000.0,150.0
+dl-2020,pac + bubble,Bidirectional,150,43,0.47964,30000.0,150.0
+dl-2020,pac + bubble,Bidirectional,150,44,0.47964,30000.0,150.0
+dl-2020,pac + bubble,Bidirectional,150,45,0.47964,30000.0,150.0
+dl-2020,pac + bubble,Bidirectional,150,46,0.47964,30000.0,150.0
+dl-2020,pac + bubble,Bidirectional,150,47,0.47964,30000.0,150.0
+dl-2020,pac + bubble,Bidirectional,150,48,0.47964,30000.0,150.0
+dl-2020,pac + bubble,Bidirectional,150,49,0.47964,30000.0,150.0
+dl-2020,pac + bubble,Bidirectional,200,42,0.47964,40000.0,200.0
+dl-2020,pac + bubble,Bidirectional,200,43,0.47964,40000.0,200.0
+dl-2020,pac + bubble,Bidirectional,200,44,0.47964,40000.0,200.0
+dl-2020,pac + bubble,Bidirectional,200,45,0.47964,40000.0,200.0
+dl-2020,pac + bubble,Bidirectional,200,46,0.47964,40000.0,200.0
+dl-2020,pac + bubble,Bidirectional,200,47,0.47964,40000.0,200.0
+dl-2020,pac + bubble,Bidirectional,200,48,0.47964,40000.0,200.0
+dl-2020,pac + bubble,Bidirectional,200,49,0.47964,40000.0,200.0
+dl-2020,pac + bubble,Bidirectional,250,42,0.47964,50000.0,250.0
+dl-2020,pac + bubble,Bidirectional,250,43,0.47964,50000.0,250.0
+dl-2020,pac + bubble,Bidirectional,250,44,0.47964,50000.0,250.0
+dl-2020,pac + bubble,Bidirectional,250,45,0.47964,50000.0,250.0
+dl-2020,pac + bubble,Bidirectional,250,46,0.47964,50000.0,250.0
+dl-2020,pac + bubble,Bidirectional,250,47,0.47964,50000.0,250.0
+dl-2020,pac + bubble,Bidirectional,250,48,0.47964,50000.0,250.0
+dl-2020,pac + bubble,Bidirectional,250,49,0.47964,50000.0,250.0
+dl-2020,pac + bubble,Bidirectional,300,42,0.55044,60000.0,300.0
+dl-2020,pac + bubble,Bidirectional,300,43,0.55044,60000.0,300.0
+dl-2020,pac + bubble,Bidirectional,300,44,0.55044,60000.0,300.0
+dl-2020,pac + bubble,Bidirectional,300,45,0.55044,60000.0,300.0
+dl-2020,pac + bubble,Bidirectional,300,46,0.55044,60000.0,300.0
+dl-2020,pac + bubble,Bidirectional,300,47,0.55044,60000.0,300.0
+dl-2020,pac + bubble,Bidirectional,300,48,0.55044,60000.0,300.0
+dl-2020,pac + bubble,Bidirectional,300,49,0.55044,60000.0,300.0
+dl-2020,pac + bubble,Bidirectional,350,42,0.58593,66708.0,333.54
+dl-2020,pac + bubble,Bidirectional,350,43,0.58593,66708.0,333.54
+dl-2020,pac + bubble,Bidirectional,350,44,0.58593,66708.0,333.54
+dl-2020,pac + bubble,Bidirectional,350,45,0.58593,66708.0,333.54
+dl-2020,pac + bubble,Bidirectional,350,46,0.58593,66708.0,333.54
+dl-2020,pac + bubble,Bidirectional,350,47,0.58593,66708.0,333.54
+dl-2020,pac + bubble,Bidirectional,350,48,0.58593,66708.0,333.54
+dl-2020,pac + bubble,Bidirectional,350,49,0.58593,66708.0,333.54
+dl-2020,pac + bubble,Bidirectional,400,42,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,400,43,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,400,44,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,400,45,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,400,46,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,400,47,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,400,48,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,400,49,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,450,42,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,450,43,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,450,44,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,450,45,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,450,46,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,450,47,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,450,48,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,450,49,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,500,42,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,500,43,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,500,44,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,500,45,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,500,46,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,500,47,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,500,48,0.58618,66822.0,334.11
+dl-2020,pac + bubble,Bidirectional,500,49,0.58618,66822.0,334.11
+dl-2019,quick sort (classic),Bidirectional,100,42,0.58079,4300.0,100.0
+dl-2019,quick sort (classic),Bidirectional,100,43,0.58079,4300.0,100.0
+dl-2019,quick sort (classic),Bidirectional,100,44,0.58079,4300.0,100.0
+dl-2019,quick sort (classic),Bidirectional,100,45,0.58079,4300.0,100.0
+dl-2019,quick sort (classic),Bidirectional,100,46,0.58079,4300.0,100.0
+dl-2019,quick sort (classic),Bidirectional,100,47,0.58079,4300.0,100.0
+dl-2019,quick sort (classic),Bidirectional,100,48,0.58079,4300.0,100.0
+dl-2019,quick sort (classic),Bidirectional,100,49,0.58079,4300.0,100.0
+dl-2019,quick sort (classic),Bidirectional,150,42,0.58079,6450.0,150.0
+dl-2019,quick sort (classic),Bidirectional,150,43,0.58079,6450.0,150.0
+dl-2019,quick sort (classic),Bidirectional,150,44,0.58079,6450.0,150.0
+dl-2019,quick sort (classic),Bidirectional,150,45,0.58079,6450.0,150.0
+dl-2019,quick sort (classic),Bidirectional,150,46,0.58079,6450.0,150.0
+dl-2019,quick sort (classic),Bidirectional,150,47,0.58079,6450.0,150.0
+dl-2019,quick sort (classic),Bidirectional,150,48,0.58079,6450.0,150.0
+dl-2019,quick sort (classic),Bidirectional,150,49,0.58079,6450.0,150.0
+dl-2019,quick sort (classic),Bidirectional,200,42,0.58298,8600.0,200.0
+dl-2019,quick sort (classic),Bidirectional,200,43,0.58298,8600.0,200.0
+dl-2019,quick sort (classic),Bidirectional,200,44,0.58298,8600.0,200.0
+dl-2019,quick sort (classic),Bidirectional,200,45,0.58298,8600.0,200.0
+dl-2019,quick sort (classic),Bidirectional,200,46,0.58298,8600.0,200.0
+dl-2019,quick sort (classic),Bidirectional,200,47,0.58298,8600.0,200.0
+dl-2019,quick sort (classic),Bidirectional,200,48,0.58298,8600.0,200.0
+dl-2019,quick sort (classic),Bidirectional,200,49,0.58298,8600.0,200.0
+dl-2019,quick sort (classic),Bidirectional,250,42,0.58573,10750.0,250.0
+dl-2019,quick sort (classic),Bidirectional,250,43,0.58573,10750.0,250.0
+dl-2019,quick sort (classic),Bidirectional,250,44,0.58573,10750.0,250.0
+dl-2019,quick sort (classic),Bidirectional,250,45,0.58573,10750.0,250.0
+dl-2019,quick sort (classic),Bidirectional,250,46,0.58573,10750.0,250.0
+dl-2019,quick sort (classic),Bidirectional,250,47,0.58573,10750.0,250.0
+dl-2019,quick sort (classic),Bidirectional,250,48,0.58573,10750.0,250.0
+dl-2019,quick sort (classic),Bidirectional,250,49,0.58573,10750.0,250.0
+dl-2019,quick sort (classic),Bidirectional,300,42,0.58573,12900.0,300.0
+dl-2019,quick sort (classic),Bidirectional,300,43,0.58573,12900.0,300.0
+dl-2019,quick sort (classic),Bidirectional,300,44,0.58573,12900.0,300.0
+dl-2019,quick sort (classic),Bidirectional,300,45,0.58573,12900.0,300.0
+dl-2019,quick sort (classic),Bidirectional,300,46,0.58573,12900.0,300.0
+dl-2019,quick sort (classic),Bidirectional,300,47,0.58573,12900.0,300.0
+dl-2019,quick sort (classic),Bidirectional,300,48,0.58573,12900.0,300.0
+dl-2019,quick sort (classic),Bidirectional,300,49,0.58573,12900.0,300.0
+dl-2019,quick sort (classic),Bidirectional,350,42,0.58573,15050.0,350.0
+dl-2019,quick sort (classic),Bidirectional,350,43,0.58573,15050.0,350.0
+dl-2019,quick sort (classic),Bidirectional,350,44,0.58573,15050.0,350.0
+dl-2019,quick sort (classic),Bidirectional,350,45,0.58573,15050.0,350.0
+dl-2019,quick sort (classic),Bidirectional,350,46,0.58573,15050.0,350.0
+dl-2019,quick sort (classic),Bidirectional,350,47,0.58573,15050.0,350.0
+dl-2019,quick sort (classic),Bidirectional,350,48,0.58573,15050.0,350.0
+dl-2019,quick sort (classic),Bidirectional,350,49,0.58573,15050.0,350.0
+dl-2019,quick sort (classic),Bidirectional,400,42,0.58854,17200.0,400.0
+dl-2019,quick sort (classic),Bidirectional,400,43,0.58854,17200.0,400.0
+dl-2019,quick sort (classic),Bidirectional,400,44,0.58854,17200.0,400.0
+dl-2019,quick sort (classic),Bidirectional,400,45,0.58854,17200.0,400.0
+dl-2019,quick sort (classic),Bidirectional,400,46,0.58854,17200.0,400.0
+dl-2019,quick sort (classic),Bidirectional,400,47,0.58854,17200.0,400.0
+dl-2019,quick sort (classic),Bidirectional,400,48,0.58854,17200.0,400.0
+dl-2019,quick sort (classic),Bidirectional,400,49,0.58854,17200.0,400.0
+dl-2019,quick sort (classic),Bidirectional,450,42,0.59083,19350.0,450.0
+dl-2019,quick sort (classic),Bidirectional,450,43,0.59083,19350.0,450.0
+dl-2019,quick sort (classic),Bidirectional,450,44,0.59083,19350.0,450.0
+dl-2019,quick sort (classic),Bidirectional,450,45,0.59083,19350.0,450.0
+dl-2019,quick sort (classic),Bidirectional,450,46,0.59083,19350.0,450.0
+dl-2019,quick sort (classic),Bidirectional,450,47,0.59083,19350.0,450.0
+dl-2019,quick sort (classic),Bidirectional,450,48,0.59083,19350.0,450.0
+dl-2019,quick sort (classic),Bidirectional,450,49,0.59083,19350.0,450.0
+dl-2019,quick sort (classic),Bidirectional,500,42,0.59266,21500.0,500.0
+dl-2019,quick sort (classic),Bidirectional,500,43,0.59266,21500.0,500.0
+dl-2019,quick sort (classic),Bidirectional,500,44,0.59266,21500.0,500.0
+dl-2019,quick sort (classic),Bidirectional,500,45,0.59266,21500.0,500.0
+dl-2019,quick sort (classic),Bidirectional,500,46,0.59266,21500.0,500.0
+dl-2019,quick sort (classic),Bidirectional,500,47,0.59266,21500.0,500.0
+dl-2019,quick sort (classic),Bidirectional,500,48,0.59266,21500.0,500.0
+dl-2019,quick sort (classic),Bidirectional,500,49,0.59266,21500.0,500.0
+dl-2020,quick sort (classic),Bidirectional,100,42,0.53771,20000.0,100.0
+dl-2020,quick sort (classic),Bidirectional,100,43,0.53771,20000.0,100.0
+dl-2020,quick sort (classic),Bidirectional,100,44,0.53771,20000.0,100.0
+dl-2020,quick sort (classic),Bidirectional,100,45,0.53771,20000.0,100.0
+dl-2020,quick sort (classic),Bidirectional,100,46,0.53771,20000.0,100.0
+dl-2020,quick sort (classic),Bidirectional,100,47,0.53771,20000.0,100.0
+dl-2020,quick sort (classic),Bidirectional,100,48,0.53771,20000.0,100.0
+dl-2020,quick sort (classic),Bidirectional,100,49,0.53771,20000.0,100.0
+dl-2020,quick sort (classic),Bidirectional,150,42,0.53693,30000.0,150.0
+dl-2020,quick sort (classic),Bidirectional,150,43,0.53693,30000.0,150.0
+dl-2020,quick sort (classic),Bidirectional,150,44,0.53693,30000.0,150.0
+dl-2020,quick sort (classic),Bidirectional,150,45,0.53693,30000.0,150.0
+dl-2020,quick sort (classic),Bidirectional,150,46,0.53693,30000.0,150.0
+dl-2020,quick sort (classic),Bidirectional,150,47,0.53693,30000.0,150.0
+dl-2020,quick sort (classic),Bidirectional,150,48,0.53693,30000.0,150.0
+dl-2020,quick sort (classic),Bidirectional,150,49,0.53693,30000.0,150.0
+dl-2020,quick sort (classic),Bidirectional,200,42,0.53436,40000.0,200.0
+dl-2020,quick sort (classic),Bidirectional,200,43,0.53436,40000.0,200.0
+dl-2020,quick sort (classic),Bidirectional,200,44,0.53436,40000.0,200.0
+dl-2020,quick sort (classic),Bidirectional,200,45,0.53436,40000.0,200.0
+dl-2020,quick sort (classic),Bidirectional,200,46,0.53436,40000.0,200.0
+dl-2020,quick sort (classic),Bidirectional,200,47,0.53436,40000.0,200.0
+dl-2020,quick sort (classic),Bidirectional,200,48,0.53436,40000.0,200.0
+dl-2020,quick sort (classic),Bidirectional,200,49,0.53436,40000.0,200.0
+dl-2020,quick sort (classic),Bidirectional,250,42,0.53831,50000.0,250.0
+dl-2020,quick sort (classic),Bidirectional,250,43,0.53831,50000.0,250.0
+dl-2020,quick sort (classic),Bidirectional,250,44,0.53831,50000.0,250.0
+dl-2020,quick sort (classic),Bidirectional,250,45,0.53831,50000.0,250.0
+dl-2020,quick sort (classic),Bidirectional,250,46,0.53831,50000.0,250.0
+dl-2020,quick sort (classic),Bidirectional,250,47,0.53831,50000.0,250.0
+dl-2020,quick sort (classic),Bidirectional,250,48,0.53831,50000.0,250.0
+dl-2020,quick sort (classic),Bidirectional,250,49,0.53831,50000.0,250.0
+dl-2020,quick sort (classic),Bidirectional,300,42,0.53831,60000.0,300.0
+dl-2020,quick sort (classic),Bidirectional,300,43,0.53831,60000.0,300.0
+dl-2020,quick sort (classic),Bidirectional,300,44,0.53831,60000.0,300.0
+dl-2020,quick sort (classic),Bidirectional,300,45,0.53831,60000.0,300.0
+dl-2020,quick sort (classic),Bidirectional,300,46,0.53831,60000.0,300.0
+dl-2020,quick sort (classic),Bidirectional,300,47,0.53831,60000.0,300.0
+dl-2020,quick sort (classic),Bidirectional,300,48,0.53831,60000.0,300.0
+dl-2020,quick sort (classic),Bidirectional,300,49,0.53831,60000.0,300.0
+dl-2020,quick sort (classic),Bidirectional,350,42,0.53831,70000.0,350.0
+dl-2020,quick sort (classic),Bidirectional,350,43,0.53831,70000.0,350.0
+dl-2020,quick sort (classic),Bidirectional,350,44,0.53831,70000.0,350.0
+dl-2020,quick sort (classic),Bidirectional,350,45,0.53831,70000.0,350.0
+dl-2020,quick sort (classic),Bidirectional,350,46,0.53831,70000.0,350.0
+dl-2020,quick sort (classic),Bidirectional,350,47,0.53831,70000.0,350.0
+dl-2020,quick sort (classic),Bidirectional,350,48,0.53831,70000.0,350.0
+dl-2020,quick sort (classic),Bidirectional,350,49,0.53831,70000.0,350.0
+dl-2020,quick sort (classic),Bidirectional,400,42,0.53951,80000.0,400.0
+dl-2020,quick sort (classic),Bidirectional,400,43,0.53951,80000.0,400.0
+dl-2020,quick sort (classic),Bidirectional,400,44,0.53951,80000.0,400.0
+dl-2020,quick sort (classic),Bidirectional,400,45,0.53951,80000.0,400.0
+dl-2020,quick sort (classic),Bidirectional,400,46,0.53951,80000.0,400.0
+dl-2020,quick sort (classic),Bidirectional,400,47,0.53951,80000.0,400.0
+dl-2020,quick sort (classic),Bidirectional,400,48,0.53951,80000.0,400.0
+dl-2020,quick sort (classic),Bidirectional,400,49,0.53951,80000.0,400.0
+dl-2020,quick sort (classic),Bidirectional,450,42,0.54097,90000.0,450.0
+dl-2020,quick sort (classic),Bidirectional,450,43,0.54097,90000.0,450.0
+dl-2020,quick sort (classic),Bidirectional,450,44,0.54097,90000.0,450.0
+dl-2020,quick sort (classic),Bidirectional,450,45,0.54097,90000.0,450.0
+dl-2020,quick sort (classic),Bidirectional,450,46,0.54097,90000.0,450.0
+dl-2020,quick sort (classic),Bidirectional,450,47,0.54097,90000.0,450.0
+dl-2020,quick sort (classic),Bidirectional,450,48,0.54097,90000.0,450.0
+dl-2020,quick sort (classic),Bidirectional,450,49,0.54097,90000.0,450.0
+dl-2020,quick sort (classic),Bidirectional,500,42,0.54097,100000.0,500.0
+dl-2020,quick sort (classic),Bidirectional,500,43,0.54097,100000.0,500.0
+dl-2020,quick sort (classic),Bidirectional,500,44,0.54097,100000.0,500.0
+dl-2020,quick sort (classic),Bidirectional,500,45,0.54097,100000.0,500.0
+dl-2020,quick sort (classic),Bidirectional,500,46,0.54097,100000.0,500.0
+dl-2020,quick sort (classic),Bidirectional,500,47,0.54097,100000.0,500.0
+dl-2020,quick sort (classic),Bidirectional,500,48,0.54097,100000.0,500.0
+dl-2020,quick sort (classic),Bidirectional,500,49,0.54097,100000.0,500.0
+dl-2019,bubble sort (classic),Sampling,100,42,0.55921,4300.0,100.0
+dl-2019,bubble sort (classic),Sampling,100,43,0.56451,4300.0,100.0
+dl-2019,bubble sort (classic),Sampling,100,44,0.56318,4300.0,100.0
+dl-2019,bubble sort (classic),Sampling,100,45,0.56229,4300.0,100.0
+dl-2019,bubble sort (classic),Sampling,100,46,0.57321,4300.0,100.0
+dl-2019,bubble sort (classic),Sampling,100,47,0.55901,4300.0,100.0
+dl-2019,bubble sort (classic),Sampling,100,48,0.56911,4300.0,100.0
+dl-2019,bubble sort (classic),Sampling,100,49,0.56742,4300.0,100.0
+dl-2019,bubble sort (classic),Sampling,150,42,0.56882,6450.0,150.0
+dl-2019,bubble sort (classic),Sampling,150,43,0.56554,6450.0,150.0
+dl-2019,bubble sort (classic),Sampling,150,44,0.56416,6450.0,150.0
+dl-2019,bubble sort (classic),Sampling,150,45,0.56917,6450.0,150.0
+dl-2019,bubble sort (classic),Sampling,150,46,0.56562,6450.0,150.0
+dl-2019,bubble sort (classic),Sampling,150,47,0.57066,6450.0,150.0
+dl-2019,bubble sort (classic),Sampling,150,48,0.56718,6450.0,150.0
+dl-2019,bubble sort (classic),Sampling,150,49,0.56922,6450.0,150.0
+dl-2019,bubble sort (classic),Sampling,200,42,0.59767,8600.0,200.0
+dl-2019,bubble sort (classic),Sampling,200,43,0.60171,8600.0,200.0
+dl-2019,bubble sort (classic),Sampling,200,44,0.60532,8600.0,200.0
+dl-2019,bubble sort (classic),Sampling,200,45,0.59522,8600.0,200.0
+dl-2019,bubble sort (classic),Sampling,200,46,0.60242,8600.0,200.0
+dl-2019,bubble sort (classic),Sampling,200,47,0.60414,8600.0,200.0
+dl-2019,bubble sort (classic),Sampling,200,48,0.60753,8600.0,200.0
+dl-2019,bubble sort (classic),Sampling,200,49,0.59797,8600.0,200.0
+dl-2019,bubble sort (classic),Sampling,250,42,0.60332,10750.0,250.0
+dl-2019,bubble sort (classic),Sampling,250,43,0.60202,10750.0,250.0
+dl-2019,bubble sort (classic),Sampling,250,44,0.59896,10750.0,250.0
+dl-2019,bubble sort (classic),Sampling,250,45,0.60013,10750.0,250.0
+dl-2019,bubble sort (classic),Sampling,250,46,0.60426,10750.0,250.0
+dl-2019,bubble sort (classic),Sampling,250,47,0.6031,10750.0,250.0
+dl-2019,bubble sort (classic),Sampling,250,48,0.60444,10750.0,250.0
+dl-2019,bubble sort (classic),Sampling,250,49,0.60351,10750.0,250.0
+dl-2019,bubble sort (classic),Sampling,300,42,0.61978,12900.0,300.0
+dl-2019,bubble sort (classic),Sampling,300,43,0.62748,12900.0,300.0
+dl-2019,bubble sort (classic),Sampling,300,44,0.62434,12900.0,300.0
+dl-2019,bubble sort (classic),Sampling,300,45,0.62694,12900.0,300.0
+dl-2019,bubble sort (classic),Sampling,300,46,0.61707,12900.0,300.0
+dl-2019,bubble sort (classic),Sampling,300,47,0.62429,12900.0,300.0
+dl-2019,bubble sort (classic),Sampling,300,48,0.61676,12900.0,300.0
+dl-2019,bubble sort (classic),Sampling,300,49,0.63264,12900.0,300.0
+dl-2019,bubble sort (classic),Sampling,350,42,0.62516,15050.0,350.0
+dl-2019,bubble sort (classic),Sampling,350,43,0.62349,15050.0,350.0
+dl-2019,bubble sort (classic),Sampling,350,44,0.62247,15050.0,350.0
+dl-2019,bubble sort (classic),Sampling,350,45,0.63064,15050.0,350.0
+dl-2019,bubble sort (classic),Sampling,350,46,0.62947,15050.0,350.0
+dl-2019,bubble sort (classic),Sampling,350,47,0.62137,15050.0,350.0
+dl-2019,bubble sort (classic),Sampling,350,48,0.62858,15050.0,350.0
+dl-2019,bubble sort (classic),Sampling,350,49,0.62587,15050.0,350.0
+dl-2019,bubble sort (classic),Sampling,400,42,0.64274,17200.0,400.0
+dl-2019,bubble sort (classic),Sampling,400,43,0.64987,17200.0,400.0
+dl-2019,bubble sort (classic),Sampling,400,44,0.64433,17200.0,400.0
+dl-2019,bubble sort (classic),Sampling,400,45,0.64504,17200.0,400.0
+dl-2019,bubble sort (classic),Sampling,400,46,0.64619,17200.0,400.0
+dl-2019,bubble sort (classic),Sampling,400,47,0.64746,17200.0,400.0
+dl-2019,bubble sort (classic),Sampling,400,48,0.64166,17200.0,400.0
+dl-2019,bubble sort (classic),Sampling,400,49,0.6477,17200.0,400.0
+dl-2019,bubble sort (classic),Sampling,450,42,0.64372,19350.0,450.0
+dl-2019,bubble sort (classic),Sampling,450,43,0.6488,19350.0,450.0
+dl-2019,bubble sort (classic),Sampling,450,44,0.65505,19350.0,450.0
+dl-2019,bubble sort (classic),Sampling,450,45,0.65053,19350.0,450.0
+dl-2019,bubble sort (classic),Sampling,450,46,0.64518,19350.0,450.0
+dl-2019,bubble sort (classic),Sampling,450,47,0.64119,19350.0,450.0
+dl-2019,bubble sort (classic),Sampling,450,48,0.64337,19350.0,450.0
+dl-2019,bubble sort (classic),Sampling,450,49,0.64888,19350.0,450.0
+dl-2019,bubble sort (classic),Sampling,500,42,0.65732,21500.0,500.0
+dl-2019,bubble sort (classic),Sampling,500,43,0.65849,21500.0,500.0
+dl-2019,bubble sort (classic),Sampling,500,44,0.67019,21500.0,500.0
+dl-2019,bubble sort (classic),Sampling,500,45,0.65453,21500.0,500.0
+dl-2019,bubble sort (classic),Sampling,500,46,0.65548,21500.0,500.0
+dl-2019,bubble sort (classic),Sampling,500,47,0.65532,21500.0,500.0
+dl-2019,bubble sort (classic),Sampling,500,48,0.66886,21500.0,500.0
+dl-2019,bubble sort (classic),Sampling,500,49,0.66447,21500.0,500.0
+dl-2020,bubble sort (classic),Sampling,100,42,0.55228,20000.0,100.0
+dl-2020,bubble sort (classic),Sampling,100,43,0.54836,20000.0,100.0
+dl-2020,bubble sort (classic),Sampling,100,44,0.54977,20000.0,100.0
+dl-2020,bubble sort (classic),Sampling,100,45,0.55289,20000.0,100.0
+dl-2020,bubble sort (classic),Sampling,100,46,0.56179,20000.0,100.0
+dl-2020,bubble sort (classic),Sampling,100,47,0.55015,20000.0,100.0
+dl-2020,bubble sort (classic),Sampling,100,48,0.55637,20000.0,100.0
+dl-2020,bubble sort (classic),Sampling,100,49,0.55491,20000.0,100.0
+dl-2020,bubble sort (classic),Sampling,150,42,0.55308,30000.0,150.0
+dl-2020,bubble sort (classic),Sampling,150,43,0.54655,30000.0,150.0
+dl-2020,bubble sort (classic),Sampling,150,44,0.54785,30000.0,150.0
+dl-2020,bubble sort (classic),Sampling,150,45,0.55741,30000.0,150.0
+dl-2020,bubble sort (classic),Sampling,150,46,0.55753,30000.0,150.0
+dl-2020,bubble sort (classic),Sampling,150,47,0.55764,30000.0,150.0
+dl-2020,bubble sort (classic),Sampling,150,48,0.55938,30000.0,150.0
+dl-2020,bubble sort (classic),Sampling,150,49,0.55699,30000.0,150.0
+dl-2020,bubble sort (classic),Sampling,200,42,0.59025,40000.0,200.0
+dl-2020,bubble sort (classic),Sampling,200,43,0.60379,40000.0,200.0
+dl-2020,bubble sort (classic),Sampling,200,44,0.59875,40000.0,200.0
+dl-2020,bubble sort (classic),Sampling,200,45,0.60128,40000.0,200.0
+dl-2020,bubble sort (classic),Sampling,200,46,0.59408,40000.0,200.0
+dl-2020,bubble sort (classic),Sampling,200,47,0.59062,40000.0,200.0
+dl-2020,bubble sort (classic),Sampling,200,48,0.58971,40000.0,200.0
+dl-2020,bubble sort (classic),Sampling,200,49,0.59137,40000.0,200.0
+dl-2020,bubble sort (classic),Sampling,250,42,0.58448,50000.0,250.0
+dl-2020,bubble sort (classic),Sampling,250,43,0.60105,50000.0,250.0
+dl-2020,bubble sort (classic),Sampling,250,44,0.59068,50000.0,250.0
+dl-2020,bubble sort (classic),Sampling,250,45,0.58636,50000.0,250.0
+dl-2020,bubble sort (classic),Sampling,250,46,0.59063,50000.0,250.0
+dl-2020,bubble sort (classic),Sampling,250,47,0.58695,50000.0,250.0
+dl-2020,bubble sort (classic),Sampling,250,48,0.58919,50000.0,250.0
+dl-2020,bubble sort (classic),Sampling,250,49,0.59954,50000.0,250.0
+dl-2020,bubble sort (classic),Sampling,300,42,0.613,60000.0,300.0
+dl-2020,bubble sort (classic),Sampling,300,43,0.61853,60000.0,300.0
+dl-2020,bubble sort (classic),Sampling,300,44,0.61555,60000.0,300.0
+dl-2020,bubble sort (classic),Sampling,300,45,0.61787,60000.0,300.0
+dl-2020,bubble sort (classic),Sampling,300,46,0.62224,60000.0,300.0
+dl-2020,bubble sort (classic),Sampling,300,47,0.61953,60000.0,300.0
+dl-2020,bubble sort (classic),Sampling,300,48,0.61038,60000.0,300.0
+dl-2020,bubble sort (classic),Sampling,300,49,0.60598,60000.0,300.0
+dl-2020,bubble sort (classic),Sampling,350,42,0.6178,70000.0,350.0
+dl-2020,bubble sort (classic),Sampling,350,43,0.60994,70000.0,350.0
+dl-2020,bubble sort (classic),Sampling,350,44,0.61056,70000.0,350.0
+dl-2020,bubble sort (classic),Sampling,350,45,0.61558,70000.0,350.0
+dl-2020,bubble sort (classic),Sampling,350,46,0.61461,70000.0,350.0
+dl-2020,bubble sort (classic),Sampling,350,47,0.61448,70000.0,350.0
+dl-2020,bubble sort (classic),Sampling,350,48,0.61672,70000.0,350.0
+dl-2020,bubble sort (classic),Sampling,350,49,0.61823,70000.0,350.0
+dl-2020,bubble sort (classic),Sampling,400,42,0.63352,80000.0,400.0
+dl-2020,bubble sort (classic),Sampling,400,43,0.62593,80000.0,400.0
+dl-2020,bubble sort (classic),Sampling,400,44,0.6369,80000.0,400.0
+dl-2020,bubble sort (classic),Sampling,400,45,0.63612,80000.0,400.0
+dl-2020,bubble sort (classic),Sampling,400,46,0.6289,80000.0,400.0
+dl-2020,bubble sort (classic),Sampling,400,47,0.64428,80000.0,400.0
+dl-2020,bubble sort (classic),Sampling,400,48,0.63563,80000.0,400.0
+dl-2020,bubble sort (classic),Sampling,400,49,0.6398,80000.0,400.0
+dl-2020,bubble sort (classic),Sampling,450,42,0.6437,90000.0,450.0
+dl-2020,bubble sort (classic),Sampling,450,43,0.63563,90000.0,450.0
+dl-2020,bubble sort (classic),Sampling,450,44,0.63467,90000.0,450.0
+dl-2020,bubble sort (classic),Sampling,450,45,0.63608,90000.0,450.0
+dl-2020,bubble sort (classic),Sampling,450,46,0.62698,90000.0,450.0
+dl-2020,bubble sort (classic),Sampling,450,47,0.63048,90000.0,450.0
+dl-2020,bubble sort (classic),Sampling,450,48,0.63027,90000.0,450.0
+dl-2020,bubble sort (classic),Sampling,450,49,0.62588,90000.0,450.0
+dl-2020,bubble sort (classic),Sampling,500,42,0.65877,100000.0,500.0
+dl-2020,bubble sort (classic),Sampling,500,43,0.6434,100000.0,500.0
+dl-2020,bubble sort (classic),Sampling,500,44,0.65378,100000.0,500.0
+dl-2020,bubble sort (classic),Sampling,500,45,0.6403,100000.0,500.0
+dl-2020,bubble sort (classic),Sampling,500,46,0.64786,100000.0,500.0
+dl-2020,bubble sort (classic),Sampling,500,47,0.64828,100000.0,500.0
+dl-2020,bubble sort (classic),Sampling,500,48,0.64424,100000.0,500.0
+dl-2020,bubble sort (classic),Sampling,500,49,0.64546,100000.0,500.0
+dl-2019,heap sort (classic),Sampling,100,42,0.0911,4300.0,100.0
+dl-2019,heap sort (classic),Sampling,100,43,0.08611,4300.0,100.0
+dl-2019,heap sort (classic),Sampling,100,44,0.09098,4300.0,100.0
+dl-2019,heap sort (classic),Sampling,100,45,0.09269,4300.0,100.0
+dl-2019,heap sort (classic),Sampling,100,46,0.09172,4300.0,100.0
+dl-2019,heap sort (classic),Sampling,100,47,0.08999,4300.0,100.0
+dl-2019,heap sort (classic),Sampling,100,48,0.09286,4300.0,100.0
+dl-2019,heap sort (classic),Sampling,100,49,0.08895,4300.0,100.0
+dl-2019,heap sort (classic),Sampling,150,42,0.16885,6450.0,150.0
+dl-2019,heap sort (classic),Sampling,150,43,0.17343,6450.0,150.0
+dl-2019,heap sort (classic),Sampling,150,44,0.17308,6450.0,150.0
+dl-2019,heap sort (classic),Sampling,150,45,0.16973,6450.0,150.0
+dl-2019,heap sort (classic),Sampling,150,46,0.17992,6450.0,150.0
+dl-2019,heap sort (classic),Sampling,150,47,0.1682,6450.0,150.0
+dl-2019,heap sort (classic),Sampling,150,48,0.16886,6450.0,150.0
+dl-2019,heap sort (classic),Sampling,150,49,0.18238,6450.0,150.0
+dl-2019,heap sort (classic),Sampling,200,42,0.49271,8600.0,200.0
+dl-2019,heap sort (classic),Sampling,200,43,0.4978,8600.0,200.0
+dl-2019,heap sort (classic),Sampling,200,44,0.49888,8600.0,200.0
+dl-2019,heap sort (classic),Sampling,200,45,0.51024,8600.0,200.0
+dl-2019,heap sort (classic),Sampling,200,46,0.48932,8600.0,200.0
+dl-2019,heap sort (classic),Sampling,200,47,0.5004,8600.0,200.0
+dl-2019,heap sort (classic),Sampling,200,48,0.50101,8600.0,200.0
+dl-2019,heap sort (classic),Sampling,200,49,0.49421,8600.0,200.0
+dl-2019,heap sort (classic),Sampling,250,42,0.65927,10750.0,250.0
+dl-2019,heap sort (classic),Sampling,250,43,0.66243,10750.0,250.0
+dl-2019,heap sort (classic),Sampling,250,44,0.66296,10750.0,250.0
+dl-2019,heap sort (classic),Sampling,250,45,0.66439,10750.0,250.0
+dl-2019,heap sort (classic),Sampling,250,46,0.66083,10750.0,250.0
+dl-2019,heap sort (classic),Sampling,250,47,0.67437,10750.0,250.0
+dl-2019,heap sort (classic),Sampling,250,48,0.65844,10750.0,250.0
+dl-2019,heap sort (classic),Sampling,250,49,0.66893,10750.0,250.0
+dl-2019,heap sort (classic),Sampling,300,42,0.68494,12900.0,300.0
+dl-2019,heap sort (classic),Sampling,300,43,0.6928,12900.0,300.0
+dl-2019,heap sort (classic),Sampling,300,44,0.68251,12900.0,300.0
+dl-2019,heap sort (classic),Sampling,300,45,0.69262,12900.0,300.0
+dl-2019,heap sort (classic),Sampling,300,46,0.68372,12900.0,300.0
+dl-2019,heap sort (classic),Sampling,300,47,0.69716,12900.0,300.0
+dl-2019,heap sort (classic),Sampling,300,48,0.69608,12900.0,300.0
+dl-2019,heap sort (classic),Sampling,300,49,0.69625,12900.0,300.0
+dl-2019,heap sort (classic),Sampling,350,42,0.6903,15050.0,350.0
+dl-2019,heap sort (classic),Sampling,350,43,0.69479,15050.0,350.0
+dl-2019,heap sort (classic),Sampling,350,44,0.68813,15050.0,350.0
+dl-2019,heap sort (classic),Sampling,350,45,0.68899,15050.0,350.0
+dl-2019,heap sort (classic),Sampling,350,46,0.68546,15050.0,350.0
+dl-2019,heap sort (classic),Sampling,350,47,0.68471,15050.0,350.0
+dl-2019,heap sort (classic),Sampling,350,48,0.68661,15050.0,350.0
+dl-2019,heap sort (classic),Sampling,350,49,0.69093,15050.0,350.0
+dl-2019,heap sort (classic),Sampling,400,42,0.69816,17200.0,400.0
+dl-2019,heap sort (classic),Sampling,400,43,0.68873,17200.0,400.0
+dl-2019,heap sort (classic),Sampling,400,44,0.69149,17200.0,400.0
+dl-2019,heap sort (classic),Sampling,400,45,0.69632,17200.0,400.0
+dl-2019,heap sort (classic),Sampling,400,46,0.68121,17200.0,400.0
+dl-2019,heap sort (classic),Sampling,400,47,0.694,17200.0,400.0
+dl-2019,heap sort (classic),Sampling,400,48,0.68362,17200.0,400.0
+dl-2019,heap sort (classic),Sampling,400,49,0.68591,17200.0,400.0
+dl-2019,heap sort (classic),Sampling,450,42,0.68758,19350.0,450.0
+dl-2019,heap sort (classic),Sampling,450,43,0.69372,19350.0,450.0
+dl-2019,heap sort (classic),Sampling,450,44,0.69147,19350.0,450.0
+dl-2019,heap sort (classic),Sampling,450,45,0.69244,19350.0,450.0
+dl-2019,heap sort (classic),Sampling,450,46,0.67877,19350.0,450.0
+dl-2019,heap sort (classic),Sampling,450,47,0.69355,19350.0,450.0
+dl-2019,heap sort (classic),Sampling,450,48,0.6885,19350.0,450.0
+dl-2019,heap sort (classic),Sampling,450,49,0.6883,19350.0,450.0
+dl-2019,heap sort (classic),Sampling,500,42,0.68835,21500.0,500.0
+dl-2019,heap sort (classic),Sampling,500,43,0.687,21500.0,500.0
+dl-2019,heap sort (classic),Sampling,500,44,0.69537,21500.0,500.0
+dl-2019,heap sort (classic),Sampling,500,45,0.6936,21500.0,500.0
+dl-2019,heap sort (classic),Sampling,500,46,0.69666,21500.0,500.0
+dl-2019,heap sort (classic),Sampling,500,47,0.68918,21500.0,500.0
+dl-2019,heap sort (classic),Sampling,500,48,0.69676,21500.0,500.0
+dl-2019,heap sort (classic),Sampling,500,49,0.69029,21500.0,500.0
+dl-2020,heap sort (classic),Sampling,100,42,0.04587,20000.0,100.0
+dl-2020,heap sort (classic),Sampling,100,43,0.0435,20000.0,100.0
+dl-2020,heap sort (classic),Sampling,100,44,0.04053,20000.0,100.0
+dl-2020,heap sort (classic),Sampling,100,45,0.04159,20000.0,100.0
+dl-2020,heap sort (classic),Sampling,100,46,0.04231,20000.0,100.0
+dl-2020,heap sort (classic),Sampling,100,47,0.03263,20000.0,100.0
+dl-2020,heap sort (classic),Sampling,100,48,0.0384,20000.0,100.0
+dl-2020,heap sort (classic),Sampling,100,49,0.04398,20000.0,100.0
+dl-2020,heap sort (classic),Sampling,150,42,0.15964,30000.0,150.0
+dl-2020,heap sort (classic),Sampling,150,43,0.17398,30000.0,150.0
+dl-2020,heap sort (classic),Sampling,150,44,0.15123,30000.0,150.0
+dl-2020,heap sort (classic),Sampling,150,45,0.14343,30000.0,150.0
+dl-2020,heap sort (classic),Sampling,150,46,0.16462,30000.0,150.0
+dl-2020,heap sort (classic),Sampling,150,47,0.1599,30000.0,150.0
+dl-2020,heap sort (classic),Sampling,150,48,0.141,30000.0,150.0
+dl-2020,heap sort (classic),Sampling,150,49,0.1556,30000.0,150.0
+dl-2020,heap sort (classic),Sampling,200,42,0.51376,40000.0,200.0
+dl-2020,heap sort (classic),Sampling,200,43,0.51065,40000.0,200.0
+dl-2020,heap sort (classic),Sampling,200,44,0.51211,40000.0,200.0
+dl-2020,heap sort (classic),Sampling,200,45,0.50119,40000.0,200.0
+dl-2020,heap sort (classic),Sampling,200,46,0.50414,40000.0,200.0
+dl-2020,heap sort (classic),Sampling,200,47,0.49632,40000.0,200.0
+dl-2020,heap sort (classic),Sampling,200,48,0.50475,40000.0,200.0
+dl-2020,heap sort (classic),Sampling,200,49,0.49994,40000.0,200.0
+dl-2020,heap sort (classic),Sampling,250,42,0.64884,50000.0,250.0
+dl-2020,heap sort (classic),Sampling,250,43,0.65357,50000.0,250.0
+dl-2020,heap sort (classic),Sampling,250,44,0.64989,50000.0,250.0
+dl-2020,heap sort (classic),Sampling,250,45,0.6514,50000.0,250.0
+dl-2020,heap sort (classic),Sampling,250,46,0.65342,50000.0,250.0
+dl-2020,heap sort (classic),Sampling,250,47,0.64515,50000.0,250.0
+dl-2020,heap sort (classic),Sampling,250,48,0.65684,50000.0,250.0
+dl-2020,heap sort (classic),Sampling,250,49,0.65674,50000.0,250.0
+dl-2020,heap sort (classic),Sampling,300,42,0.6731,60000.0,300.0
+dl-2020,heap sort (classic),Sampling,300,43,0.68511,60000.0,300.0
+dl-2020,heap sort (classic),Sampling,300,44,0.67551,60000.0,300.0
+dl-2020,heap sort (classic),Sampling,300,45,0.67821,60000.0,300.0
+dl-2020,heap sort (classic),Sampling,300,46,0.67032,60000.0,300.0
+dl-2020,heap sort (classic),Sampling,300,47,0.68876,60000.0,300.0
+dl-2020,heap sort (classic),Sampling,300,48,0.68697,60000.0,300.0
+dl-2020,heap sort (classic),Sampling,300,49,0.6759,60000.0,300.0
+dl-2020,heap sort (classic),Sampling,350,42,0.67635,70000.0,350.0
+dl-2020,heap sort (classic),Sampling,350,43,0.68486,70000.0,350.0
+dl-2020,heap sort (classic),Sampling,350,44,0.68714,70000.0,350.0
+dl-2020,heap sort (classic),Sampling,350,45,0.67898,70000.0,350.0
+dl-2020,heap sort (classic),Sampling,350,46,0.67939,70000.0,350.0
+dl-2020,heap sort (classic),Sampling,350,47,0.66801,70000.0,350.0
+dl-2020,heap sort (classic),Sampling,350,48,0.69168,70000.0,350.0
+dl-2020,heap sort (classic),Sampling,350,49,0.67004,70000.0,350.0
+dl-2020,heap sort (classic),Sampling,400,42,0.67269,80000.0,400.0
+dl-2020,heap sort (classic),Sampling,400,43,0.67649,80000.0,400.0
+dl-2020,heap sort (classic),Sampling,400,44,0.67673,80000.0,400.0
+dl-2020,heap sort (classic),Sampling,400,45,0.67237,80000.0,400.0
+dl-2020,heap sort (classic),Sampling,400,46,0.68161,80000.0,400.0
+dl-2020,heap sort (classic),Sampling,400,47,0.67503,80000.0,400.0
+dl-2020,heap sort (classic),Sampling,400,48,0.67726,80000.0,400.0
+dl-2020,heap sort (classic),Sampling,400,49,0.68238,80000.0,400.0
+dl-2020,heap sort (classic),Sampling,450,42,0.67781,90000.0,450.0
+dl-2020,heap sort (classic),Sampling,450,43,0.68176,90000.0,450.0
+dl-2020,heap sort (classic),Sampling,450,44,0.68584,90000.0,450.0
+dl-2020,heap sort (classic),Sampling,450,45,0.68731,90000.0,450.0
+dl-2020,heap sort (classic),Sampling,450,46,0.68337,90000.0,450.0
+dl-2020,heap sort (classic),Sampling,450,47,0.67902,90000.0,450.0
+dl-2020,heap sort (classic),Sampling,450,48,0.67759,90000.0,450.0
+dl-2020,heap sort (classic),Sampling,450,49,0.67729,90000.0,450.0
+dl-2020,heap sort (classic),Sampling,500,42,0.68579,100000.0,500.0
+dl-2020,heap sort (classic),Sampling,500,43,0.67508,100000.0,500.0
+dl-2020,heap sort (classic),Sampling,500,44,0.67424,100000.0,500.0
+dl-2020,heap sort (classic),Sampling,500,45,0.68206,100000.0,500.0
+dl-2020,heap sort (classic),Sampling,500,46,0.68412,100000.0,500.0
+dl-2020,heap sort (classic),Sampling,500,47,0.68419,100000.0,500.0
+dl-2020,heap sort (classic),Sampling,500,48,0.68614,100000.0,500.0
+dl-2020,heap sort (classic),Sampling,500,49,0.68497,100000.0,500.0
+dl-2019,mohajer (ir),Sampling,100,42,0.61415,4300.0,100.0
+dl-2019,mohajer (ir),Sampling,100,43,0.61922,4300.0,100.0
+dl-2019,mohajer (ir),Sampling,100,44,0.61242,4300.0,100.0
+dl-2019,mohajer (ir),Sampling,100,45,0.62269,4300.0,100.0
+dl-2019,mohajer (ir),Sampling,100,46,0.62345,4300.0,100.0
+dl-2019,mohajer (ir),Sampling,100,47,0.61397,4300.0,100.0
+dl-2019,mohajer (ir),Sampling,100,48,0.63641,4300.0,100.0
+dl-2019,mohajer (ir),Sampling,100,49,0.61983,4300.0,100.0
+dl-2019,mohajer (ir),Sampling,150,42,0.67791,6450.0,150.0
+dl-2019,mohajer (ir),Sampling,150,43,0.66641,6450.0,150.0
+dl-2019,mohajer (ir),Sampling,150,44,0.66129,6450.0,150.0
+dl-2019,mohajer (ir),Sampling,150,45,0.66572,6450.0,150.0
+dl-2019,mohajer (ir),Sampling,150,46,0.66475,6450.0,150.0
+dl-2019,mohajer (ir),Sampling,150,47,0.6723,6450.0,150.0
+dl-2019,mohajer (ir),Sampling,150,48,0.65766,6450.0,150.0
+dl-2019,mohajer (ir),Sampling,150,49,0.65868,6450.0,150.0
+dl-2019,mohajer (ir),Sampling,200,42,0.687,8600.0,200.0
+dl-2019,mohajer (ir),Sampling,200,43,0.68263,8600.0,200.0
+dl-2019,mohajer (ir),Sampling,200,44,0.67909,8600.0,200.0
+dl-2019,mohajer (ir),Sampling,200,45,0.67665,8600.0,200.0
+dl-2019,mohajer (ir),Sampling,200,46,0.6853,8600.0,200.0
+dl-2019,mohajer (ir),Sampling,200,47,0.68709,8600.0,200.0
+dl-2019,mohajer (ir),Sampling,200,48,0.6659,8600.0,200.0
+dl-2019,mohajer (ir),Sampling,200,49,0.68564,8600.0,200.0
+dl-2019,mohajer (ir),Sampling,250,42,0.68729,9946.0,231.30232558139537
+dl-2019,mohajer (ir),Sampling,250,43,0.68234,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,250,44,0.68797,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,250,45,0.69073,9939.0,231.13953488372093
+dl-2019,mohajer (ir),Sampling,250,46,0.68212,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,250,47,0.68342,9985.0,232.2093023255814
+dl-2019,mohajer (ir),Sampling,250,48,0.68073,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,250,49,0.69394,9964.0,231.72093023255815
+dl-2019,mohajer (ir),Sampling,300,42,0.68729,9946.0,231.30232558139537
+dl-2019,mohajer (ir),Sampling,300,43,0.68234,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,300,44,0.68797,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,300,45,0.69073,9939.0,231.13953488372093
+dl-2019,mohajer (ir),Sampling,300,46,0.68212,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,300,47,0.68342,9985.0,232.2093023255814
+dl-2019,mohajer (ir),Sampling,300,48,0.68073,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,300,49,0.69394,9964.0,231.72093023255815
+dl-2019,mohajer (ir),Sampling,350,42,0.68729,9946.0,231.30232558139537
+dl-2019,mohajer (ir),Sampling,350,43,0.68234,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,350,44,0.68797,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,350,45,0.69073,9939.0,231.13953488372093
+dl-2019,mohajer (ir),Sampling,350,46,0.68212,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,350,47,0.68342,9985.0,232.2093023255814
+dl-2019,mohajer (ir),Sampling,350,48,0.68073,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,350,49,0.69394,9964.0,231.72093023255815
+dl-2019,mohajer (ir),Sampling,400,42,0.68729,9946.0,231.30232558139537
+dl-2019,mohajer (ir),Sampling,400,43,0.68234,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,400,44,0.68797,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,400,45,0.69073,9939.0,231.13953488372093
+dl-2019,mohajer (ir),Sampling,400,46,0.68212,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,400,47,0.68342,9985.0,232.2093023255814
+dl-2019,mohajer (ir),Sampling,400,48,0.68073,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,400,49,0.69394,9964.0,231.72093023255815
+dl-2019,mohajer (ir),Sampling,450,42,0.68729,9946.0,231.30232558139537
+dl-2019,mohajer (ir),Sampling,450,43,0.68234,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,450,44,0.68797,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,450,45,0.69073,9939.0,231.13953488372093
+dl-2019,mohajer (ir),Sampling,450,46,0.68212,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,450,47,0.68342,9985.0,232.2093023255814
+dl-2019,mohajer (ir),Sampling,450,48,0.68073,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,450,49,0.69394,9964.0,231.72093023255815
+dl-2019,mohajer (ir),Sampling,500,42,0.68729,9946.0,231.30232558139537
+dl-2019,mohajer (ir),Sampling,500,43,0.68234,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,500,44,0.68797,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,500,45,0.69073,9939.0,231.13953488372093
+dl-2019,mohajer (ir),Sampling,500,46,0.68212,9935.0,231.04651162790697
+dl-2019,mohajer (ir),Sampling,500,47,0.68342,9985.0,232.2093023255814
+dl-2019,mohajer (ir),Sampling,500,48,0.68073,9947.0,231.32558139534885
+dl-2019,mohajer (ir),Sampling,500,49,0.69394,9964.0,231.72093023255815
+dl-2020,mohajer (ir),Sampling,100,42,0.59952,20000.0,100.0
+dl-2020,mohajer (ir),Sampling,100,43,0.6087,20000.0,100.0
+dl-2020,mohajer (ir),Sampling,100,44,0.61487,20000.0,100.0
+dl-2020,mohajer (ir),Sampling,100,45,0.61109,20000.0,100.0
+dl-2020,mohajer (ir),Sampling,100,46,0.60953,20000.0,100.0
+dl-2020,mohajer (ir),Sampling,100,47,0.60935,20000.0,100.0
+dl-2020,mohajer (ir),Sampling,100,48,0.60619,20000.0,100.0
+dl-2020,mohajer (ir),Sampling,100,49,0.59558,20000.0,100.0
+dl-2020,mohajer (ir),Sampling,150,42,0.65057,30000.0,150.0
+dl-2020,mohajer (ir),Sampling,150,43,0.65659,30000.0,150.0
+dl-2020,mohajer (ir),Sampling,150,44,0.6385,30000.0,150.0
+dl-2020,mohajer (ir),Sampling,150,45,0.66344,30000.0,150.0
+dl-2020,mohajer (ir),Sampling,150,46,0.65124,30000.0,150.0
+dl-2020,mohajer (ir),Sampling,150,47,0.64626,30000.0,150.0
+dl-2020,mohajer (ir),Sampling,150,48,0.65012,30000.0,150.0
+dl-2020,mohajer (ir),Sampling,150,49,0.65352,30000.0,150.0
+dl-2020,mohajer (ir),Sampling,200,42,0.67663,40000.0,200.0
+dl-2020,mohajer (ir),Sampling,200,43,0.67304,40000.0,200.0
+dl-2020,mohajer (ir),Sampling,200,44,0.67822,40000.0,200.0
+dl-2020,mohajer (ir),Sampling,200,45,0.68029,40000.0,200.0
+dl-2020,mohajer (ir),Sampling,200,46,0.66923,40000.0,200.0
+dl-2020,mohajer (ir),Sampling,200,47,0.65916,40000.0,200.0
+dl-2020,mohajer (ir),Sampling,200,48,0.66328,40000.0,200.0
+dl-2020,mohajer (ir),Sampling,200,49,0.6767,40000.0,200.0
+dl-2020,mohajer (ir),Sampling,250,42,0.67625,46368.0,231.84
+dl-2020,mohajer (ir),Sampling,250,43,0.67347,46248.0,231.24
+dl-2020,mohajer (ir),Sampling,250,44,0.68009,46281.0,231.405
+dl-2020,mohajer (ir),Sampling,250,45,0.6756,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,250,46,0.67567,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,250,47,0.67253,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,250,48,0.66946,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,250,49,0.66859,46278.0,231.39
+dl-2020,mohajer (ir),Sampling,300,42,0.67625,46368.0,231.84
+dl-2020,mohajer (ir),Sampling,300,43,0.67347,46248.0,231.24
+dl-2020,mohajer (ir),Sampling,300,44,0.68009,46281.0,231.405
+dl-2020,mohajer (ir),Sampling,300,45,0.6756,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,300,46,0.67567,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,300,47,0.67253,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,300,48,0.66946,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,300,49,0.66859,46278.0,231.39
+dl-2020,mohajer (ir),Sampling,350,42,0.67625,46368.0,231.84
+dl-2020,mohajer (ir),Sampling,350,43,0.67347,46248.0,231.24
+dl-2020,mohajer (ir),Sampling,350,44,0.68009,46281.0,231.405
+dl-2020,mohajer (ir),Sampling,350,45,0.6756,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,350,46,0.67567,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,350,47,0.67253,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,350,48,0.66946,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,350,49,0.66859,46278.0,231.39
+dl-2020,mohajer (ir),Sampling,400,42,0.67625,46368.0,231.84
+dl-2020,mohajer (ir),Sampling,400,43,0.67347,46248.0,231.24
+dl-2020,mohajer (ir),Sampling,400,44,0.68009,46281.0,231.405
+dl-2020,mohajer (ir),Sampling,400,45,0.6756,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,400,46,0.67567,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,400,47,0.67253,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,400,48,0.66946,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,400,49,0.66859,46278.0,231.39
+dl-2020,mohajer (ir),Sampling,450,42,0.67625,46368.0,231.84
+dl-2020,mohajer (ir),Sampling,450,43,0.67347,46248.0,231.24
+dl-2020,mohajer (ir),Sampling,450,44,0.68009,46281.0,231.405
+dl-2020,mohajer (ir),Sampling,450,45,0.6756,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,450,46,0.67567,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,450,47,0.67253,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,450,48,0.66946,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,450,49,0.66859,46278.0,231.39
+dl-2020,mohajer (ir),Sampling,500,42,0.67625,46368.0,231.84
+dl-2020,mohajer (ir),Sampling,500,43,0.67347,46248.0,231.24
+dl-2020,mohajer (ir),Sampling,500,44,0.68009,46281.0,231.405
+dl-2020,mohajer (ir),Sampling,500,45,0.6756,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,500,46,0.67567,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,500,47,0.67253,46276.0,231.38
+dl-2020,mohajer (ir),Sampling,500,48,0.66946,46266.0,231.33
+dl-2020,mohajer (ir),Sampling,500,49,0.66859,46278.0,231.39
+dl-2019,mohajer + bubble,Sampling,100,42,0.61415,4300.0,100.0
+dl-2019,mohajer + bubble,Sampling,100,43,0.61922,4300.0,100.0
+dl-2019,mohajer + bubble,Sampling,100,44,0.61242,4300.0,100.0
+dl-2019,mohajer + bubble,Sampling,100,45,0.62269,4300.0,100.0
+dl-2019,mohajer + bubble,Sampling,100,46,0.62345,4300.0,100.0
+dl-2019,mohajer + bubble,Sampling,100,47,0.61397,4300.0,100.0
+dl-2019,mohajer + bubble,Sampling,100,48,0.63641,4300.0,100.0
+dl-2019,mohajer + bubble,Sampling,100,49,0.61983,4300.0,100.0
+dl-2019,mohajer + bubble,Sampling,150,42,0.67791,6450.0,150.0
+dl-2019,mohajer + bubble,Sampling,150,43,0.66641,6450.0,150.0
+dl-2019,mohajer + bubble,Sampling,150,44,0.66129,6450.0,150.0
+dl-2019,mohajer + bubble,Sampling,150,45,0.66572,6450.0,150.0
+dl-2019,mohajer + bubble,Sampling,150,46,0.66475,6450.0,150.0
+dl-2019,mohajer + bubble,Sampling,150,47,0.6723,6450.0,150.0
+dl-2019,mohajer + bubble,Sampling,150,48,0.65766,6450.0,150.0
+dl-2019,mohajer + bubble,Sampling,150,49,0.65868,6450.0,150.0
+dl-2019,mohajer + bubble,Sampling,200,42,0.687,8600.0,200.0
+dl-2019,mohajer + bubble,Sampling,200,43,0.68263,8600.0,200.0
+dl-2019,mohajer + bubble,Sampling,200,44,0.67909,8600.0,200.0
+dl-2019,mohajer + bubble,Sampling,200,45,0.67665,8600.0,200.0
+dl-2019,mohajer + bubble,Sampling,200,46,0.6853,8600.0,200.0
+dl-2019,mohajer + bubble,Sampling,200,47,0.68709,8600.0,200.0
+dl-2019,mohajer + bubble,Sampling,200,48,0.6659,8600.0,200.0
+dl-2019,mohajer + bubble,Sampling,200,49,0.68564,8600.0,200.0
+dl-2019,mohajer + bubble,Sampling,250,42,0.67988,10750.0,250.0
+dl-2019,mohajer + bubble,Sampling,250,43,0.68014,10750.0,250.0
+dl-2019,mohajer + bubble,Sampling,250,44,0.67021,10750.0,250.0
+dl-2019,mohajer + bubble,Sampling,250,45,0.67754,10750.0,250.0
+dl-2019,mohajer + bubble,Sampling,250,46,0.68001,10750.0,250.0
+dl-2019,mohajer + bubble,Sampling,250,47,0.67416,10750.0,250.0
+dl-2019,mohajer + bubble,Sampling,250,48,0.68914,10750.0,250.0
+dl-2019,mohajer + bubble,Sampling,250,49,0.68907,10750.0,250.0
+dl-2019,mohajer + bubble,Sampling,300,42,0.68528,12854.0,298.93023255813955
+dl-2019,mohajer + bubble,Sampling,300,43,0.69056,12900.0,300.0
+dl-2019,mohajer + bubble,Sampling,300,44,0.68308,12900.0,300.0
+dl-2019,mohajer + bubble,Sampling,300,45,0.68532,12859.0,299.04651162790697
+dl-2019,mohajer + bubble,Sampling,300,46,0.69359,12892.0,299.8139534883721
+dl-2019,mohajer + bubble,Sampling,300,47,0.68881,12892.0,299.8139534883721
+dl-2019,mohajer + bubble,Sampling,300,48,0.68794,12886.0,299.6744186046512
+dl-2019,mohajer + bubble,Sampling,300,49,0.68518,12888.0,299.72093023255815
+dl-2019,mohajer + bubble,Sampling,350,42,0.69173,14365.0,334.06976744186045
+dl-2019,mohajer + bubble,Sampling,350,43,0.69423,14514.0,337.5348837209302
+dl-2019,mohajer + bubble,Sampling,350,44,0.68869,14721.0,342.3488372093023
+dl-2019,mohajer + bubble,Sampling,350,45,0.68912,14514.0,337.5348837209302
+dl-2019,mohajer + bubble,Sampling,350,46,0.68933,14499.0,337.1860465116279
+dl-2019,mohajer + bubble,Sampling,350,47,0.68836,14532.0,337.95348837209303
+dl-2019,mohajer + bubble,Sampling,350,48,0.69006,14339.0,333.4651162790698
+dl-2019,mohajer + bubble,Sampling,350,49,0.69569,14418.0,335.30232558139534
+dl-2019,mohajer + bubble,Sampling,400,42,0.69471,14539.0,338.1162790697674
+dl-2019,mohajer + bubble,Sampling,400,43,0.69269,14930.0,347.2093023255814
+dl-2019,mohajer + bubble,Sampling,400,44,0.69353,14676.0,341.30232558139534
+dl-2019,mohajer + bubble,Sampling,400,45,0.68835,14459.0,336.25581395348837
+dl-2019,mohajer + bubble,Sampling,400,46,0.68732,14533.0,337.9767441860465
+dl-2019,mohajer + bubble,Sampling,400,47,0.68313,14776.0,343.6279069767442
+dl-2019,mohajer + bubble,Sampling,400,48,0.69076,14792.0,344.0
+dl-2019,mohajer + bubble,Sampling,400,49,0.69186,14573.0,338.90697674418607
+dl-2019,mohajer + bubble,Sampling,450,42,0.69471,14539.0,338.1162790697674
+dl-2019,mohajer + bubble,Sampling,450,43,0.69269,14930.0,347.2093023255814
+dl-2019,mohajer + bubble,Sampling,450,44,0.69353,14676.0,341.30232558139534
+dl-2019,mohajer + bubble,Sampling,450,45,0.68835,14459.0,336.25581395348837
+dl-2019,mohajer + bubble,Sampling,450,46,0.68732,14533.0,337.9767441860465
+dl-2019,mohajer + bubble,Sampling,450,47,0.68313,14776.0,343.6279069767442
+dl-2019,mohajer + bubble,Sampling,450,48,0.69076,14792.0,344.0
+dl-2019,mohajer + bubble,Sampling,450,49,0.69186,14573.0,338.90697674418607
+dl-2019,mohajer + bubble,Sampling,500,42,0.69471,14539.0,338.1162790697674
+dl-2019,mohajer + bubble,Sampling,500,43,0.69269,14930.0,347.2093023255814
+dl-2019,mohajer + bubble,Sampling,500,44,0.69353,14676.0,341.30232558139534
+dl-2019,mohajer + bubble,Sampling,500,45,0.68835,14459.0,336.25581395348837
+dl-2019,mohajer + bubble,Sampling,500,46,0.68732,14533.0,337.9767441860465
+dl-2019,mohajer + bubble,Sampling,500,47,0.68313,14776.0,343.6279069767442
+dl-2019,mohajer + bubble,Sampling,500,48,0.69076,14792.0,344.0
+dl-2019,mohajer + bubble,Sampling,500,49,0.69186,14573.0,338.90697674418607
+dl-2020,mohajer + bubble,Sampling,100,42,0.59952,20000.0,100.0
+dl-2020,mohajer + bubble,Sampling,100,43,0.6087,20000.0,100.0
+dl-2020,mohajer + bubble,Sampling,100,44,0.61487,20000.0,100.0
+dl-2020,mohajer + bubble,Sampling,100,45,0.61109,20000.0,100.0
+dl-2020,mohajer + bubble,Sampling,100,46,0.60953,20000.0,100.0
+dl-2020,mohajer + bubble,Sampling,100,47,0.60935,20000.0,100.0
+dl-2020,mohajer + bubble,Sampling,100,48,0.60619,20000.0,100.0
+dl-2020,mohajer + bubble,Sampling,100,49,0.59558,20000.0,100.0
+dl-2020,mohajer + bubble,Sampling,150,42,0.65057,30000.0,150.0
+dl-2020,mohajer + bubble,Sampling,150,43,0.65659,30000.0,150.0
+dl-2020,mohajer + bubble,Sampling,150,44,0.6385,30000.0,150.0
+dl-2020,mohajer + bubble,Sampling,150,45,0.66344,30000.0,150.0
+dl-2020,mohajer + bubble,Sampling,150,46,0.65124,30000.0,150.0
+dl-2020,mohajer + bubble,Sampling,150,47,0.64626,30000.0,150.0
+dl-2020,mohajer + bubble,Sampling,150,48,0.65012,30000.0,150.0
+dl-2020,mohajer + bubble,Sampling,150,49,0.65352,30000.0,150.0
+dl-2020,mohajer + bubble,Sampling,200,42,0.67663,40000.0,200.0
+dl-2020,mohajer + bubble,Sampling,200,43,0.67304,40000.0,200.0
+dl-2020,mohajer + bubble,Sampling,200,44,0.67822,40000.0,200.0
+dl-2020,mohajer + bubble,Sampling,200,45,0.68029,40000.0,200.0
+dl-2020,mohajer + bubble,Sampling,200,46,0.66923,40000.0,200.0
+dl-2020,mohajer + bubble,Sampling,200,47,0.65916,40000.0,200.0
+dl-2020,mohajer + bubble,Sampling,200,48,0.66328,40000.0,200.0
+dl-2020,mohajer + bubble,Sampling,200,49,0.6767,40000.0,200.0
+dl-2020,mohajer + bubble,Sampling,250,42,0.67607,50000.0,250.0
+dl-2020,mohajer + bubble,Sampling,250,43,0.66612,50000.0,250.0
+dl-2020,mohajer + bubble,Sampling,250,44,0.66609,50000.0,250.0
+dl-2020,mohajer + bubble,Sampling,250,45,0.67571,50000.0,250.0
+dl-2020,mohajer + bubble,Sampling,250,46,0.67842,50000.0,250.0
+dl-2020,mohajer + bubble,Sampling,250,47,0.66516,50000.0,250.0
+dl-2020,mohajer + bubble,Sampling,250,48,0.66896,50000.0,250.0
+dl-2020,mohajer + bubble,Sampling,250,49,0.67824,50000.0,250.0
+dl-2020,mohajer + bubble,Sampling,300,42,0.67049,59857.0,299.285
+dl-2020,mohajer + bubble,Sampling,300,43,0.67345,59906.0,299.53
+dl-2020,mohajer + bubble,Sampling,300,44,0.66591,59848.0,299.24
+dl-2020,mohajer + bubble,Sampling,300,45,0.6818,59970.0,299.85
+dl-2020,mohajer + bubble,Sampling,300,46,0.67606,59909.0,299.545
+dl-2020,mohajer + bubble,Sampling,300,47,0.67739,59872.0,299.36
+dl-2020,mohajer + bubble,Sampling,300,48,0.68511,59912.0,299.56
+dl-2020,mohajer + bubble,Sampling,300,49,0.6719,59888.0,299.44
+dl-2020,mohajer + bubble,Sampling,350,42,0.67603,67392.0,336.96
+dl-2020,mohajer + bubble,Sampling,350,43,0.6745,67037.0,335.185
+dl-2020,mohajer + bubble,Sampling,350,44,0.66564,66914.0,334.57
+dl-2020,mohajer + bubble,Sampling,350,45,0.67739,67051.0,335.255
+dl-2020,mohajer + bubble,Sampling,350,46,0.68195,66737.0,333.685
+dl-2020,mohajer + bubble,Sampling,350,47,0.66491,67202.0,336.01
+dl-2020,mohajer + bubble,Sampling,350,48,0.67135,66958.0,334.79
+dl-2020,mohajer + bubble,Sampling,350,49,0.6816,66998.0,334.99
+dl-2020,mohajer + bubble,Sampling,400,42,0.663,67748.0,338.74
+dl-2020,mohajer + bubble,Sampling,400,43,0.67445,68570.0,342.85
+dl-2020,mohajer + bubble,Sampling,400,44,0.6726,68185.0,340.925
+dl-2020,mohajer + bubble,Sampling,400,45,0.66786,68419.0,342.095
+dl-2020,mohajer + bubble,Sampling,400,46,0.67385,68292.0,341.46
+dl-2020,mohajer + bubble,Sampling,400,47,0.67815,68262.0,341.31
+dl-2020,mohajer + bubble,Sampling,400,48,0.67215,68590.0,342.95
+dl-2020,mohajer + bubble,Sampling,400,49,0.66915,68116.0,340.58
+dl-2020,mohajer + bubble,Sampling,450,42,0.663,67748.0,338.74
+dl-2020,mohajer + bubble,Sampling,450,43,0.67445,68570.0,342.85
+dl-2020,mohajer + bubble,Sampling,450,44,0.6726,68185.0,340.925
+dl-2020,mohajer + bubble,Sampling,450,45,0.66786,68419.0,342.095
+dl-2020,mohajer + bubble,Sampling,450,46,0.67385,68292.0,341.46
+dl-2020,mohajer + bubble,Sampling,450,47,0.67815,68262.0,341.31
+dl-2020,mohajer + bubble,Sampling,450,48,0.67215,68590.0,342.95
+dl-2020,mohajer + bubble,Sampling,450,49,0.66915,68116.0,340.58
+dl-2020,mohajer + bubble,Sampling,500,42,0.663,67748.0,338.74
+dl-2020,mohajer + bubble,Sampling,500,43,0.67445,68570.0,342.85
+dl-2020,mohajer + bubble,Sampling,500,44,0.6726,68185.0,340.925
+dl-2020,mohajer + bubble,Sampling,500,45,0.66786,68419.0,342.095
+dl-2020,mohajer + bubble,Sampling,500,46,0.67385,68292.0,341.46
+dl-2020,mohajer + bubble,Sampling,500,47,0.67815,68262.0,341.31
+dl-2020,mohajer + bubble,Sampling,500,48,0.67215,68590.0,342.95
+dl-2020,mohajer + bubble,Sampling,500,49,0.66915,68116.0,340.58
+dl-2019,pac + bubble,Sampling,100,42,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Sampling,100,43,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Sampling,100,44,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Sampling,100,45,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Sampling,100,46,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Sampling,100,47,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Sampling,100,48,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Sampling,100,49,0.50583,4300.0,100.0
+dl-2019,pac + bubble,Sampling,150,42,0.58354,6450.0,150.0
+dl-2019,pac + bubble,Sampling,150,43,0.59198,6450.0,150.0
+dl-2019,pac + bubble,Sampling,150,44,0.59136,6450.0,150.0
+dl-2019,pac + bubble,Sampling,150,45,0.59525,6450.0,150.0
+dl-2019,pac + bubble,Sampling,150,46,0.59007,6450.0,150.0
+dl-2019,pac + bubble,Sampling,150,47,0.58467,6450.0,150.0
+dl-2019,pac + bubble,Sampling,150,48,0.59614,6450.0,150.0
+dl-2019,pac + bubble,Sampling,150,49,0.5917,6450.0,150.0
+dl-2019,pac + bubble,Sampling,200,42,0.6105,7919.0,184.1627906976744
+dl-2019,pac + bubble,Sampling,200,43,0.61879,7966.0,185.25581395348837
+dl-2019,pac + bubble,Sampling,200,44,0.60607,7885.0,183.37209302325581
+dl-2019,pac + bubble,Sampling,200,45,0.60616,7917.0,184.11627906976744
+dl-2019,pac + bubble,Sampling,200,46,0.614,7970.0,185.34883720930233
+dl-2019,pac + bubble,Sampling,200,47,0.62142,7931.0,184.4418604651163
+dl-2019,pac + bubble,Sampling,200,48,0.60227,7830.0,182.09302325581396
+dl-2019,pac + bubble,Sampling,200,49,0.6076,7897.0,183.65116279069767
+dl-2019,pac + bubble,Sampling,250,42,0.6105,7919.0,184.1627906976744
+dl-2019,pac + bubble,Sampling,250,43,0.61879,7966.0,185.25581395348837
+dl-2019,pac + bubble,Sampling,250,44,0.60607,7885.0,183.37209302325581
+dl-2019,pac + bubble,Sampling,250,45,0.60616,7917.0,184.11627906976744
+dl-2019,pac + bubble,Sampling,250,46,0.614,7970.0,185.34883720930233
+dl-2019,pac + bubble,Sampling,250,47,0.62142,7931.0,184.4418604651163
+dl-2019,pac + bubble,Sampling,250,48,0.60227,7830.0,182.09302325581396
+dl-2019,pac + bubble,Sampling,250,49,0.6076,7897.0,183.65116279069767
+dl-2019,pac + bubble,Sampling,300,42,0.6105,7919.0,184.1627906976744
+dl-2019,pac + bubble,Sampling,300,43,0.61879,7966.0,185.25581395348837
+dl-2019,pac + bubble,Sampling,300,44,0.60607,7885.0,183.37209302325581
+dl-2019,pac + bubble,Sampling,300,45,0.60616,7917.0,184.11627906976744
+dl-2019,pac + bubble,Sampling,300,46,0.614,7970.0,185.34883720930233
+dl-2019,pac + bubble,Sampling,300,47,0.62142,7931.0,184.4418604651163
+dl-2019,pac + bubble,Sampling,300,48,0.60227,7830.0,182.09302325581396
+dl-2019,pac + bubble,Sampling,300,49,0.6076,7897.0,183.65116279069767
+dl-2019,pac + bubble,Sampling,350,42,0.6105,7919.0,184.1627906976744
+dl-2019,pac + bubble,Sampling,350,43,0.61879,7966.0,185.25581395348837
+dl-2019,pac + bubble,Sampling,350,44,0.60607,7885.0,183.37209302325581
+dl-2019,pac + bubble,Sampling,350,45,0.60616,7917.0,184.11627906976744
+dl-2019,pac + bubble,Sampling,350,46,0.614,7970.0,185.34883720930233
+dl-2019,pac + bubble,Sampling,350,47,0.62142,7931.0,184.4418604651163
+dl-2019,pac + bubble,Sampling,350,48,0.60227,7830.0,182.09302325581396
+dl-2019,pac + bubble,Sampling,350,49,0.6076,7897.0,183.65116279069767
+dl-2019,pac + bubble,Sampling,400,42,0.6105,7919.0,184.1627906976744
+dl-2019,pac + bubble,Sampling,400,43,0.61879,7966.0,185.25581395348837
+dl-2019,pac + bubble,Sampling,400,44,0.60607,7885.0,183.37209302325581
+dl-2019,pac + bubble,Sampling,400,45,0.60616,7917.0,184.11627906976744
+dl-2019,pac + bubble,Sampling,400,46,0.614,7970.0,185.34883720930233
+dl-2019,pac + bubble,Sampling,400,47,0.62142,7931.0,184.4418604651163
+dl-2019,pac + bubble,Sampling,400,48,0.60227,7830.0,182.09302325581396
+dl-2019,pac + bubble,Sampling,400,49,0.6076,7897.0,183.65116279069767
+dl-2019,pac + bubble,Sampling,450,42,0.6105,7919.0,184.1627906976744
+dl-2019,pac + bubble,Sampling,450,43,0.61879,7966.0,185.25581395348837
+dl-2019,pac + bubble,Sampling,450,44,0.60607,7885.0,183.37209302325581
+dl-2019,pac + bubble,Sampling,450,45,0.60616,7917.0,184.11627906976744
+dl-2019,pac + bubble,Sampling,450,46,0.614,7970.0,185.34883720930233
+dl-2019,pac + bubble,Sampling,450,47,0.62142,7931.0,184.4418604651163
+dl-2019,pac + bubble,Sampling,450,48,0.60227,7830.0,182.09302325581396
+dl-2019,pac + bubble,Sampling,450,49,0.6076,7897.0,183.65116279069767
+dl-2019,pac + bubble,Sampling,500,42,0.6105,7919.0,184.1627906976744
+dl-2019,pac + bubble,Sampling,500,43,0.61879,7966.0,185.25581395348837
+dl-2019,pac + bubble,Sampling,500,44,0.60607,7885.0,183.37209302325581
+dl-2019,pac + bubble,Sampling,500,45,0.60616,7917.0,184.11627906976744
+dl-2019,pac + bubble,Sampling,500,46,0.614,7970.0,185.34883720930233
+dl-2019,pac + bubble,Sampling,500,47,0.62142,7931.0,184.4418604651163
+dl-2019,pac + bubble,Sampling,500,48,0.60227,7830.0,182.09302325581396
+dl-2019,pac + bubble,Sampling,500,49,0.6076,7897.0,183.65116279069767
+dl-2020,pac + bubble,Sampling,100,42,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Sampling,100,43,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Sampling,100,44,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Sampling,100,45,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Sampling,100,46,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Sampling,100,47,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Sampling,100,48,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Sampling,100,49,0.47964,20000.0,100.0
+dl-2020,pac + bubble,Sampling,150,42,0.55269,30000.0,150.0
+dl-2020,pac + bubble,Sampling,150,43,0.55195,30000.0,150.0
+dl-2020,pac + bubble,Sampling,150,44,0.5488,30000.0,150.0
+dl-2020,pac + bubble,Sampling,150,45,0.55006,30000.0,150.0
+dl-2020,pac + bubble,Sampling,150,46,0.54155,30000.0,150.0
+dl-2020,pac + bubble,Sampling,150,47,0.54897,30000.0,150.0
+dl-2020,pac + bubble,Sampling,150,48,0.54626,30000.0,150.0
+dl-2020,pac + bubble,Sampling,150,49,0.55831,30000.0,150.0
+dl-2020,pac + bubble,Sampling,200,42,0.58513,36744.0,183.72
+dl-2020,pac + bubble,Sampling,200,43,0.58382,36743.0,183.715
+dl-2020,pac + bubble,Sampling,200,44,0.59944,36584.0,182.92
+dl-2020,pac + bubble,Sampling,200,45,0.5877,36768.0,183.84
+dl-2020,pac + bubble,Sampling,200,46,0.58457,36630.0,183.15
+dl-2020,pac + bubble,Sampling,200,47,0.59089,36527.0,182.635
+dl-2020,pac + bubble,Sampling,200,48,0.59127,36711.0,183.555
+dl-2020,pac + bubble,Sampling,200,49,0.59268,36739.0,183.695
+dl-2020,pac + bubble,Sampling,250,42,0.58513,36744.0,183.72
+dl-2020,pac + bubble,Sampling,250,43,0.58382,36743.0,183.715
+dl-2020,pac + bubble,Sampling,250,44,0.59944,36584.0,182.92
+dl-2020,pac + bubble,Sampling,250,45,0.5877,36768.0,183.84
+dl-2020,pac + bubble,Sampling,250,46,0.58457,36630.0,183.15
+dl-2020,pac + bubble,Sampling,250,47,0.59089,36527.0,182.635
+dl-2020,pac + bubble,Sampling,250,48,0.59127,36711.0,183.555
+dl-2020,pac + bubble,Sampling,250,49,0.59268,36739.0,183.695
+dl-2020,pac + bubble,Sampling,300,42,0.58513,36744.0,183.72
+dl-2020,pac + bubble,Sampling,300,43,0.58382,36743.0,183.715
+dl-2020,pac + bubble,Sampling,300,44,0.59944,36584.0,182.92
+dl-2020,pac + bubble,Sampling,300,45,0.5877,36768.0,183.84
+dl-2020,pac + bubble,Sampling,300,46,0.58457,36630.0,183.15
+dl-2020,pac + bubble,Sampling,300,47,0.59089,36527.0,182.635
+dl-2020,pac + bubble,Sampling,300,48,0.59127,36711.0,183.555
+dl-2020,pac + bubble,Sampling,300,49,0.59268,36739.0,183.695
+dl-2020,pac + bubble,Sampling,350,42,0.58513,36744.0,183.72
+dl-2020,pac + bubble,Sampling,350,43,0.58382,36743.0,183.715
+dl-2020,pac + bubble,Sampling,350,44,0.59944,36584.0,182.92
+dl-2020,pac + bubble,Sampling,350,45,0.5877,36768.0,183.84
+dl-2020,pac + bubble,Sampling,350,46,0.58457,36630.0,183.15
+dl-2020,pac + bubble,Sampling,350,47,0.59089,36527.0,182.635
+dl-2020,pac + bubble,Sampling,350,48,0.59127,36711.0,183.555
+dl-2020,pac + bubble,Sampling,350,49,0.59268,36739.0,183.695
+dl-2020,pac + bubble,Sampling,400,42,0.58513,36744.0,183.72
+dl-2020,pac + bubble,Sampling,400,43,0.58382,36743.0,183.715
+dl-2020,pac + bubble,Sampling,400,44,0.59944,36584.0,182.92
+dl-2020,pac + bubble,Sampling,400,45,0.5877,36768.0,183.84
+dl-2020,pac + bubble,Sampling,400,46,0.58457,36630.0,183.15
+dl-2020,pac + bubble,Sampling,400,47,0.59089,36527.0,182.635
+dl-2020,pac + bubble,Sampling,400,48,0.59127,36711.0,183.555
+dl-2020,pac + bubble,Sampling,400,49,0.59268,36739.0,183.695
+dl-2020,pac + bubble,Sampling,450,42,0.58513,36744.0,183.72
+dl-2020,pac + bubble,Sampling,450,43,0.58382,36743.0,183.715
+dl-2020,pac + bubble,Sampling,450,44,0.59944,36584.0,182.92
+dl-2020,pac + bubble,Sampling,450,45,0.5877,36768.0,183.84
+dl-2020,pac + bubble,Sampling,450,46,0.58457,36630.0,183.15
+dl-2020,pac + bubble,Sampling,450,47,0.59089,36527.0,182.635
+dl-2020,pac + bubble,Sampling,450,48,0.59127,36711.0,183.555
+dl-2020,pac + bubble,Sampling,450,49,0.59268,36739.0,183.695
+dl-2020,pac + bubble,Sampling,500,42,0.58513,36744.0,183.72
+dl-2020,pac + bubble,Sampling,500,43,0.58382,36743.0,183.715
+dl-2020,pac + bubble,Sampling,500,44,0.59944,36584.0,182.92
+dl-2020,pac + bubble,Sampling,500,45,0.5877,36768.0,183.84
+dl-2020,pac + bubble,Sampling,500,46,0.58457,36630.0,183.15
+dl-2020,pac + bubble,Sampling,500,47,0.59089,36527.0,182.635
+dl-2020,pac + bubble,Sampling,500,48,0.59127,36711.0,183.555
+dl-2020,pac + bubble,Sampling,500,49,0.59268,36739.0,183.695
+dl-2019,quick sort (classic),Sampling,100,42,0.56325,4300.0,100.0
+dl-2019,quick sort (classic),Sampling,100,43,0.57211,4300.0,100.0
+dl-2019,quick sort (classic),Sampling,100,44,0.57082,4300.0,100.0
+dl-2019,quick sort (classic),Sampling,100,45,0.56573,4300.0,100.0
+dl-2019,quick sort (classic),Sampling,100,46,0.56917,4300.0,100.0
+dl-2019,quick sort (classic),Sampling,100,47,0.57428,4300.0,100.0
+dl-2019,quick sort (classic),Sampling,100,48,0.56846,4300.0,100.0
+dl-2019,quick sort (classic),Sampling,100,49,0.56707,4300.0,100.0
+dl-2019,quick sort (classic),Sampling,150,42,0.57568,6450.0,150.0
+dl-2019,quick sort (classic),Sampling,150,43,0.56604,6450.0,150.0
+dl-2019,quick sort (classic),Sampling,150,44,0.56345,6450.0,150.0
+dl-2019,quick sort (classic),Sampling,150,45,0.56896,6450.0,150.0
+dl-2019,quick sort (classic),Sampling,150,46,0.56506,6450.0,150.0
+dl-2019,quick sort (classic),Sampling,150,47,0.56696,6450.0,150.0
+dl-2019,quick sort (classic),Sampling,150,48,0.55836,6450.0,150.0
+dl-2019,quick sort (classic),Sampling,150,49,0.57143,6450.0,150.0
+dl-2019,quick sort (classic),Sampling,200,42,0.56984,8600.0,200.0
+dl-2019,quick sort (classic),Sampling,200,43,0.57172,8600.0,200.0
+dl-2019,quick sort (classic),Sampling,200,44,0.57809,8600.0,200.0
+dl-2019,quick sort (classic),Sampling,200,45,0.56384,8600.0,200.0
+dl-2019,quick sort (classic),Sampling,200,46,0.56771,8600.0,200.0
+dl-2019,quick sort (classic),Sampling,200,47,0.56525,8600.0,200.0
+dl-2019,quick sort (classic),Sampling,200,48,0.55982,8600.0,200.0
+dl-2019,quick sort (classic),Sampling,200,49,0.56902,8600.0,200.0
+dl-2019,quick sort (classic),Sampling,250,42,0.59892,10750.0,250.0
+dl-2019,quick sort (classic),Sampling,250,43,0.59023,10750.0,250.0
+dl-2019,quick sort (classic),Sampling,250,44,0.57848,10750.0,250.0
+dl-2019,quick sort (classic),Sampling,250,45,0.59393,10750.0,250.0
+dl-2019,quick sort (classic),Sampling,250,46,0.56788,10750.0,250.0
+dl-2019,quick sort (classic),Sampling,250,47,0.57914,10750.0,250.0
+dl-2019,quick sort (classic),Sampling,250,48,0.57565,10750.0,250.0
+dl-2019,quick sort (classic),Sampling,250,49,0.56714,10750.0,250.0
+dl-2019,quick sort (classic),Sampling,300,42,0.58423,12900.0,300.0
+dl-2019,quick sort (classic),Sampling,300,43,0.60726,12900.0,300.0
+dl-2019,quick sort (classic),Sampling,300,44,0.59257,12900.0,300.0
+dl-2019,quick sort (classic),Sampling,300,45,0.58782,12900.0,300.0
+dl-2019,quick sort (classic),Sampling,300,46,0.59457,12900.0,300.0
+dl-2019,quick sort (classic),Sampling,300,47,0.5942,12900.0,300.0
+dl-2019,quick sort (classic),Sampling,300,48,0.59482,12900.0,300.0
+dl-2019,quick sort (classic),Sampling,300,49,0.59586,12900.0,300.0
+dl-2019,quick sort (classic),Sampling,350,42,0.61439,15050.0,350.0
+dl-2019,quick sort (classic),Sampling,350,43,0.6278,15050.0,350.0
+dl-2019,quick sort (classic),Sampling,350,44,0.61252,15050.0,350.0
+dl-2019,quick sort (classic),Sampling,350,45,0.60712,15050.0,350.0
+dl-2019,quick sort (classic),Sampling,350,46,0.61756,15050.0,350.0
+dl-2019,quick sort (classic),Sampling,350,47,0.62109,15050.0,350.0
+dl-2019,quick sort (classic),Sampling,350,48,0.61756,15050.0,350.0
+dl-2019,quick sort (classic),Sampling,350,49,0.60387,15050.0,350.0
+dl-2019,quick sort (classic),Sampling,400,42,0.62997,17200.0,400.0
+dl-2019,quick sort (classic),Sampling,400,43,0.63201,17200.0,400.0
+dl-2019,quick sort (classic),Sampling,400,44,0.62594,17200.0,400.0
+dl-2019,quick sort (classic),Sampling,400,45,0.62029,17200.0,400.0
+dl-2019,quick sort (classic),Sampling,400,46,0.62601,17200.0,400.0
+dl-2019,quick sort (classic),Sampling,400,47,0.63269,17200.0,400.0
+dl-2019,quick sort (classic),Sampling,400,48,0.61241,17200.0,400.0
+dl-2019,quick sort (classic),Sampling,400,49,0.62187,17200.0,400.0
+dl-2019,quick sort (classic),Sampling,450,42,0.64832,19350.0,450.0
+dl-2019,quick sort (classic),Sampling,450,43,0.64846,19350.0,450.0
+dl-2019,quick sort (classic),Sampling,450,44,0.65902,19350.0,450.0
+dl-2019,quick sort (classic),Sampling,450,45,0.63775,19350.0,450.0
+dl-2019,quick sort (classic),Sampling,450,46,0.64574,19350.0,450.0
+dl-2019,quick sort (classic),Sampling,450,47,0.64324,19350.0,450.0
+dl-2019,quick sort (classic),Sampling,450,48,0.63734,19350.0,450.0
+dl-2019,quick sort (classic),Sampling,450,49,0.64512,19350.0,450.0
+dl-2019,quick sort (classic),Sampling,500,42,0.64371,21500.0,500.0
+dl-2019,quick sort (classic),Sampling,500,43,0.66489,21500.0,500.0
+dl-2019,quick sort (classic),Sampling,500,44,0.66241,21500.0,500.0
+dl-2019,quick sort (classic),Sampling,500,45,0.67003,21500.0,500.0
+dl-2019,quick sort (classic),Sampling,500,46,0.6647,21500.0,500.0
+dl-2019,quick sort (classic),Sampling,500,47,0.65938,21500.0,500.0
+dl-2019,quick sort (classic),Sampling,500,48,0.63944,21500.0,500.0
+dl-2019,quick sort (classic),Sampling,500,49,0.66855,21500.0,500.0
+dl-2020,quick sort (classic),Sampling,100,42,0.5151,20000.0,100.0
+dl-2020,quick sort (classic),Sampling,100,43,0.52795,20000.0,100.0
+dl-2020,quick sort (classic),Sampling,100,44,0.51379,20000.0,100.0
+dl-2020,quick sort (classic),Sampling,100,45,0.52564,20000.0,100.0
+dl-2020,quick sort (classic),Sampling,100,46,0.5208,20000.0,100.0
+dl-2020,quick sort (classic),Sampling,100,47,0.52912,20000.0,100.0
+dl-2020,quick sort (classic),Sampling,100,48,0.51479,20000.0,100.0
+dl-2020,quick sort (classic),Sampling,100,49,0.51981,20000.0,100.0
+dl-2020,quick sort (classic),Sampling,150,42,0.53277,30000.0,150.0
+dl-2020,quick sort (classic),Sampling,150,43,0.52807,30000.0,150.0
+dl-2020,quick sort (classic),Sampling,150,44,0.52751,30000.0,150.0
+dl-2020,quick sort (classic),Sampling,150,45,0.53248,30000.0,150.0
+dl-2020,quick sort (classic),Sampling,150,46,0.5212,30000.0,150.0
+dl-2020,quick sort (classic),Sampling,150,47,0.52717,30000.0,150.0
+dl-2020,quick sort (classic),Sampling,150,48,0.52807,30000.0,150.0
+dl-2020,quick sort (classic),Sampling,150,49,0.52002,30000.0,150.0
+dl-2020,quick sort (classic),Sampling,200,42,0.54338,40000.0,200.0
+dl-2020,quick sort (classic),Sampling,200,43,0.53439,40000.0,200.0
+dl-2020,quick sort (classic),Sampling,200,44,0.53558,40000.0,200.0
+dl-2020,quick sort (classic),Sampling,200,45,0.54782,40000.0,200.0
+dl-2020,quick sort (classic),Sampling,200,46,0.52774,40000.0,200.0
+dl-2020,quick sort (classic),Sampling,200,47,0.53312,40000.0,200.0
+dl-2020,quick sort (classic),Sampling,200,48,0.53639,40000.0,200.0
+dl-2020,quick sort (classic),Sampling,200,49,0.53802,40000.0,200.0
+dl-2020,quick sort (classic),Sampling,250,42,0.54675,50000.0,250.0
+dl-2020,quick sort (classic),Sampling,250,43,0.54068,50000.0,250.0
+dl-2020,quick sort (classic),Sampling,250,44,0.55445,50000.0,250.0
+dl-2020,quick sort (classic),Sampling,250,45,0.54314,50000.0,250.0
+dl-2020,quick sort (classic),Sampling,250,46,0.54367,50000.0,250.0
+dl-2020,quick sort (classic),Sampling,250,47,0.53718,50000.0,250.0
+dl-2020,quick sort (classic),Sampling,250,48,0.53637,50000.0,250.0
+dl-2020,quick sort (classic),Sampling,250,49,0.53839,50000.0,250.0
+dl-2020,quick sort (classic),Sampling,300,42,0.56148,60000.0,300.0
+dl-2020,quick sort (classic),Sampling,300,43,0.54459,60000.0,300.0
+dl-2020,quick sort (classic),Sampling,300,44,0.56531,60000.0,300.0
+dl-2020,quick sort (classic),Sampling,300,45,0.56803,60000.0,300.0
+dl-2020,quick sort (classic),Sampling,300,46,0.56375,60000.0,300.0
+dl-2020,quick sort (classic),Sampling,300,47,0.55268,60000.0,300.0
+dl-2020,quick sort (classic),Sampling,300,48,0.5561,60000.0,300.0
+dl-2020,quick sort (classic),Sampling,300,49,0.54702,60000.0,300.0
+dl-2020,quick sort (classic),Sampling,350,42,0.56055,70000.0,350.0
+dl-2020,quick sort (classic),Sampling,350,43,0.56578,70000.0,350.0
+dl-2020,quick sort (classic),Sampling,350,44,0.56072,70000.0,350.0
+dl-2020,quick sort (classic),Sampling,350,45,0.55876,70000.0,350.0
+dl-2020,quick sort (classic),Sampling,350,46,0.57674,70000.0,350.0
+dl-2020,quick sort (classic),Sampling,350,47,0.56292,70000.0,350.0
+dl-2020,quick sort (classic),Sampling,350,48,0.55433,70000.0,350.0
+dl-2020,quick sort (classic),Sampling,350,49,0.57028,70000.0,350.0
+dl-2020,quick sort (classic),Sampling,400,42,0.57251,80000.0,400.0
+dl-2020,quick sort (classic),Sampling,400,43,0.56204,80000.0,400.0
+dl-2020,quick sort (classic),Sampling,400,44,0.56834,80000.0,400.0
+dl-2020,quick sort (classic),Sampling,400,45,0.58034,80000.0,400.0
+dl-2020,quick sort (classic),Sampling,400,46,0.57442,80000.0,400.0
+dl-2020,quick sort (classic),Sampling,400,47,0.58038,80000.0,400.0
+dl-2020,quick sort (classic),Sampling,400,48,0.55659,80000.0,400.0
+dl-2020,quick sort (classic),Sampling,400,49,0.57308,80000.0,400.0
+dl-2020,quick sort (classic),Sampling,450,42,0.59756,90000.0,450.0
+dl-2020,quick sort (classic),Sampling,450,43,0.58727,90000.0,450.0
+dl-2020,quick sort (classic),Sampling,450,44,0.59405,90000.0,450.0
+dl-2020,quick sort (classic),Sampling,450,45,0.5803,90000.0,450.0
+dl-2020,quick sort (classic),Sampling,450,46,0.60026,90000.0,450.0
+dl-2020,quick sort (classic),Sampling,450,47,0.59658,90000.0,450.0
+dl-2020,quick sort (classic),Sampling,450,48,0.59103,90000.0,450.0
+dl-2020,quick sort (classic),Sampling,450,49,0.5873,90000.0,450.0
+dl-2020,quick sort (classic),Sampling,500,42,0.61911,100000.0,500.0
+dl-2020,quick sort (classic),Sampling,500,43,0.61553,100000.0,500.0
+dl-2020,quick sort (classic),Sampling,500,44,0.62377,100000.0,500.0
+dl-2020,quick sort (classic),Sampling,500,45,0.61565,100000.0,500.0
+dl-2020,quick sort (classic),Sampling,500,46,0.60521,100000.0,500.0
+dl-2020,quick sort (classic),Sampling,500,47,0.60699,100000.0,500.0
+dl-2020,quick sort (classic),Sampling,500,48,0.62094,100000.0,500.0
+dl-2020,quick sort (classic),Sampling,500,49,0.62198,100000.0,500.0
