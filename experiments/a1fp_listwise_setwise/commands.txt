@@ -13,6 +13,15 @@ python -m pip install --upgrade pip
 python -m pip install -e external/llm-rankers
 python -m pip install torch transformers pyserini ir-datasets accelerate tiktoken sentencepiece
 
+## Preflight / dry run
+
+# Runs dependency, CUDA, BM25, model-cache, dataset-name, disk, and output-collision checks
+# without launching generation. The full baseline runner executes this same preflight first.
+CUDA_VISIBLE_DEVICES=0 bash experiments/a1fp_listwise_setwise/scripts/run_llm_rankers_baselines.sh --dry-run
+
+# Optional: require the model config/tokenizer to already exist in the local HuggingFace cache.
+REQUIRE_LOCAL_MODEL=1 CUDA_VISIBLE_DEVICES=0 bash experiments/a1fp_listwise_setwise/scripts/run_llm_rankers_baselines.sh --dry-run
+
 ## Commands executed locally
 
 python experiments/a1fp_listwise_setwise/scripts/prepare_bm25.py
@@ -44,6 +53,10 @@ python -m pyserini.eval.trec_eval -c -l 2 -m ndcg_cut.10 dl20-passage \
   experiments/a1fp_listwise_setwise/runs/bm25.dl20.txt
 
 ## Listwise baseline: RankGPT-style listwise permutation generation
+
+CUDA_VISIBLE_DEVICES=0 bash experiments/a1fp_listwise_setwise/scripts/run_llm_rankers_baselines.sh
+
+## Individual baseline commands equivalent to the runner above
 
 CUDA_VISIBLE_DEVICES=0 python external/llm-rankers/run.py \
   run \
