@@ -1,0 +1,11 @@
+method,dataset,variant,budget_calls,ndcg10,avg_calls,avg_prompt_tokens,avg_completion_tokens,avg_total_tokens,source
+mohajer,dl19,randomized_direction_oracle,100,61.41,100,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable
+mohajer,dl19,randomized_direction_oracle,150,67.79,150,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable
+mohajer,dl19,randomized_direction_oracle,200,68.7,200,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable
+mohajer,dl19,randomized_direction_oracle,250,68.73,231.302326,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable
+mohajer,dl19,randomized_direction_oracle,300,68.73,231.302326,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable
+mohajer,dl20,randomized_direction_oracle,100,59.95,100,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable
+mohajer,dl20,randomized_direction_oracle,150,65.06,150,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable
+mohajer,dl20,randomized_direction_oracle,200,67.66,200,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable
+mohajer,dl20,randomized_direction_oracle,250,67.62,231.84,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable
+mohajer,dl20,randomized_direction_oracle,300,67.62,231.84,,,,reports/limit_comparisons_experiment.csv;tokens_unavailable

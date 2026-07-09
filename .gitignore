@@ -204,3 +204,6 @@ cython_debug/
 
 # Local temp scratch files
 tmp_*.txt
+
+# External experiment dependencies cloned on demand
+/external/llm-rankers/

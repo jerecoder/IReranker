@@ -1,0 +1,9 @@
+method,dataset,variant,ndcg10,avg_calls,avg_prompt_tokens,avg_completion_tokens,avg_total_tokens,avg_time_sec
+listwise,dl19,rankgpt_w4_s2_r1,,,,,,
+listwise,dl19,rankgpt_w4_s2_r3,,,,,,
+listwise,dl19,rankgpt_w4_s2_r5,,,,,,
+listwise,dl20,rankgpt_w4_s2_r1,,,,,,
+listwise,dl20,rankgpt_w4_s2_r3,,,,,,
+listwise,dl20,rankgpt_w4_s2_r5,,,,,,
+setwise,dl19,heapsort_c3_k10,,,,,,
+setwise,dl20,heapsort_c3_k10,,,,,,

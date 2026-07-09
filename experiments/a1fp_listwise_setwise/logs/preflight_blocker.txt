@@ -1,0 +1,26 @@
+A1fp listwise/setwise preflight, 2026-07-09
+
+Official llm-rankers clone:
+external/llm-rankers
+commit b36517bf17a3956dc56c4c967f972d02390b1cdd
+
+Local checks:
+- nvidia-smi sees NVIDIA GeForce RTX 5050 Laptop GPU with 8151 MiB VRAM.
+- Base Python torch is CPU-only: torch 2.6.0, torch.version.cuda None, torch.cuda.is_available False.
+- pyserini is not installed in the base Python.
+- ir_datasets is not installed in the base Python.
+- No local HuggingFace cache entry for google/flan-t5-xl was found.
+- No local ir_datasets MSMARCO passage docstore cache was found.
+- Free disk after cloning llm-rankers was about 6.8G.
+
+Decision:
+The official Flan-T5-XL generation runs were not launched locally because they would require
+downloading both the MSMARCO passage docstore and Flan-T5-XL model weights, and the current
+Python/Torch install cannot use CUDA. Starting those downloads under the available disk budget
+would likely fail before producing reviewer-usable results.
+
+Prepared artifacts:
+- BM25 top-100 runs were derived from the repository's existing Anserini BM25 top-1000 files.
+- BM25 sanity reference from existing reports is DL19 NDCG@10 0.50583 and DL20 NDCG@10 0.47964; top-100 truncation preserves NDCG@10.
+- Mohajer randomized-direction oracle rows were sourced from reports/limit_comparisons_experiment.csv.
+- Baseline CSV rows are present with blank metric/cost fields until official llm-rankers logs and run files exist.

@@ -1,0 +1,1 @@
+NDCG@10 versus raw LLM calls on TREC DL2019/2020 with Flan-T5-XL. Since listwise and setwise calls contain multiple documents, raw calls are reported only as a secondary cost axis; token-normalized comparison is the fairer cross-paradigm cost metric. Baseline token points are filled only after the official llm-rankers generation runs complete.
