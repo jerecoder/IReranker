@@ -26,7 +26,7 @@ import random
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Mapping, Tuple
 
 import numpy as np
 import pandas as pd
@@ -125,6 +125,63 @@ def paired_bootstrap_delta_macro_dl19_dl20(
         "ci_half": ci_half,
         "p": p,
         "n": int(n19 + n20),
+    }
+
+
+def paired_bootstrap_delta_macro(
+    diffs_by_dataset: Mapping[str, np.ndarray],
+    *,
+    resamples: int,
+    alpha: float,
+    rng: np.random.Generator,
+) -> Dict[str, float]:
+    """Bootstrap queries within each dataset, then macro-average datasets.
+
+    With one dataset this is the ordinary paired per-query bootstrap. With
+    multiple datasets, each dataset contributes equal weight regardless of its
+    query count, matching the original DL19/DL20 calculation.
+    """
+    finite_diffs = []
+    for diffs in diffs_by_dataset.values():
+        values = np.asarray(diffs, dtype=float)
+        values = values[np.isfinite(values)]
+        if values.size == 0:
+            return {
+                "delta": np.nan,
+                "ci_low": np.nan,
+                "ci_high": np.nan,
+                "ci_half": np.nan,
+                "p": np.nan,
+                "n": 0,
+            }
+        finite_diffs.append(values)
+
+    if not finite_diffs:
+        return {
+            "delta": np.nan,
+            "ci_low": np.nan,
+            "ci_high": np.nan,
+            "ci_half": np.nan,
+            "p": np.nan,
+            "n": 0,
+        }
+
+    delta = float(np.mean([values.mean() for values in finite_diffs]))
+    boot_means = []
+    for values in finite_diffs:
+        indices = rng.integers(0, values.size, size=(resamples, values.size))
+        boot_means.append(values[indices].mean(axis=1))
+    boot = np.mean(np.stack(boot_means, axis=0), axis=0)
+
+    ci_low = float(np.quantile(boot, alpha / 2))
+    ci_high = float(np.quantile(boot, 1 - alpha / 2))
+    return {
+        "delta": delta,
+        "ci_low": ci_low,
+        "ci_high": ci_high,
+        "ci_half": 0.5 * (ci_high - ci_low),
+        "p": 2 * min(float(np.mean(boot <= 0.0)), float(np.mean(boot >= 0.0))),
+        "n": int(sum(values.size for values in finite_diffs)),
     }
 
 
@@ -351,20 +408,22 @@ def main():
 
     for oc in ["Bidirectional", "Sampling"]:
         for b in BUDGETS:
-            A19 = cond.get(("dl-2019", oc, A_RANKER, int(b)))
-            B19 = cond.get(("dl-2019", oc, B_RANKER, int(b)))
-            A20 = cond.get(("dl-2020", oc, A_RANKER, int(b)))
-            B20 = cond.get(("dl-2020", oc, B_RANKER, int(b)))
-            if A19 is None or B19 is None or A20 is None or B20 is None:
+            diffs_by_dataset = {}
+            for ds in DATASETS:
+                a_scores = cond.get((ds, oc, A_RANKER, int(b)))
+                b_scores = cond.get((ds, oc, B_RANKER, int(b)))
+                if a_scores is None or b_scores is None:
+                    break
+                aligned_a, aligned_b = a_scores.align(b_scores, join="inner")
+                diffs_by_dataset[ds] = (aligned_a - aligned_b).to_numpy(float)
+            if len(diffs_by_dataset) != len(DATASETS):
                 continue
 
-            a19, b19 = A19.align(B19, join="inner")
-            a20, b20 = A20.align(B20, join="inner")
-            d19 = (a19 - b19).to_numpy(float)
-            d20 = (a20 - b20).to_numpy(float)
-
-            stats = paired_bootstrap_delta_macro_dl19_dl20(
-                d19, d20, resamples=args.resamples, alpha=args.alpha, rng=rng
+            stats = paired_bootstrap_delta_macro(
+                diffs_by_dataset,
+                resamples=args.resamples,
+                alpha=args.alpha,
+                rng=rng,
             )
 
             sig_rows.append(
