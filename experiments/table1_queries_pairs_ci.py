@@ -32,10 +32,15 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from ireranker.data.loaders import load_beir_dataset
+from ireranker.data.loaders import load_beir_dataset, load_beir_dataset_from_bm25
 from ireranker.evaluation.beir import dataset_to_beir_qrels, ranker_results_to_beir
+from ireranker.oracles import (
+    BidirectionalMatrixOracle,
+    LiveFlanT5BidirectionalOracle,
+    LiveFlanT5SamplingOracle,
+    SamplingMatrixOracle,
+)
 from ireranker.rankers import get_ranker
-from ireranker.oracles import BidirectionalMatrixOracle, SamplingMatrixOracle
 
 
 DEFAULT_SPLIT = "test"
@@ -237,6 +242,14 @@ def main():
     ap.add_argument("--split", default=DEFAULT_SPLIT)
     ap.add_argument("--k", type=int, default=DEFAULT_K)
     ap.add_argument("--model", default=DEFAULT_MODEL)
+    ap.add_argument("--oracle-mode", choices=["matrix", "live-flan"], default="matrix")
+    ap.add_argument("--live-model-name", default="google/flan-t5-large")
+    ap.add_argument("--live-cache-path", default=None)
+    ap.add_argument("--live-device", default=None)
+    ap.add_argument("--max-input-tokens", type=int, default=512)
+    ap.add_argument("--cache-flush-interval", type=int, default=20)
+    ap.add_argument("--bm25-top-k", type=int, default=100)
+    ap.add_argument("--out-dir", default=None)
     ap.add_argument("--seeds", type=int, nargs="+", default=[42])
     ap.add_argument("--resamples", type=int, default=10_000)
     ap.add_argument("--alpha", type=float, default=0.05)
@@ -244,10 +257,17 @@ def main():
     ap.add_argument("--no-resume", action="store_true")
     args = ap.parse_args()
 
-    _ensure_dir(OUT_DIR)
+    out_dir = Path(args.out_dir) if args.out_dir else OUT_DIR
+    if args.oracle_mode == "live-flan" and args.out_dir is None:
+        out_dir = OUT_DIR.with_name(f"{OUT_DIR.name}_live")
+    raw_path = out_dir / "raw_runs.csv"
+    query_path = out_dir / "query_ndcg.csv"
+    sig_path = out_dir / "paired_bootstrap_pairs.csv"
 
-    raw_existing = pd.DataFrame() if args.no_resume else _read_csv(RAW_PATH)
-    query_existing = pd.DataFrame() if args.no_resume else _read_csv(QUERY_PATH)
+    _ensure_dir(out_dir)
+
+    raw_existing = pd.DataFrame() if args.no_resume else _read_csv(raw_path)
+    query_existing = pd.DataFrame() if args.no_resume else _read_csv(query_path)
 
     raw_rows = raw_existing.to_dict("records") if not raw_existing.empty else []
     query_rows = query_existing.to_dict("records") if not query_existing.empty else []
@@ -291,8 +311,42 @@ def main():
 
     pbar = tqdm(total=total, desc="Table 1 runs", unit="run")
 
+    def make_oracle(oracle_type: str, budget: int, seed: int):
+        if args.oracle_mode == "matrix":
+            if oracle_type == "Bidirectional":
+                return BidirectionalMatrixOracle(
+                    comparison_limit=budget,
+                    comparison_limit_per_task=True,
+                )
+            return SamplingMatrixOracle(
+                seed=seed,
+                comparison_limit=budget,
+                comparison_limit_per_task=True,
+            )
+
+        live_cache_path = Path(args.live_cache_path) if args.live_cache_path else None
+        common = {
+            "model_name": args.live_model_name,
+            "cache_path": live_cache_path,
+            "device": args.live_device,
+            "max_input_tokens": args.max_input_tokens,
+            "cache_flush_interval": args.cache_flush_interval,
+            "comparison_limit": budget,
+            "comparison_limit_per_task": True,
+        }
+        if oracle_type == "Bidirectional":
+            return LiveFlanT5BidirectionalOracle(**common)
+        return LiveFlanT5SamplingOracle(seed=seed, **common)
+
     for ds in DATASETS:
-        dataset = load_beir_dataset(ds, split=args.split, matrix_model=args.model)
+        if args.oracle_mode == "live-flan":
+            dataset = load_beir_dataset_from_bm25(
+                ds,
+                split=args.split,
+                top_k=args.bm25_top_k,
+            )
+        else:
+            dataset = load_beir_dataset(ds, split=args.split, matrix_model=args.model)
         task_qids = [t.query_id for t in dataset.tasks]
 
         for s in args.seeds:
@@ -301,7 +355,7 @@ def main():
                     # Bidirectional
                     if not have_run(ds, rk, "Bidirectional", b, s):
                         pbar.set_description(f"{ds} | {rk} | Bidirectional | B={b} | S={s}")
-                        oracle = BidirectionalMatrixOracle(comparison_limit=b, comparison_limit_per_task=True)
+                        oracle = make_oracle("Bidirectional", b, s)
                         ranker = get_ranker(rk, oracle=oracle, seed=s)
                         ranker.set_dataset(ds, split=args.split, query_ids=task_qids, matrix_model=args.model)
 
@@ -343,7 +397,7 @@ def main():
                     # Sampling
                     if not have_run(ds, rk, "Sampling", b, s):
                         pbar.set_description(f"{ds} | {rk} | Sampling | B={b} | S={s}")
-                        oracle = SamplingMatrixOracle(seed=s, comparison_limit=b, comparison_limit_per_task=True)
+                        oracle = make_oracle("Sampling", b, s)
                         ranker = get_ranker(rk, oracle=oracle, seed=s)
                         ranker.set_dataset(ds, split=args.split, query_ids=task_qids, matrix_model=args.model)
 
@@ -392,8 +446,8 @@ def main():
         ["MatrixModel", "Oracle", "Ranker", "Dataset", "Budget", "Seed", "QueryID"]
     ).reset_index(drop=True)
 
-    raw_df.to_csv(RAW_PATH, index=False)
-    query_df.to_csv(QUERY_PATH, index=False)
+    raw_df.to_csv(raw_path, index=False)
+    query_df.to_csv(query_path, index=False)
 
     # Build seed-averaged per-query series for each condition
     cond = {}
@@ -447,11 +501,14 @@ def main():
     if not sig_df.empty:
         for c in ["delta", "ci_low", "ci_high", "ci_half"]:
             sig_df[c + "_pct"] = 100.0 * sig_df[c]
-    sig_df.to_csv(SIG_PATH, index=False)
+    sig_df.to_csv(sig_path, index=False)
 
-    print(f"Saved: {RAW_PATH}")
-    print(f"Saved: {QUERY_PATH}")
-    print(f"Saved: {SIG_PATH}")
+    if args.oracle_mode == "live-flan":
+        LiveFlanT5BidirectionalOracle.flush_all_caches()
+
+    print(f"Saved: {raw_path}")
+    print(f"Saved: {query_path}")
+    print(f"Saved: {sig_path}")
 
 
 if __name__ == "__main__":

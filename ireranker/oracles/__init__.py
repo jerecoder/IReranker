@@ -1,4 +1,8 @@
 from .bidirectional_matrix_oracle import BidirectionalMatrixOracle
+from .live_flan_t5_oracle import (
+    LiveFlanT5BidirectionalOracle,
+    LiveFlanT5SamplingOracle,
+)
 from .oracle import BudgetExceeded, MatrixKey, Oracle
 from .sampling_matrix_oracles import (
     CachedSamplingMatrixOracle,
@@ -12,9 +16,10 @@ __all__ = [
     "BudgetExceeded",
     "MatrixKey",
     "BidirectionalMatrixOracle",
+    "LiveFlanT5BidirectionalOracle",
+    "LiveFlanT5SamplingOracle",
     "SamplingMatrixOracle",
     "CachedSamplingMatrixOracle",
     "WeirdSamplingMatrixOracle",
     "TrackingOracle",
 ]
-

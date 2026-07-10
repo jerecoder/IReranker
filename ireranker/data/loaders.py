@@ -218,6 +218,94 @@ def _read_beir_qrels(data_path: Path, split: str) -> Dict[str, Dict[str, int]]:
     return qrels
 
 
+def _read_bm25_candidates(dataset: str, *, top_k: int) -> Dict[str, List[str]]:
+    from ireranker.config import EXTERNAL_DATA_DIR
+
+    run_path = EXTERNAL_DATA_DIR / "beir" / "bm25-runs" / f"run.beir.bm25-flat.{dataset}.txt"
+    if not run_path.exists():
+        raise FileNotFoundError(f"Missing BM25 run file: {run_path}")
+
+    candidates: Dict[str, List[str]] = {}
+    seen_by_qid: Dict[str, set[str]] = {}
+    with run_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            parts = line.strip().split()
+            if len(parts) < 6:
+                continue
+            qid, doc_id = parts[0], parts[2]
+            docs = candidates.setdefault(qid, [])
+            seen = seen_by_qid.setdefault(qid, set())
+            if doc_id in seen or len(docs) >= top_k:
+                continue
+            docs.append(doc_id)
+            seen.add(doc_id)
+    return candidates
+
+
+def load_beir_dataset_from_bm25(
+    dataset: str,
+    *,
+    split: str = "test",
+    top_k: int = 100,
+    max_queries: Optional[int] = None,
+) -> RankingDataset:
+    """Load a BEIR/public-task dataset using BM25 run candidates instead of a matrix."""
+    canonical = _beir_supported_name(dataset)
+    if canonical is None:
+        raise ValueError(f"Dataset '{dataset}' not supported via BEIR loader yet.")
+
+    from ireranker.config import EXTERNAL_DATA_DIR
+
+    cfg = _load_beir_config()
+    cache_subdir = str(cfg.get("cache_subdir") or "beir")
+    base_out = EXTERNAL_DATA_DIR / cache_subdir
+    base_out.mkdir(parents=True, exist_ok=True)
+
+    data_path = Path(_download_beir_once(canonical, base_out))
+    qrels = _read_beir_qrels(data_path, split)
+    bm25_candidates = _read_bm25_candidates(canonical, top_k=top_k)
+
+    q_ids = sorted(set(qrels.keys()) & set(bm25_candidates.keys()))
+    if max_queries is not None:
+        q_ids = q_ids[:max_queries]
+
+    if not q_ids:
+        raise FileNotFoundError(
+            f"No shared qids between qrels and BM25 run for {canonical}/{split}."
+        )
+
+    tasks: List[RankingTask] = []
+    for qid in q_ids:
+        rel_map = qrels.get(qid, {})
+        cand_ids = list(bm25_candidates.get(qid, []))
+        for doc_id in sorted(rel_map.keys()):
+            if doc_id not in cand_ids:
+                cand_ids.append(doc_id)
+        y_true = [float(rel_map.get(doc_id, 0)) for doc_id in cand_ids]
+        tasks.append(
+            RankingTask(
+                query_id=qid,
+                candidate_ids=cand_ids,
+                y_true=y_true,
+                dataset_path=str(data_path),
+            )
+        )
+
+    logger.info(
+        f"Using BM25 candidates for {len(tasks)} queries in {canonical}/{split} "
+        f"(top_k={top_k})"
+    )
+    return RankingDataset(
+        tasks=tasks,
+        metadata={
+            "dataset": canonical,
+            "split": split,
+            "candidate_source": "bm25",
+            "bm25_top_k": int(top_k),
+        },
+    )
+
+
 def load_beir_dataset(
     dataset: str,
     *,
