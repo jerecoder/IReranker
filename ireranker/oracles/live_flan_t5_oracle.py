@@ -32,6 +32,7 @@ class LiveFlanT5Oracle(Oracle):
     _model_cache: Dict[tuple[str, str], tuple[Any, Any, str, int, int]] = {}
     _cache_store: Dict[Path, Dict[MatrixKey, Mapping[str, Any]]] = {}
     _cache_dirty: Dict[Path, int] = {}
+    _text_store: Dict[str, tuple[Dict[str, str], Dict[str, str]]] = {}
     _atexit_registered = False
 
     def __init__(
@@ -148,6 +149,13 @@ class LiveFlanT5Oracle(Oracle):
         if not queries_path.exists():
             raise FileNotFoundError(f"Missing queries file: {queries_path}")
 
+        text_cache_key = str(dataset_dir.resolve())
+        cached_text = LiveFlanT5Oracle._text_store.get(text_cache_key)
+        if cached_text is not None:
+            self._corpus, self._queries = cached_text
+            self._validate_allowed_query_text(queries_path)
+            return
+
         self._corpus = {}
         with corpus_path.open("r", encoding="utf-8") as f:
             for line in f:
@@ -175,6 +183,10 @@ class LiveFlanT5Oracle(Oracle):
                 if text:
                     self._queries[qid] = text
 
+        LiveFlanT5Oracle._text_store[text_cache_key] = (self._corpus, self._queries)
+        self._validate_allowed_query_text(queries_path)
+
+    def _validate_allowed_query_text(self, queries_path: Path) -> None:
         if self._allowed_qids:
             missing = sorted(qid for qid in self._allowed_qids if qid not in self._queries)
             if missing:
