@@ -8,6 +8,11 @@ from typing import Dict, List, NamedTuple, Optional
 import zipfile
 
 from ireranker.config import logger
+from ireranker.data.public_tasks import (
+    build_public_task_dataset,
+    has_public_task_layout,
+    is_public_task_dataset,
+)
 from ireranker.oracles.oracle import load_matrix
 from ireranker.types import RankingDataset, RankingTask
 
@@ -75,6 +80,18 @@ def _download_beir_once(canonical: str, base_out: Path) -> str:
 
     try:
         base_out.mkdir(parents=True, exist_ok=True)
+        if is_public_task_dataset(canonical):
+            if has_public_task_layout(ds_dir):
+                logger.info(f"Using existing public-task dataset at: {ds_dir}")
+                return str(ds_dir)
+            logger.info(
+                f"Building public-task dataset '{canonical}' "
+                f"from source qrels/topics into: {ds_dir}"
+            )
+            data_path = build_public_task_dataset(canonical, base_out)
+            logger.info(f"Public-task dataset ready at: {data_path}")
+            return str(data_path)
+
         if ds_dir.exists() and ds_dir.is_dir():
             try:
                 if zip_path.exists():
