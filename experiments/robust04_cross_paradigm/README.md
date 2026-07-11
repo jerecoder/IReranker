@@ -79,8 +79,10 @@ ln -s "$PWD/.vm-cache/pyserini" "$HOME/.cache/pyserini"
 The full runner first rebuilds public Robust04 topics/qrels, freezes the local
 top-100 candidate snapshot, checks rendered prompt lengths, and performs live
 end-to-end four-document smoke rankings through Mohajer, PRP, setwise, and
-listwise paths. No measured run starts unless every permutation and output
-parser passes this preflight.
+listwise paths. No measured run starts unless every method executes and returns
+a full permutation. Malformed model responses are deterministically completed,
+reported as preflight warnings, and counted in the measured `invalid_outputs`
+metric rather than being mistaken for an infrastructure failure.
 
 ```bash
 nohup bash experiments/robust04_cross_paradigm/run_all_fresh.sh \

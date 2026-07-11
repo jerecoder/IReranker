@@ -79,7 +79,10 @@ class SharedFlanT5Engine:
         ).to(device)
 
     def truncate(self, text: str, limit: int) -> str:
-        tokens = self.tokenizer.tokenize(str(text))[: int(limit)]
+        # Robust04 documents can be thousands of tokens long. We only convert the
+        # first `limit` pieces back to text; suppress the tokenizer's misleading
+        # model-length warning because the untruncated sequence is never encoded.
+        tokens = self.tokenizer.tokenize(str(text), verbose=False)[: int(limit)]
         return self.tokenizer.convert_tokens_to_string(tokens)
 
     def truncate_query(self, text: str) -> str:
