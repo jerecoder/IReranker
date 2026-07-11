@@ -20,6 +20,11 @@ new comparison-cache file for every budget and deletes it before each run. The
 Hugging Face model-weight cache is intentionally retained: loading a previously
 downloaded immutable checkpoint does not skip measured model inference.
 
+The baseline runner also supplies a non-secret placeholder `OPENAI_API_KEY`
+because recent Pyserini releases eagerly import an optional OpenAI encoder. No
+OpenAI API is used. Java temporary files are placed under the experiment folder
+instead of the VM's potentially constrained `/dev/shm`.
+
 ## Setup and run
 
 ```bash

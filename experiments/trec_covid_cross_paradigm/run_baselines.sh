@@ -10,6 +10,14 @@ BM25="${EXP_DIR}/runs/bm25.trec-covid.txt"
 INDEX="beir-v1.0.0-trec-covid"
 
 mkdir -p "${EXP_DIR}/runs" "${EXP_DIR}/logs"
+mkdir -p "${EXP_DIR}/java-tmp"
+
+# Recent Pyserini imports its optional OpenAI encoder eagerly. These experiments
+# use only a local Hugging Face model, but the import still requires a non-empty
+# value. This placeholder is never sent anywhere. Keep Java temporary files on
+# the workspace disk because VM /dev/shm may be too small.
+export OPENAI_API_KEY="${OPENAI_API_KEY:-unused-local-flan-t5-run}"
+export JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:--Djava.io.tmpdir=${PWD}/${EXP_DIR}/java-tmp}"
 
 common=(run --model_name_or_path "${MODEL}" --tokenizer_name_or_path "${MODEL}"
   --run_path "${BM25}" --pyserini_index "${INDEX}" --hits 100
