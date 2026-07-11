@@ -6,6 +6,7 @@ RUNNER="${LLM_RANKERS_RUNNER:-external/llm-rankers/run.py}"
 MODEL="${MODEL:-google/flan-t5-large}"
 DEVICE="${DEVICE:-cuda}"
 PASSAGE_LENGTH="${PASSAGE_LENGTH:-100}"
+SKIP_COMPLETED="${SKIP_COMPLETED:-0}"
 BM25="${EXP_DIR}/runs/bm25.trec-covid.txt"
 INDEX="beir-v1.0.0-trec-covid"
 
@@ -19,6 +20,8 @@ mkdir -p "${EXP_DIR}/java-tmp"
 export OPENAI_API_KEY="${OPENAI_API_KEY:-unused-local-flan-t5-run}"
 export JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:--Djava.io.tmpdir=${PWD}/${EXP_DIR}/java-tmp}"
 
+python "${EXP_DIR}/patch_llm_rankers_compat.py" "${RUNNER}"
+
 common=(run --model_name_or_path "${MODEL}" --tokenizer_name_or_path "${MODEL}"
   --run_path "${BM25}" --pyserini_index "${INDEX}" --hits 100
   --query_length 32 --scoring generation --device "${DEVICE}")
@@ -27,6 +30,11 @@ run_one() {
   local name="$1"; shift
   local output="${EXP_DIR}/runs/${name}.txt"
   local log="${EXP_DIR}/logs/${name}.log"
+  if [[ "${SKIP_COMPLETED}" == "1" && -s "${output}" && -s "${log}" ]] \
+      && grep -q "Avg time per query:" "${log}"; then
+    echo "SKIP: completed ${name}"
+    return
+  fi
   rm -f "${output}" "${log}"
   CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}" python "${RUNNER}" \
     "${common[@]}" --save_path "${output}" "$@" 2>&1 | tee "${log}"

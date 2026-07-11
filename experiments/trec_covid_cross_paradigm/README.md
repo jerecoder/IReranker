@@ -25,6 +25,11 @@ because recent Pyserini releases eagerly import an optional OpenAI encoder. No
 OpenAI API is used. Java temporary files are placed under the experiment folder
 instead of the VM's potentially constrained `/dev/shm`.
 
+For modern Transformers releases, the runner applies a narrow compatibility
+patch replacing the removed `batch_encode_plus` tokenizer call in the pinned
+setwise and listwise code. Set `SKIP_COMPLETED=1` when resuming to retain any
+method with both a run file and completed metrics in its log.
+
 ## Setup and run
 
 ```bash
