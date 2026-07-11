@@ -6,6 +6,7 @@ from pathlib import Path
 import pickle
 import random
 import re
+import time
 from typing import Any, Dict, Iterable, Mapping, Optional, Tuple
 
 from ireranker.config import EXTERNAL_DATA_DIR, logger
@@ -63,6 +64,10 @@ class LiveFlanT5Oracle(Oracle):
         self._queries: Dict[str, str] = {}
         self._corpus: Dict[str, str] = {}
         self._comparison_cache_file: Dict[MatrixKey, Mapping[str, Any]] | None = None
+        self.model_inferences = 0
+        self.total_prompt_tokens = 0
+        self.total_decoder_tokens = 0
+        self.total_inference_seconds = 0.0
         self.enable_cache(cache_comparisons)
 
         if not LiveFlanT5Oracle._atexit_registered:
@@ -92,6 +97,13 @@ class LiveFlanT5Oracle(Oracle):
 
     def sample_lt(self, i: int, j: int) -> bool:
         raise NotImplementedError
+
+    def reset_comparisons(self) -> None:
+        super().reset_comparisons()
+        self.model_inferences = 0
+        self.total_prompt_tokens = 0
+        self.total_decoder_tokens = 0
+        self.total_inference_seconds = 0.0
 
     @classmethod
     def flush_all_caches(cls) -> None:
@@ -219,7 +231,15 @@ class LiveFlanT5Oracle(Oracle):
             raise FileNotFoundError(f"Missing corpus text for docs: {missing[:5]}")
 
         prompt = self._build_prompt(query, text_a, text_b)
+        # Model initialization/download is setup cost, not per-query inference.
+        self._ensure_model()
+        started = time.perf_counter()
         score_a, score_b, prompt_tokens = self._score_prompt(prompt)
+        elapsed = time.perf_counter() - started
+        self.model_inferences += 1
+        self.total_prompt_tokens += int(prompt_tokens)
+        self.total_decoder_tokens += 1
+        self.total_inference_seconds += elapsed
         entry = {
             "model": self.model_name,
             "scores": [("A", score_a), ("B", score_b)],
