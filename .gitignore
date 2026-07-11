@@ -204,3 +204,9 @@ cython_debug/
 
 # Local temp scratch files
 tmp_*.txt
+
+# Local experiment caches and Robust04 result bundles
+/.vm-cache/
+/robust04-cross-paradigm.pid
+/robust04-cross-paradigm-results.tar.gz
+/robust04-cross-paradigm-results.tar.gz.sha256

@@ -203,17 +203,11 @@ def parse_robust_topics_from_testset_gz(raw_gz: bytes) -> list[dict[str, object]
     blocks = text.split("<top>")
     queries: list[dict[str, object]] = []
     for block in blocks[1:]:
-        num = ""
-        title = ""
-        for line in block.splitlines():
-            line = line.strip()
-            if line.startswith("<num>"):
-                num = line.replace("<num>", "").replace("Number:", "").strip()
-            elif line.startswith("<title>"):
-                title = line.replace("<title>", "").strip()
-                if num:
-                    break
-        if num:
+        num_match = re.search(r"<num>\s*(?:Number:)?\s*([^\s<]+)", block, re.IGNORECASE)
+        title_match = re.search(r"<title>\s*(.*?)\s*<desc>", block, re.DOTALL | re.IGNORECASE)
+        num = num_match.group(1).strip() if num_match else ""
+        title = re.sub(r"\s+", " ", title_match.group(1)).strip() if title_match else ""
+        if num and title:
             queries.append({"_id": num, "text": title, "metadata": {}})
     return queries
 
