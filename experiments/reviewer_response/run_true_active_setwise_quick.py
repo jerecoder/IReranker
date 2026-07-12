@@ -87,8 +87,8 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def condition_name(method: str, budget: int | None) -> str:
-    return "bm25" if method == "bm25" else f"{method}_t{budget}_s{SEED}"
+def condition_name(method: str, budget: int | None, seed: int = SEED) -> str:
+    return "bm25" if method == "bm25" else f"{method}_t{budget}_s{seed}"
 
 
 def completion_matches(
@@ -120,8 +120,10 @@ def run_condition(
     base_signature: dict[str, Any],
     resume: bool,
     status: dict[str, Any],
+    seed: int = SEED,
+    status_path: Path = STATUS_PATH,
 ) -> None:
-    condition = condition_name(method, budget)
+    condition = condition_name(method, budget, seed)
     csv_path = PER_QUERY_DIR / f"{condition}.csv"
     run_path = RUNS_DIR / f"{condition}.txt"
     done_path = PER_QUERY_DIR / f"{condition}.done"
@@ -131,7 +133,7 @@ def run_condition(
         "method": method,
         "variant": VARIANTS[method],
         "budget": budget,
-        "seed": SEED,
+        "seed": seed,
         "condition": condition,
         "setwise_presentation": (
             "none"
@@ -159,7 +161,7 @@ def run_condition(
                 "updated_utc": utc_now(),
             }
         )
-        write_json(STATUS_PATH, status)
+        write_json(status_path, status)
         candidates = [str(value) for value in row["candidates"]]
         qrels = {str(key): int(value) for key, value in row["qrels"].items()}
         torch = engine.torch if engine is not None else None
@@ -177,7 +179,7 @@ def run_condition(
                 row=row,
                 documents=documents,
                 engine=engine,
-                seed=SEED,
+                seed=seed,
                 token_budget=budget,
             )
             ranking, meter = result.ranking, result.meter
@@ -188,7 +190,7 @@ def run_condition(
                 row=row,
                 documents=documents,
                 engine=engine,
-                seed=SEED,
+                seed=seed,
                 token_budget=budget,
             )
             ranking, meter = result.ranking, result.meter
@@ -199,7 +201,7 @@ def run_condition(
                 row=row,
                 documents=documents,
                 engine=engine,
-                seed=SEED,
+                seed=seed,
                 token_budget=budget,
             )
             ranking, meter = result.ranking, result.meter
@@ -225,7 +227,7 @@ def run_condition(
                 "method": method,
                 "variant": VARIANTS[method],
                 "token_budget": budget if budget is not None else "",
-                "seed": SEED,
+                "seed": seed,
                 "query_id": qid,
                 "ndcg10": ndcg_at_k(ranking, qrels, 10),
                 **meter_row(meter),
@@ -254,8 +256,10 @@ def run_condition(
     )
 
 
-def load_verified(method: str, budget: int | None) -> list[dict[str, str]]:
-    condition = condition_name(method, budget)
+def load_verified(
+    method: str, budget: int | None, seed: int = SEED
+) -> list[dict[str, str]]:
+    condition = condition_name(method, budget, seed)
     csv_path = PER_QUERY_DIR / f"{condition}.csv"
     run_path = RUNS_DIR / f"{condition}.txt"
     done_path = PER_QUERY_DIR / f"{condition}.done"

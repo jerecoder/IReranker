@@ -222,3 +222,5 @@ tmp_*.txt
 /listwise-equivariance-results.tar.gz.sha256
 /true-active-setwise-quick-results.tar.gz
 /true-active-setwise-quick-results.tar.gz.sha256
+/true-active-setwise-multiseed-results.tar.gz
+/true-active-setwise-multiseed-results.tar.gz.sha256

@@ -144,3 +144,16 @@ tail -f true-active-setwise-quick.log
 This is an exploratory one-seed decision run. If its 100k result is promising,
 only seeds 43 and 44 need to be added. The expected runtime is comfortably under
 one hour based on the previous Setwise measurements.
+
+To extend a completed corrected run, reuse BM25, fixed Setwise, and seed 42;
+run only randomized and Active-Setwise at 50k for seeds 43 and 44:
+
+```bash
+nohup bash experiments/reviewer_response/run_true_active_setwise_extra_seeds.sh \
+  > true-active-setwise-extra-seeds.log 2>&1 &
+tail -f true-active-setwise-extra-seeds.log
+```
+
+The extension verifies all reusable signatures and hashes before loading the
+model, resumes at condition boundaries, and writes a three-seed aggregate under
+`metrics/multiseed`.
