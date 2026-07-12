@@ -213,3 +213,6 @@ tmp_*.txt
 /mohajer-hybrid-probe.pid
 /mohajer-hybrid-probe-results.tar.gz
 /mohajer-hybrid-probe-results.tar.gz.sha256
+/reviewer-response.pid
+/reviewer-response-results.tar.gz
+/reviewer-response-results.tar.gz.sha256
