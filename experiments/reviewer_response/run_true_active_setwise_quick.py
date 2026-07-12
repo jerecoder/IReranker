@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One-seed corrected standard Setwise vs true Active-Setwise experiment."""
+"""One-seed fixed, randomized, and true Active-Setwise comparison."""
 
 from __future__ import annotations
 
@@ -25,6 +25,7 @@ from experiments.mohajer_hybrid_probe.engine import (  # noqa: E402
 )
 from experiments.reviewer_response.active_setwise import (  # noqa: E402
     run_active_setwise,
+    run_standard_setwise_fixed,
     run_standard_setwise_randomized,
 )
 from experiments.reviewer_response.analyze import (  # noqa: E402
@@ -54,9 +55,10 @@ RUNS_DIR = OUTPUT_DIR / "runs"
 METRICS_DIR = OUTPUT_DIR / "metrics"
 STATUS_PATH = OUTPUT_DIR / "status.json"
 SEED = 42
-METHODS = ["setwise_randomized", "active_setwise"]
+METHODS = ["setwise", "setwise_randomized", "active_setwise"]
 VARIANTS = {
     "bm25": "top100",
+    "setwise": "standalone_heapsort_c3_top10",
     "setwise_randomized": "standard_heapsort_c3_randomized_presentation_top10",
     "active_setwise": "mohajer_groups_c3_setwise_tournament_top10",
 }
@@ -131,6 +133,13 @@ def run_condition(
         "budget": budget,
         "seed": SEED,
         "condition": condition,
+        "setwise_presentation": (
+            "none"
+            if method == "bm25"
+            else "fixed"
+            if method == "setwise"
+            else "seeded_randomized_per_choice_event"
+        ),
         "query_ids_sha256": hashlib.sha256("\n".join(qids).encode()).hexdigest(),
     }
     if resume and completion_matches(done_path, csv_path, run_path, signature):
@@ -161,6 +170,17 @@ def run_condition(
         if method == "bm25":
             ranking = candidates
             meter = UsageMeter()
+        elif method == "setwise":
+            if engine is None or budget is None:
+                raise RuntimeError("Setwise requires an engine and budget")
+            result = run_standard_setwise_fixed(
+                row=row,
+                documents=documents,
+                engine=engine,
+                seed=SEED,
+                token_budget=budget,
+            )
+            ranking, meter = result.ranking, result.meter
         elif method == "setwise_randomized":
             if engine is None or budget is None:
                 raise RuntimeError("Setwise requires an engine and budget")
@@ -303,32 +323,41 @@ def analyze() -> None:
                 }
             )
         qids = sorted(method_values["active_setwise"])
-        differences = np.array(
+        for comparison_index, (method_a, method_b) in enumerate(
             [
-                method_values["active_setwise"][qid]
-                - method_values["setwise_randomized"][qid]
-                for qid in qids
+                ("active_setwise", "setwise"),
+                ("active_setwise", "setwise_randomized"),
+                ("setwise_randomized", "setwise"),
             ]
-        )
-        low, high = bootstrap_interval(differences, seed=20260712, resamples=10000)
-        tests.append(
-            {
-                "token_budget": budget,
-                "method_a": "active_setwise",
-                "method_b": "setwise_randomized",
-                "queries": QUERY_COUNT,
-                "seed": SEED,
-                "mean_delta_ndcg10": float(differences.mean()),
-                "ci_low": low,
-                "ci_high": high,
-                "p_value_sign_flip": sign_flip_p_value(
-                    differences, seed=20260712, resamples=10000
-                ),
-                "wins": int(np.count_nonzero(differences > 1e-12)),
-                "ties": int(np.count_nonzero(np.abs(differences) <= 1e-12)),
-                "losses": int(np.count_nonzero(differences < -1e-12)),
-            }
-        )
+        ):
+            differences = np.array(
+                [
+                    method_values[method_a][qid] - method_values[method_b][qid]
+                    for qid in qids
+                ]
+            )
+            statistical_seed = 20260712 + comparison_index
+            low, high = bootstrap_interval(
+                differences, seed=statistical_seed, resamples=10000
+            )
+            tests.append(
+                {
+                    "token_budget": budget,
+                    "method_a": method_a,
+                    "method_b": method_b,
+                    "queries": QUERY_COUNT,
+                    "seed": SEED,
+                    "mean_delta_ndcg10": float(differences.mean()),
+                    "ci_low": low,
+                    "ci_high": high,
+                    "p_value_sign_flip": sign_flip_p_value(
+                        differences, seed=statistical_seed, resamples=10000
+                    ),
+                    "wins": int(np.count_nonzero(differences > 1e-12)),
+                    "ties": int(np.count_nonzero(np.abs(differences) <= 1e-12)),
+                    "losses": int(np.count_nonzero(differences < -1e-12)),
+                }
+            )
     METRICS_DIR.mkdir(parents=True, exist_ok=True)
     write_csv(METRICS_DIR / "summary.csv", summary)
     write_csv(METRICS_DIR / "paired_tests.csv", tests)
@@ -337,8 +366,11 @@ def analyze() -> None:
         {
             "exploratory_single_seed": True,
             "pairwise_preprocessing": False,
-            "all_oracle_events_are_randomized_presentation_setwise": True,
-            "primary_comparison": tests[0],
+            "fixed_control_uses_conventional_presentation": True,
+            "randomized_and_active_conditions_randomize_each_choice_event": True,
+            "comparisons_at_100k": [
+                row for row in tests if row["token_budget"] == TOKEN_BUDGETS[0]
+            ],
             "next_step": (
                 "If the 100k point is promising, run seeds 43 and 44. Otherwise stop "
                 "Active-Setwise expansion."
@@ -392,7 +424,7 @@ def main() -> None:
         ROOT / "experiments/robust04_cross_paradigm/methods.py",
     ]
     base_signature = {
-        "protocol_version": 1,
+        "protocol_version": 2,
         "dataset": DATASET,
         "query_count": QUERY_COUNT,
         "seed": SEED,
@@ -402,7 +434,7 @@ def main() -> None:
         "device": args.device,
         "model_output_cache": False,
         "pairwise_preprocessing": False,
-        "setwise_presentation_randomized": True,
+        "setwise_max_documents_per_prompt": 3,
         "snapshot_manifest_sha256": sha256(SNAPSHOT_DIR / "manifest.json"),
         "source_sha256": {
             str(path.relative_to(ROOT)).replace("\\", "/"): sha256(path)

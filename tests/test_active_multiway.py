@@ -58,15 +58,19 @@ def test_active_multiway_returns_permutation_when_budget_expires() -> None:
 def test_standard_and_active_use_same_chooser_but_different_schedules() -> None:
     active_calls = 0
     standard_calls = 0
+    active_max_match = 0
+    standard_max_match = 0
 
     def active_choose(match):
-        nonlocal active_calls
+        nonlocal active_calls, active_max_match
         active_calls += 1
+        active_max_match = max(active_max_match, len(match))
         return max(match)
 
     def standard_choose(match):
-        nonlocal standard_calls
+        nonlocal standard_calls, standard_max_match
         standard_calls += 1
+        standard_max_match = max(standard_max_match, len(match))
         return max(match)
 
     active = active_multiway_topk(100, top_k=10, arity=3, choose_best=active_choose)
@@ -75,3 +79,4 @@ def test_standard_and_active_use_same_chooser_but_different_schedules() -> None:
     )
     assert active[:10] == standard[:10] == list(range(99, 89, -1))
     assert active_calls != standard_calls
+    assert active_max_match == standard_max_match == 3

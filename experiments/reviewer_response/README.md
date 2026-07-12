@@ -129,11 +129,11 @@ values and computes no effectiveness metric.
 ## Corrected one-seed Active-Setwise quick experiment
 
 The corrected scheduler can be tested immediately with seed 42 on all 20 frozen
-queries and both token caps. It compares standard 3-ary Setwise heapsort against
-true Mohajer-style Active-Setwise using the identical seeded randomized-
-presentation Setwise primitive. Both methods are rerun because the older
-standard Setwise control did not randomize presentation; BM25 and the frozen
-snapshot are reused. No pairwise prompt is permitted by a runtime invariant.
+queries and both token caps. It compares conventional fixed-presentation
+Setwise, the same standard scheduler with randomized presentation, and true
+Mohajer-style Active-Setwise with randomized presentation. Every choice event
+contains at most three documents. BM25 and the frozen snapshot are reused, and
+no pairwise prompt is permitted by a runtime invariant.
 
 ```bash
 nohup bash experiments/reviewer_response/run_true_active_setwise_quick.sh \

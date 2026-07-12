@@ -21,8 +21,8 @@ class ActiveSetwiseResult:
     stage_b_tokens: int
 
 
-class RandomizedSetwiseChooser:
-    """One setwise prompt with seeded presentation randomization per choice event."""
+class SetwiseChooser:
+    """One Setwise prompt, optionally randomized within each choice event."""
 
     def __init__(
         self,
@@ -33,11 +33,15 @@ class RandomizedSetwiseChooser:
         meter: UsageMeter,
         seed: int,
         query_id: str,
+        randomized_presentation: bool,
+        max_documents: int,
     ) -> None:
         self.query = engine.truncate_query(query)
         self.documents = documents
         self.engine = engine
         self.meter = meter
+        self.randomized_presentation = randomized_presentation
+        self.max_documents = max_documents
         digest = hashlib.sha256(f"setwise:{seed}:{query_id}".encode()).digest()
         self.rng = random.Random(int.from_bytes(digest[:8], "big"))
         self.text_cache: dict[str, str] = {}
@@ -49,10 +53,15 @@ class RandomizedSetwiseChooser:
 
     def __call__(self, candidates: Sequence[str]) -> str:
         presented = [str(value) for value in candidates]
-        if len(presented) < 2 or len(presented) > len(SETWISE_LABELS):
+        if (
+            len(presented) < 2
+            or len(presented) > self.max_documents
+            or len(presented) > len(SETWISE_LABELS)
+        ):
             raise ValueError(f"Unsupported setwise match size: {len(presented)}")
         fallback_order = {doc_id: index for index, doc_id in enumerate(presented)}
-        self.rng.shuffle(presented)
+        if self.randomized_presentation:
+            self.rng.shuffle(presented)
         prompt = render_setwise(self.query, [self._text(doc_id) for doc_id in presented])
         output = self.engine.generate(
             [prompt],
@@ -77,15 +86,19 @@ def _chooser(
     engine: SharedFlanT5Engine,
     seed: int,
     token_budget: int,
-) -> tuple[RandomizedSetwiseChooser, UsageMeter]:
+    randomized_presentation: bool,
+    max_documents: int,
+) -> tuple[SetwiseChooser, UsageMeter]:
     meter = UsageMeter(token_limit=token_budget)
-    chooser = RandomizedSetwiseChooser(
+    chooser = SetwiseChooser(
         query=str(row["query"]),
         documents=documents,
         engine=engine,
         meter=meter,
         seed=seed,
         query_id=str(row["query_id"]),
+        randomized_presentation=randomized_presentation,
+        max_documents=max_documents,
     )
     return chooser, meter
 
@@ -106,6 +119,8 @@ def run_active_setwise(
         engine=engine,
         seed=seed,
         token_budget=token_budget,
+        randomized_presentation=True,
+        max_documents=arity,
     )
 
     def choose_index(indices: Sequence[int]) -> int:
@@ -143,6 +158,42 @@ def run_standard_setwise_randomized(
         engine=engine,
         seed=seed,
         token_budget=token_budget,
+        randomized_presentation=True,
+        max_documents=arity,
+    )
+    ranking = standard_multiway_heapsort_topk(
+        candidates,
+        top_k=10,
+        arity=arity,
+        choose_best=chooser,
+    )
+    return ActiveSetwiseResult(
+        ranking=ranking,
+        meter=meter,
+        stage_a_tokens=meter.total_model_tokens,
+        stage_b_tokens=0,
+    )
+
+
+def run_standard_setwise_fixed(
+    *,
+    row: dict[str, Any],
+    documents: dict[str, str],
+    engine: SharedFlanT5Engine,
+    seed: int,
+    token_budget: int,
+    arity: int = 3,
+) -> ActiveSetwiseResult:
+    """Conventional fixed-presentation Setwise using the identical scheduler."""
+    candidates = [str(value) for value in row["candidates"]]
+    chooser, meter = _chooser(
+        row=row,
+        documents=documents,
+        engine=engine,
+        seed=seed,
+        token_budget=token_budget,
+        randomized_presentation=False,
+        max_documents=arity,
     )
     ranking = standard_multiway_heapsort_topk(
         candidates,

@@ -72,16 +72,27 @@ def active_multiway_topk(
     arity: int,
     choose_best: ChooseBest[int],
 ) -> list[int]:
-    """Mohajer-style group tournaments plus a multiway champion heap."""
+    """Mohajer-style group tournaments plus a multiway champion heap.
+
+    ``arity`` is the maximum number of documents in one choice event.  The
+    champion heap therefore has ``arity - 1`` children: parent plus children
+    must never exceed the requested Setwise prompt size.
+    """
+    if arity < 2:
+        raise ValueError("arity must be at least two")
     indices, groups = strided_groups(n, top_k)
     if not indices:
         return []
     ranking: list[int] = []
     heap: list[_Champion] = []
 
+    num_children = arity - 1
+
     def heapify(position: int) -> None:
-        child_start = arity * position + 1
-        child_positions = list(range(child_start, min(child_start + arity, len(heap))))
+        child_start = num_children * position + 1
+        child_positions = list(
+            range(child_start, min(child_start + num_children, len(heap)))
+        )
         positions = [position] + child_positions
         if len(positions) <= 1:
             return
@@ -99,7 +110,7 @@ def active_multiway_topk(
                 continue
             winner = tournament_winner(group, arity=arity, choose_best=choose_best)
             heap.append(_Champion(winner, group_id))
-        for position in range((len(heap) - 2) // arity, -1, -1):
+        for position in range((len(heap) - 2) // num_children, -1, -1):
             heapify(position)
 
         k = min(top_k, n)
@@ -139,14 +150,20 @@ def standard_multiway_heapsort_topk(
     arity: int,
     choose_best: ChooseBest[Item],
 ) -> list[Item]:
-    """Standard d-ary partial heapsort using the identical multiway chooser."""
+    """Partial heapsort where ``arity`` is the maximum choice-event size."""
+    if arity < 2:
+        raise ValueError("arity must be at least two")
     original = list(items)
     order = list(items)
     extracted: list[Item] = []
 
+    num_children = arity - 1
+
     def heapify(size: int, position: int) -> None:
-        child_start = arity * position + 1
-        child_positions = list(range(child_start, min(child_start + arity, size)))
+        child_start = num_children * position + 1
+        child_positions = list(
+            range(child_start, min(child_start + num_children, size))
+        )
         positions = [position] + child_positions
         if len(positions) <= 1:
             return
@@ -158,7 +175,7 @@ def standard_multiway_heapsort_topk(
 
     try:
         size = len(order)
-        for position in range((size - 2) // arity, -1, -1):
+        for position in range((size - 2) // num_children, -1, -1):
             heapify(size, position)
         for end in range(size - 1, 0, -1):
             order[end], order[0] = order[0], order[end]
