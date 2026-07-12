@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 from experiments.mohajer_hybrid_probe.common import (
+    eligible_query_ids,
     ndcg_at_k,
     pareto_methods,
     quality_gate_methods,
@@ -17,6 +18,20 @@ def test_probe_query_selection_is_stable_and_dataset_specific() -> None:
     assert first == stable_query_order("fiqa", reversed(qids))
     assert first != stable_query_order("scifact", qids)
     assert sorted(first) == sorted(qids)
+
+
+def test_probe_selection_excludes_short_or_duplicate_bm25_lists() -> None:
+    queries = {qid: "query" for qid in ("valid", "short", "duplicate", "no-qrels")}
+    qrels = {qid: {} for qid in ("valid", "short", "duplicate")}
+    candidates = {
+        "valid": ["a", "b", "c"],
+        "short": ["a", "b"],
+        "duplicate": ["a", "a", "b"],
+        "no-qrels": ["a", "b", "c"],
+    }
+    assert eligible_query_ids(
+        queries, qrels, candidates, candidates_per_query=3
+    ) == {"valid"}
 
 
 def test_probe_ndcg_uses_full_qrels_with_linear_gain() -> None:

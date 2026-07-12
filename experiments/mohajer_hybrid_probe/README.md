@@ -21,7 +21,8 @@ Robust04 and TREC News are intentionally absent because their document
 collections are licensed rather than automatically downloadable.
 
 The screen freezes three queries per dataset by ascending
-`sha256(dataset + ':' + query_id)`. Every method receives the same BM25 top-100,
+`sha256(dataset + ':' + query_id)` among queries that have query text, qrels,
+and exactly 100 unique BM25 candidates. Every method receives the same BM25 top-100,
 query text, rendered documents, FLAN-T5 checkpoint, truncation, generation
 primitive, and end-to-end model-token budget. NDCG@10 uses the full qrels and
 linear gain, matching `trec_eval`/`pytrec_eval`.

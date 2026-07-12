@@ -195,7 +195,7 @@ def main() -> None:
         for dataset, (_, _, manifest) in snapshots.items()
     }
     provenance = {
-        "protocol_version": 1,
+        "protocol_version": 2,
         "git_commit": git_commit,
         "git_tracked_files_dirty": bool(git_status),
         "command": sys.argv,

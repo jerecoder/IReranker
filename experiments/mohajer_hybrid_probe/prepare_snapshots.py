@@ -20,6 +20,8 @@ sys.path.insert(0, str(ROOT))
 from experiments.mohajer_hybrid_probe.common import (  # noqa: E402
     DATASET_ORDER,
     ROOT,
+    SNAPSHOT_PROTOCOL_VERSION,
+    eligible_query_ids,
     sha256,
     snapshot_dir,
     stable_query_order,
@@ -63,17 +65,18 @@ def load_bm25(dataset: str) -> tuple[dict[str, list[str]], dict[tuple[str, str],
     path = RUN_ROOT / f"run.beir.bm25-flat.{dataset}.txt"
     candidates: dict[str, list[str]] = {}
     scores: dict[tuple[str, str], float] = {}
+    row_counts: dict[str, int] = {}
     with path.open(encoding="utf-8") as handle:
         for line in handle:
             parts = line.split()
             if len(parts) < 6:
                 raise ValueError(f"Malformed BM25 row in {path}: {line!r}")
             qid, doc_id = parts[0], parts[2]
-            docs = candidates.setdefault(qid, [])
-            if len(docs) >= 100:
+            count = row_counts.get(qid, 0)
+            if count >= 100:
                 continue
-            if doc_id in docs:
-                raise ValueError(f"Duplicate BM25 document for {dataset}/{qid}: {doc_id}")
+            row_counts[qid] = count + 1
+            docs = candidates.setdefault(qid, [])
             docs.append(doc_id)
             scores[(qid, doc_id)] = float(parts[4])
     return candidates, scores
@@ -131,20 +134,33 @@ def prepare_dataset(dataset: str, *, count: int, offset: int, force: bool) -> No
     manifest_path = output / "manifest.json"
     if manifest_path.exists() and not force:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        expected = (int(manifest["selected_queries"]), int(manifest["selection_offset"]))
-        if expected != (count, offset):
-            raise ValueError(
-                f"Existing {dataset} snapshot uses count/offset={expected}; pass --force to replace it"
+        expected = (
+            int(manifest.get("snapshot_protocol_version", 0)),
+            int(manifest["selected_queries"]),
+            int(manifest["selection_offset"]),
+        )
+        requested = (SNAPSHOT_PROTOCOL_VERSION, count, offset)
+        if expected[0] != SNAPSHOT_PROTOCOL_VERSION:
+            print(
+                f"REBUILD snapshot: {dataset} protocol {expected[0]} -> "
+                f"{SNAPSHOT_PROTOCOL_VERSION}"
             )
-        print(f"SKIP snapshot: {dataset}")
-        return
+        elif expected != requested:
+            raise ValueError(
+                f"Existing {dataset} snapshot uses protocol/count/offset={expected}; "
+                "pass --force to replace it"
+            )
+        else:
+            print(f"SKIP snapshot: {dataset}")
+            return
 
     dataset_path = ensure_dataset(dataset)
     queries = load_queries(dataset_path)
     qrels = load_qrels(dataset_path)
     candidates, scores = load_bm25(dataset)
     shared = set(queries) & set(qrels) & set(candidates)
-    ordered = stable_query_order(dataset, shared)
+    eligible = eligible_query_ids(queries, qrels, candidates)
+    ordered = stable_query_order(dataset, eligible)
     selected = ordered[offset : offset + count]
     if len(selected) != count:
         raise ValueError(f"{dataset} only has {len(selected)} selectable queries")
@@ -184,10 +200,17 @@ def prepare_dataset(dataset: str, *, count: int, offset: int, force: bool) -> No
         ({"doc_id": doc_id, "text": documents[doc_id]} for doc_id in sorted(documents)),
     )
     manifest = {
+        "snapshot_protocol_version": SNAPSHOT_PROTOCOL_VERSION,
         "dataset": dataset,
         "selected_queries": count,
         "selection_offset": offset,
-        "selection": "ascending sha256(dataset + ':' + query_id)",
+        "selection": (
+            "ascending sha256(dataset + ':' + query_id), restricted to queries "
+            "with text, qrels, and exactly 100 unique BM25 candidates"
+        ),
+        "shared_queries_before_candidate_filter": len(shared),
+        "eligible_queries": len(eligible),
+        "queries_excluded_for_short_or_duplicate_bm25_run": len(shared - eligible),
         "selected_query_ids": selected,
         "candidates_per_query": 100,
         "unique_documents": len(documents),

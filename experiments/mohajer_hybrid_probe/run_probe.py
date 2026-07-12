@@ -354,7 +354,7 @@ def main() -> None:
         ROOT / "ireranker/rankers/bubble_ranker.py",
     ]
     common_signature = {
-        "protocol_version": 1,
+        "protocol_version": 2,
         "model": args.model,
         "model_revision": args.model_revision,
         "device": args.device,

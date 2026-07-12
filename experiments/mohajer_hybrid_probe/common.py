@@ -5,7 +5,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,6 +21,7 @@ METRICS_DIR = RESULTS_DIR / "metrics"
 # looking at results, otherwise a token-limit exception in Mohajer leaves no
 # compute for the second stage.
 HYBRID_STAGE_A_FRACTION = 0.80
+SNAPSHOT_PROTOCOL_VERSION = 2
 
 # Pre-registered order: strongest paper/repository signal first.
 DATASET_ORDER = [
@@ -119,6 +120,22 @@ def stable_query_order(dataset: str, qids: Iterable[str]) -> list[str]:
     )
 
 
+def eligible_query_ids(
+    queries: Mapping[str, Any],
+    qrels: Mapping[str, Any],
+    candidates: Mapping[str, Iterable[str]],
+    *,
+    candidates_per_query: int = 100,
+) -> set[str]:
+    shared = set(queries) & set(qrels) & set(candidates)
+    eligible: set[str] = set()
+    for qid in shared:
+        docs = [str(value) for value in candidates[qid]]
+        if len(docs) == candidates_per_query and len(set(docs)) == candidates_per_query:
+            eligible.add(str(qid))
+    return eligible
+
+
 def ndcg_at_k(ranking: Iterable[str], qrels: dict[str, int], k: int = 10) -> float:
     ranked = list(ranking)[:k]
     dcg = sum(
@@ -134,6 +151,10 @@ def load_snapshot(dataset: str) -> tuple[list[dict[str, Any]], dict[str, str], d
     directory = snapshot_dir(dataset)
     manifest_path = directory / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if int(manifest.get("snapshot_protocol_version", 0)) != SNAPSHOT_PROTOCOL_VERSION:
+        raise ValueError(
+            f"Snapshot protocol mismatch for {dataset}; rerun prepare_snapshots.py"
+        )
     for filename, expected in manifest["files"].items():
         path = directory / filename
         if not path.exists() or sha256(path) != expected:
