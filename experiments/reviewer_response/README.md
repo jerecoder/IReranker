@@ -125,3 +125,22 @@ tail -f listwise-equivariance.log
 A candidate passes only with 100% strict permutations and top-document
 agreement on at least 8/9 cases under both perturbations. The test uses no qrel
 values and computes no effectiveness metric.
+
+## Corrected one-seed Active-Setwise quick experiment
+
+The corrected scheduler can be tested immediately with seed 42 on all 20 frozen
+queries and both token caps. It compares standard 3-ary Setwise heapsort against
+true Mohajer-style Active-Setwise using the identical seeded randomized-
+presentation Setwise primitive. Both methods are rerun because the older
+standard Setwise control did not randomize presentation; BM25 and the frozen
+snapshot are reused. No pairwise prompt is permitted by a runtime invariant.
+
+```bash
+nohup bash experiments/reviewer_response/run_true_active_setwise_quick.sh \
+  > true-active-setwise-quick.log 2>&1 &
+tail -f true-active-setwise-quick.log
+```
+
+This is an exploratory one-seed decision run. If its 100k result is promising,
+only seeds 43 and 44 need to be added. The expected runtime is comfortably under
+one hour based on the previous Setwise measurements.
