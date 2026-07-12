@@ -210,3 +210,6 @@ tmp_*.txt
 /robust04-cross-paradigm.pid
 /robust04-cross-paradigm-results.tar.gz
 /robust04-cross-paradigm-results.tar.gz.sha256
+/mohajer-hybrid-probe.pid
+/mohajer-hybrid-probe-results.tar.gz
+/mohajer-hybrid-probe-results.tar.gz.sha256
