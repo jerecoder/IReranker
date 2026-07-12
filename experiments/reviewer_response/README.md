@@ -20,6 +20,15 @@ pairwise Mohajer stage identifies and orders a promising prefix; only its top 20
 documents receive the multi-document refinement. These are hybrid active-prefix
 methods, not theoretical k-ary versions of the Mohajer algorithm.
 
+**Protocol correction:** this completed cascade study is not the requested true
+active-Setwise/Listwise experiment and must not be labeled as such in the paper.
+The corrected implementation lives in `active_multiway.py`: it applies
+Mohajer's strided group tournaments and top-K champion extraction directly with
+a multi-document oracle. `active_setwise.py` uses only randomized-presentation
+three-document Setwise prompts; it has no pairwise preprocessing or polishing
+stage. The analogous strict Listwise primitive remains gated on the output
+validity/equivariance diagnostics below.
+
 Experiment 2 reuses the exact, hash-verified BM25, Mohajer, Setwise, and Listwise
 conditions from Experiment 1. It runs only the two new hybrid arms. Its primary
 comparison is active-prefix Listwise versus standard Listwise at 100k; active

@@ -38,7 +38,14 @@ EXPERIMENT_2_METHODS = [
     "mohajer_listwise",
 ]
 SHARED_METHODS = ["bm25", "mohajer", "setwise", "listwise"]
-STOCHASTIC_METHODS = {"prp", "mohajer", "mohajer_setwise", "mohajer_listwise"}
+STOCHASTIC_METHODS = {
+    "prp",
+    "mohajer",
+    "mohajer_setwise",
+    "mohajer_listwise",
+    "setwise_randomized",
+    "active_setwise",
+}
 METHOD_VARIANTS = {
     "bm25": "top100",
     "prp": "randomized_direction_prp_heapsort_top10",
@@ -47,6 +54,8 @@ METHOD_VARIANTS = {
     "listwise": "standalone_rankgpt_w4_s2_r5",
     "mohajer_setwise": "mohajer_prp_then_top20_setwise_c3",
     "mohajer_listwise": "mohajer_prp_then_top20_rankgpt_w4_s2_r2",
+    "setwise_randomized": "standard_heapsort_c3_randomized_presentation_top10",
+    "active_setwise": "mohajer_groups_c3_setwise_tournament_top10",
 }
 
 

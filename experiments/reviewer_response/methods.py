@@ -12,6 +12,10 @@ from experiments.mohajer_hybrid_probe.methods import (
     run_mohajer_hybrid,
     run_standalone,
 )
+from experiments.reviewer_response.active_setwise import (
+    run_active_setwise,
+    run_standard_setwise_randomized,
+)
 
 
 def run_prp_heapsort(
@@ -70,6 +74,10 @@ def execute_method(
         return run_mohajer_hybrid("setwise", **kwargs)
     if method == "mohajer_listwise":
         return run_mohajer_hybrid("listwise", **kwargs)
+    if method == "setwise_randomized":
+        return run_standard_setwise_randomized(**kwargs)
+    if method == "active_setwise":
+        return run_active_setwise(**kwargs)
     raise ValueError(f"Unknown reviewer-response method: {method}")
 
 
