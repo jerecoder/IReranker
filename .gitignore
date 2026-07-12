@@ -220,6 +220,8 @@ tmp_*.txt
 /listwise-diagnostic-results.tar.gz.sha256
 /listwise-equivariance-results.tar.gz
 /listwise-equivariance-results.tar.gz.sha256
+/listwise-constrained-diagnostic-results.tar.gz
+/listwise-constrained-diagnostic-results.tar.gz.sha256
 /true-active-setwise-quick-results.tar.gz
 /true-active-setwise-quick-results.tar.gz.sha256
 /true-active-setwise-multiseed-results.tar.gz

@@ -126,6 +126,19 @@ A candidate passes only with 100% strict permutations and top-document
 agreement on at least 8/9 cases under both perturbations. The test uses no qrel
 values and computes no effectiveness metric.
 
+If ordinary generation fails that gate, test greedy decoding constrained to the
+complete permutation trie (24 outputs for four documents):
+
+```bash
+nohup bash experiments/reviewer_response/run_listwise_constrained_diagnostic.sh \
+  > listwise-constrained-diagnostic.log 2>&1 &
+tail -f listwise-constrained-diagnostic.log
+```
+
+The shell always archives completed diagnostic records, even when no prompt
+passes. An effectiveness run remains blocked until at least one constrained
+variant satisfies the same strict validity and equivariance rule.
+
 ## Corrected one-seed Active-Setwise quick experiment
 
 The corrected scheduler can be tested immediately with seed 42 on all 20 frozen
