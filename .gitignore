@@ -218,3 +218,5 @@ tmp_*.txt
 /reviewer-response-results.tar.gz.sha256
 /listwise-diagnostic-results.tar.gz
 /listwise-diagnostic-results.tar.gz.sha256
+/listwise-equivariance-results.tar.gz
+/listwise-equivariance-results.tar.gz.sha256

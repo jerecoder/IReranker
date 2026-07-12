@@ -6,6 +6,7 @@ from experiments.reviewer_response.listwise_validity import (
     apply_strict_permutation,
     compact_listwise_prompt,
     legacy_repaired_permutation,
+    map_labels_to_documents,
     parse_strict_permutation,
 )
 
@@ -65,3 +66,15 @@ def test_compact_prompt_demands_every_identifier_once() -> None:
     assert "use every identifier once" in prompt
     assert "[1] > [2] > [3] > [4]" in prompt
     assert prompt.endswith("Permutation:")
+
+
+def test_label_permutations_map_back_to_document_identity() -> None:
+    label_map = {3: "a", 1: "b", 4: "c", 2: "d"}
+    assert map_labels_to_documents((1, 3, 2, 4), label_map) == (
+        "b",
+        "a",
+        "d",
+        "c",
+    )
+    with pytest.raises(ValueError):
+        map_labels_to_documents((1, 3, 3, 4), label_map)

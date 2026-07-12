@@ -52,6 +52,15 @@ def legacy_repaired_permutation(window: Sequence[str], output: str) -> list[str]
     return [str(window[value]) for value in unique]
 
 
+def map_labels_to_documents(
+    labels: Sequence[int], label_to_document: dict[int, str]
+) -> tuple[str, ...]:
+    expected = set(label_to_document)
+    if set(int(label) for label in labels) != expected or len(labels) != len(expected):
+        raise ValueError("labels must be a complete permutation of the label map")
+    return tuple(str(label_to_document[int(label)]) for label in labels)
+
+
 def compact_listwise_prompt(query: str, passages: Sequence[str]) -> str:
     body = "\n\n".join(
         f"[{index}] {str(passage).strip()}" for index, passage in enumerate(passages, start=1)

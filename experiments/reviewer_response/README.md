@@ -100,3 +100,19 @@ The output contains every prompt, raw model string, strict parse decision, and
 the legacy repaired permutation. No Listwise result should be rerun or reported
 until a frozen protocol achieves 100% strict validity on this diagnostic and a
 separate preflight sample.
+
+If the compact prompt only copies its concrete example, run the follow-up
+equivariance test. It removes all concrete output examples and evaluates three
+symbolic prompt styles. Every window is presented in its original order, with
+documents shuffled, and with identifiers reassigned; outputs are mapped back to
+document IDs before measuring agreement.
+
+```bash
+nohup bash experiments/reviewer_response/run_listwise_equivariance_test.sh \
+  > listwise-equivariance.log 2>&1 &
+tail -f listwise-equivariance.log
+```
+
+A candidate passes only with 100% strict permutations and top-document
+agreement on at least 8/9 cases under both perturbations. The test uses no qrel
+values and computes no effectiveness metric.
