@@ -81,3 +81,22 @@ RESUME=1 nohup bash experiments/reviewer_response/run_both_overnight.sh \
 
 Progress and failure information is written atomically to
 `experiments/reviewer_response/results/overnight_status.json` after every query.
+
+## Listwise output-validity diagnostic
+
+The first overnight run showed that every Listwise generation failed the strict
+complete-permutation requirement. Before rerunning Listwise, use the diagnostic
+to capture exact raw generations for three hypotheses: the original prompt with
+20 output tokens, the same prompt with 64 output tokens, and a compact prompt
+with 32 output tokens. It never accesses qrel values or computes NDCG.
+
+```bash
+nohup bash experiments/reviewer_response/run_listwise_diagnostic.sh \
+  > listwise-diagnostic.log 2>&1 &
+tail -f listwise-diagnostic.log
+```
+
+The output contains every prompt, raw model string, strict parse decision, and
+the legacy repaired permutation. No Listwise result should be rerun or reported
+until a frozen protocol achieves 100% strict validity on this diagnostic and a
+separate preflight sample.

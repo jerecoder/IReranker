@@ -216,3 +216,5 @@ tmp_*.txt
 /reviewer-response.pid
 /reviewer-response-results.tar.gz
 /reviewer-response-results.tar.gz.sha256
+/listwise-diagnostic-results.tar.gz
+/listwise-diagnostic-results.tar.gz.sha256
